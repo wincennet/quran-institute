@@ -3,11 +3,7 @@ import { Mail, MapPin, MessageCircle } from "lucide-react";
 import Reveal from "./Reveal";
 import { CONTACT, whatsappLink } from "../lib/constants";
 
-// TODO: replace with your real Formspree endpoint.
-// Create a free form at https://formspree.io and swap the ID below —
-// until then this form won't deliver submissions, so WhatsApp remains
-// the primary, reliable contact path.
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
 export default function Contact() {
   const [status, setStatus] = useState("idle");
