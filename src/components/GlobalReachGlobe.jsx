@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Globe from "react-globe.gl";
 import * as THREE from "three";
+import { feature } from "topojson-client";
+import landTopo from "world-atlas/land-110m.json";
 import { REACHED_COUNTRIES } from "../lib/constants";
+
+const LAND_FEATURES = feature(landTopo, landTopo.objects.land).features;
 
 export default function GlobalReachGlobe({ autoRotate }) {
   const containerRef = useRef(null);
@@ -29,26 +33,13 @@ export default function GlobalReachGlobe({ autoRotate }) {
     controls.autoRotate = autoRotate;
     controls.autoRotateSpeed = 0.6;
     controls.enableZoom = false;
-
-    const scene = globe.scene();
-    const key = new THREE.DirectionalLight(0xf2ead9, 1.4);
-    key.position.set(-2, 1.5, 2);
-    const fill = new THREE.AmbientLight(0xb8924d, 0.55);
-    scene.add(key);
-    scene.add(fill);
-
-    return () => {
-      scene.remove(key);
-      scene.remove(fill);
-    };
   }, [autoRotate]);
 
   const globeMaterial = useMemo(
     () =>
       new THREE.MeshPhongMaterial({
-        color: "#5c4a34",
-        specular: new THREE.Color("#e8c98a"),
-        shininess: 18,
+        color: "#f2ead9",
+        shininess: 2,
       }),
     []
   );
@@ -63,19 +54,23 @@ export default function GlobalReachGlobe({ autoRotate }) {
         globeMaterial={globeMaterial}
         showAtmosphere
         atmosphereColor="#b8924d"
-        atmosphereAltitude={0.22}
-        showGraticules
+        atmosphereAltitude={0.15}
+        polygonsData={LAND_FEATURES}
+        polygonCapColor={() => "#4e4136"}
+        polygonSideColor={() => "rgba(78, 65, 54, 0.5)"}
+        polygonStrokeColor={() => "#3a3029"}
+        polygonAltitude={0.002}
         pointsData={REACHED_COUNTRIES}
         pointLat="lat"
         pointLng="lng"
         pointAltitude={0.015}
         pointRadius={0.5}
-        pointColor={() => "#f5deab"}
+        pointColor={() => "#b8924d"}
         pointLabel={(d) => d.name}
         ringsData={REACHED_COUNTRIES}
         ringLat="lat"
         ringLng="lng"
-        ringColor={() => (t) => `rgba(245, 222, 171, ${1 - t})`}
+        ringColor={() => (t) => `rgba(184, 146, 77, ${1 - t})`}
         ringMaxRadius={2.2}
         ringPropagationSpeed={1.4}
         ringRepeatPeriod={2600}
