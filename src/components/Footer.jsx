@@ -23,7 +23,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
-            <Logo compact />
+            <Logo compact onDark />
             <p className="text-cream/70 text-sm mt-4 leading-relaxed max-w-xs">
               {MISSION_STATEMENT}
             </p>
