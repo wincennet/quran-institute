@@ -28,7 +28,7 @@ export default function Navbar() {
         scrolled ? "bg-cream-light/95 backdrop-blur shadow-sm" : "bg-transparent"
       }`}
     >
-      <nav className="max-w-6xl mx-auto flex items-center justify-between px-5 py-3">
+      <nav className="w-full flex items-center justify-between px-5 sm:px-8 lg:px-12 py-3">
         <a href="#top" className="flex items-center">
           <Logo compact />
         </a>
@@ -62,7 +62,7 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="md:hidden bg-cream-light border-t border-gold/20 px-5 py-4">
+        <div className="md:hidden bg-cream-light border-t border-gold/20 px-5 sm:px-8 py-4">
           <ul className="flex flex-col gap-4 font-sans text-brown">
             {LINKS.map((link) => (
               <li key={link.href}>
