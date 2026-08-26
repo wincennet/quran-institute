@@ -12,9 +12,9 @@ export default function Logo({ compact = false }) {
         className={compact ? "h-6 w-auto mb-1" : "h-10 w-auto mb-2"}
       />
       <span
-        className="font-arabic text-gold"
+        className="font-arabic-display text-gold"
         dir="rtl"
-        style={{ fontSize: compact ? "1.15rem" : "1.8rem" }}
+        style={{ fontSize: compact ? "1.3rem" : "2rem" }}
       >
         أكاديمية الصراط المستقيم
       </span>
