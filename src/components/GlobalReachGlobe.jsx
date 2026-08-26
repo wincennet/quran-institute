@@ -39,7 +39,7 @@ export default function GlobalReachGlobe({ autoRotate }) {
     () =>
       new THREE.MeshPhongMaterial({
         color: "#f2ead9",
-        shininess: 2,
+        shininess: 12,
       }),
     []
   );
@@ -53,19 +53,19 @@ export default function GlobalReachGlobe({ autoRotate }) {
         backgroundColor="rgba(0,0,0,0)"
         globeMaterial={globeMaterial}
         showAtmosphere
-        atmosphereColor="#b8924d"
-        atmosphereAltitude={0.15}
+        atmosphereColor="#d4a656"
+        atmosphereAltitude={0.28}
         polygonsData={LAND_FEATURES}
-        polygonCapColor={() => "#4e4136"}
-        polygonSideColor={() => "rgba(78, 65, 54, 0.5)"}
-        polygonStrokeColor={() => "#3a3029"}
-        polygonAltitude={0.002}
+        polygonCapColor={() => "#6b5642"}
+        polygonSideColor={() => "rgba(107, 86, 66, 0.6)"}
+        polygonStrokeColor={() => "#e8c98a"}
+        polygonAltitude={0.004}
         pointsData={REACHED_COUNTRIES}
         pointLat="lat"
         pointLng="lng"
         pointAltitude={0.015}
-        pointRadius={0.5}
-        pointColor={() => "#b8924d"}
+        pointRadius={0.55}
+        pointColor={() => "#e8c98a"}
         pointLabel={(d) => d.name}
         ringsData={REACHED_COUNTRIES}
         ringLat="lat"
