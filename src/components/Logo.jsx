@@ -12,16 +12,12 @@ export default function Logo({ compact = false }) {
         className={compact ? "h-6 w-auto mb-1" : "h-10 w-auto mb-2"}
       />
       <span
-        className="font-heading text-gold tracking-[0.15em] uppercase"
-        style={{ fontSize: compact ? "1.05rem" : "1.6rem" }}
+        className="font-arabic text-gold"
+        dir="rtl"
+        style={{ fontSize: compact ? "1.15rem" : "1.8rem" }}
       >
-        Assiratul Mustaqeem
+        أكاديمية الصراط المستقيم
       </span>
-      {!compact && (
-        <span className="font-arabic text-gold-dark text-2xl mt-1" dir="rtl">
-          أكاديمية الصراط المستقيم
-        </span>
-      )}
       <span
         className="font-sans text-brown tracking-[0.35em] uppercase mt-1"
         style={{ fontSize: compact ? "0.5rem" : "0.65rem" }}
