@@ -31,19 +31,10 @@ export default function Hero() {
       )}
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 text-center pt-24 pb-16">
-        <motion.img
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          src="/logo/mark.png"
-          alt="Assiratul Mustaqeem Institute mark"
-          className="h-16 md:h-20 w-auto mx-auto mb-4"
-        />
-
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
+          transition={{ duration: 0.7 }}
           className="leading-tight"
         >
           <span dir="rtl" className="block font-arabic-display text-gold text-4xl md:text-6xl">
