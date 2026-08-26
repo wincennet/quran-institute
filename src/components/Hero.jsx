@@ -40,7 +40,7 @@ export default function Hero() {
           <span dir="rtl" className="block font-arabic-display text-gold text-3xl md:text-5xl">
             أكاديمية الصراط المستقيم
           </span>
-          <span className="block font-heading-sc text-brown text-xl md:text-2xl tracking-[0.1em] mt-5">
+          <span className="block font-heading text-brown text-xl md:text-2xl font-semibold mt-5">
             Assiratul Mustaqeem Institute
           </span>
         </motion.h1>
