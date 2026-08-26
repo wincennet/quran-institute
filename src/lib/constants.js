@@ -26,7 +26,7 @@ export const COURSES = [
     arabic: "وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا",
     translation: "“And recite the Quran with measured recitation.”",
     description:
-      "A foundational course covering correct Tajweed rules, essential daily duas, the method of Namaz, and character-building Islamic stories — built for students of every age starting their recitation journey.",
+      "A comprehensive foundation course in Quran recitation, covering the proper rules of Tajweed, essential daily Duas, the correct method of performing Namaz, and enriching Islamic stories that build character. Designed for students of every age beginning their journey with the Quran.",
   },
   {
     id: "arabi",
@@ -35,7 +35,7 @@ export const COURSES = [
     arabic: "إِنَّآ أَنزَلْنَٰهُ قُرْءَٰنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ",
     translation: "“Indeed, We have sent it down as an Arabic Quran that you might understand.”",
     description:
-      "Learn the grammar (Nahw & Sarf) behind the Quran's Arabic so verses stop being sounds to memorize and start being words you understand directly from the source text.",
+      "A structured course in Quranic Arabic grammar, covering Nahw (syntax) and Sarf (morphology). Students learn to read and understand the Quran directly from its original Arabic text, rather than relying solely on translation.",
   },
   {
     id: "ilm",
@@ -44,7 +44,7 @@ export const COURSES = [
     arabic: "الرَّحْمَٰنُ عَلَّمَ الْقُرْآنَ",
     translation: "“The Most Merciful taught the Quran.”",
     description:
-      "A deeper course into word-for-word translation, classical Tafseer, and authentic Hadith — for students ready to move from recitation and grammar into full understanding and application.",
+      "An advanced course covering word-for-word Quran translation, classical Tafseer, and authentic Sahih Hadith. Guides students from recitation and grammar toward a complete understanding and practical application of the Quran's teachings.",
   },
 ];
 
