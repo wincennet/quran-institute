@@ -53,8 +53,8 @@ export default function GlobalReachGlobe({ autoRotate }) {
         backgroundColor="rgba(0,0,0,0)"
         globeMaterial={globeMaterial}
         showAtmosphere
-        atmosphereColor="#d4a656"
-        atmosphereAltitude={0.28}
+        atmosphereColor="#9c7a3c"
+        atmosphereAltitude={0.14}
         polygonsData={LAND_FEATURES}
         polygonCapColor={() => "#6b5642"}
         polygonSideColor={() => "rgba(107, 86, 66, 0.6)"}
