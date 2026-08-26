@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { MISSION_STATEMENT, whatsappLink } from "../lib/constants";
@@ -7,6 +7,20 @@ const HeroScene = lazy(() => import("./HeroScene"));
 
 export default function Hero() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const sceneWrapperRef = useRef(null);
+  const [sceneSize, setSceneSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const el = sceneWrapperRef.current;
+    if (!el) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      setSceneSize({ width, height });
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -22,13 +36,13 @@ export default function Hero() {
         }}
       />
 
-      {!prefersReducedMotion && (
-        <div className="absolute inset-0" aria-hidden="true">
+      <div ref={sceneWrapperRef} className="absolute inset-0" aria-hidden="true">
+        {!prefersReducedMotion && sceneSize.width > 0 && sceneSize.height > 0 && (
           <Suspense fallback={null}>
-            <HeroScene />
+            <HeroScene width={sceneSize.width} height={sceneSize.height} />
           </Suspense>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 text-center pt-24 pb-16">
         <motion.h1
