@@ -4,7 +4,7 @@ export const whatsappLink = (text) =>
   `https://wa.me/${WHATSAPP_NUMBER}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 
 export const CONTACT = {
-  phoneDisplay: "0324 9413931",
+  phoneDisplay: "+923249413931",
   phoneLink: "tel:+923249413931",
   email: "siratalmustaqeeminstitute0@gmail.com",
   location: "Lahore, Pakistan",
