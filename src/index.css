@@ -11,6 +11,7 @@
   --font-arabic: "Amiri", "Scheherazade New", serif;
   --font-arabic-display: "Mirza", "Amiri", serif;
   --font-heading: "Cormorant Garamond", "EB Garamond", serif;
+  --font-heading-sc: "Cormorant SC", "Cormorant Garamond", serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -53,6 +54,10 @@ body {
 
 .font-heading {
   font-family: var(--font-heading);
+}
+
+.font-heading-sc {
+  font-family: var(--font-heading-sc);
 }
 
 /* subtle repeating kufic-square motif, used as a low-opacity section backdrop */
