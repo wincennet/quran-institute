@@ -55,19 +55,6 @@ body {
   font-family: var(--font-heading);
 }
 
-@keyframes islamic-star-spin {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-.islamic-star-spin {
-  animation: islamic-star-spin 90s linear infinite;
-}
-
 /* subtle repeating kufic-square motif, used as a low-opacity section backdrop */
 .kufic-pattern {
   background-image: repeating-linear-gradient(

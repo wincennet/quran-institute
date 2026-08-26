@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { MISSION_STATEMENT, whatsappLink } from "../lib/constants";
-import IslamicStarPattern from "./IslamicStarPattern";
 
 const HeroScene = lazy(() => import("./HeroScene"));
 
@@ -22,8 +21,6 @@ export default function Hero() {
             "radial-gradient(ellipse at center, rgba(184,146,77,0.16) 0%, rgba(232,220,198,0) 60%)",
         }}
       />
-
-      <IslamicStarPattern />
 
       {!prefersReducedMotion && (
         <div className="absolute inset-0" aria-hidden="true">
