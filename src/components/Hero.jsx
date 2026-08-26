@@ -37,10 +37,10 @@ export default function Hero() {
           transition={{ duration: 0.7 }}
           className="leading-tight"
         >
-          <span dir="rtl" className="block font-arabic-display text-gold text-4xl md:text-6xl">
+          <span dir="rtl" className="block font-arabic-display text-gold text-3xl md:text-5xl">
             أكاديمية الصراط المستقيم
           </span>
-          <span className="block font-heading text-brown text-xl md:text-2xl tracking-[0.3em] uppercase mt-3">
+          <span className="block font-heading text-brown text-lg md:text-xl tracking-[0.15em] uppercase mt-5 font-medium">
             Assiratul Mustaqeem Institute
           </span>
         </motion.h1>
