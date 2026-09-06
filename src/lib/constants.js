@@ -61,7 +61,7 @@ export const STEPS = [
   },
   {
     title: "Start learning",
-    description: "Begin regular classes, 5 days a week, at a time convenient for your timezone.",
+    description: "Begin regular classes at a time convenient for your timezone.",
   },
 ];
 
@@ -71,8 +71,8 @@ export const FEATURES = [
     description: "Quality Quran education priced to be accessible to families anywhere in the world.",
   },
   {
-    title: "5 days/week classes",
-    description: "Consistent, structured learning — not a once-a-week refresher.",
+    title: "Live interactive lessons",
+    description: "Real-time classes with your teacher, not pre-recorded lectures.",
   },
   {
     title: "Qualified & experienced teachers",
@@ -87,7 +87,31 @@ export const FEATURES = [
 export const STATS = [
   { value: 13, suffix: "+", label: "Years of experience" },
   { value: 45, suffix: "+", label: "Countries reached" },
-  { value: 5, suffix: "", label: "Rights of the Quran" },
+];
+
+export const LEARNING_FORMATS = [
+  {
+    id: "group",
+    title: "Group Classes",
+    points: [
+      "Classes held as per a fixed schedule",
+      "Fixed timings",
+      "Held on Zoom",
+      "Recordings available",
+      "All courses available",
+    ],
+  },
+  {
+    id: "individual",
+    title: "Individual Classes",
+    points: [
+      "All courses available",
+      "Customizable schedule",
+      "Flexible timings",
+      "Choose your own platform",
+      "Focus on your understanding, not a fixed timeline",
+    ],
+  },
 ];
 
 // A representative spread of countries across regions for the Global Reach globe.

@@ -18,7 +18,7 @@ export default function About() {
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-14 max-w-2xl mx-auto text-center">
+        <div className="grid grid-cols-2 gap-8 mt-14 max-w-xs sm:max-w-sm mx-auto text-center">
           {STATS.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 0.1}>
               <p className="font-heading text-gold text-4xl md:text-5xl font-semibold">
