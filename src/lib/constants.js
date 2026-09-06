@@ -85,7 +85,7 @@ export const FEATURES = [
 ];
 
 export const STATS = [
-  { value: 13, suffix: "+", label: "Years of experience" },
+  { value: 2013, suffix: "", label: "Since" },
   { value: 45, suffix: "+", label: "Countries reached" },
 ];
 
