@@ -74,8 +74,8 @@ export const FEATURES = [
     description: "13 years of teaching experience across our teaching staff.",
   },
   {
-    title: "Convenient timings",
-    description: "Flexible scheduling built around students in 45+ different timezones.",
+    title: "Choice of Group or Individual Classes",
+    description: "Learn one-to-one or join a group — pick whichever fits how you learn best.",
   },
 ];
 

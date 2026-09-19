@@ -1,6 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import Reveal from "./Reveal";
-import { LEARNING_FORMATS } from "../lib/constants";
+import { LEARNING_FORMATS, PLATFORMS } from "../lib/constants";
 
 export default function LearningFormats() {
   return (
@@ -31,6 +31,24 @@ export default function LearningFormats() {
                   </li>
                 ))}
               </ul>
+
+              {format.id === "individual" && (
+                <div className="mt-6 pt-6 border-t border-gold/20">
+                  <p className="text-brown-light text-xs uppercase tracking-[0.2em] mb-3">
+                    Choose your platform
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {PLATFORMS.map((platform) => (
+                      <span
+                        key={platform}
+                        className="bg-cream border border-gold/30 rounded-full px-4 py-1.5 text-brown text-xs font-medium"
+                      >
+                        {platform}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </Reveal>
           ))}
         </div>

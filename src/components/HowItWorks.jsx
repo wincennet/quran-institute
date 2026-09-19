@@ -1,5 +1,5 @@
 import Reveal from "./Reveal";
-import { PLATFORMS, STEPS } from "../lib/constants";
+import { STEPS } from "../lib/constants";
 
 export default function HowItWorks() {
   return (
@@ -29,22 +29,6 @@ export default function HowItWorks() {
             </Reveal>
           ))}
         </div>
-
-        <Reveal delay={0.3} className="mt-16 text-center">
-          <p className="text-brown-light text-sm uppercase tracking-[0.2em] mb-5">
-            Classes held on
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {PLATFORMS.map((platform) => (
-              <span
-                key={platform}
-                className="bg-cream border border-gold/30 rounded-full px-5 py-2 text-brown text-sm font-medium"
-              >
-                {platform}
-              </span>
-            ))}
-          </div>
-        </Reveal>
       </div>
     </section>
   );
