@@ -30,14 +30,36 @@ export default function CourseCard({ course, expanded, onToggle }) {
       onMouseLeave={handleLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
       animate={{ scale: hovering ? 1.02 : 1 }}
-      className="bg-cream-light rounded-2xl border border-gold/25 p-7 shadow-sm cursor-pointer"
+      className={`bg-cream-light rounded-2xl border border-gold/25 p-7 shadow-sm cursor-pointer relative ${
+        course.comingSoon ? "opacity-90" : ""
+      }`}
       onClick={onToggle}
     >
-      <span className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-        Course
-      </span>
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+          Course
+        </span>
+        {course.comingSoon && (
+          <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.15em] text-brown-light bg-gold/15 border border-gold/30 rounded-full px-3 py-1">
+            Coming Soon
+          </span>
+        )}
+      </div>
       <h3 className="font-heading text-brown text-2xl font-semibold mt-2">{course.title}</h3>
       <p className="text-brown-light text-sm mt-1">{course.subtitle}</p>
+
+      {course.languages && (
+        <div className="flex flex-wrap gap-2 mt-4">
+          {course.languages.map((lang) => (
+            <span
+              key={lang}
+              className="font-sans text-xs text-gold-dark border border-gold/30 rounded-full px-3 py-1"
+            >
+              {lang}
+            </span>
+          ))}
+        </div>
+      )}
 
       <p dir="rtl" className="font-arabic text-gold text-xl mt-5 leading-relaxed">
         {course.arabic}
@@ -52,14 +74,25 @@ export default function CourseCard({ course, expanded, onToggle }) {
         <p className="text-brown text-sm leading-relaxed mt-5 pt-5 border-t border-gold/20">
           {course.description}
         </p>
+        {course.comingSoonNote && (
+          <p className="text-gold-dark text-xs font-medium italic mt-3">
+            {course.comingSoonNote}
+          </p>
+        )}
         <a
-          href={whatsappLink(`Assalamu alaikum, I'd like to know more about ${course.title}.`)}
+          href={whatsappLink(
+            course.comingSoon
+              ? `Assalamu alaikum, please let me know when ${course.title} becomes available.`
+              : `Assalamu alaikum, I'd like to know more about ${course.title}.`,
+          )}
           target="_blank"
           rel="noreferrer"
           onClick={(e) => e.stopPropagation()}
           className="inline-block mt-5 text-sm font-medium text-gold-dark hover:text-gold underline underline-offset-4"
         >
-          Ask about this course on WhatsApp →
+          {course.comingSoon
+            ? "Notify me when it's ready on WhatsApp →"
+            : "Ask about this course on WhatsApp →"}
         </a>
       </motion.div>
 

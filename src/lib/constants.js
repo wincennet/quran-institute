@@ -27,6 +27,7 @@ export const COURSES = [
     translation: "“And recite the Quran with measured recitation.”",
     description:
       "A comprehensive foundation course in Quran recitation, covering the proper rules of Tajweed, essential daily Duas, the correct method of performing Namaz, and enriching Islamic stories that build character. Designed for students of every age beginning their journey with the Quran.",
+    languages: ["Urdu", "English"],
   },
   {
     id: "arabi",
@@ -35,16 +36,10 @@ export const COURSES = [
     arabic: "إِنَّآ أَنزَلْنَٰهُ قُرْءَٰنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ",
     translation: "“Indeed, We have sent it down as an Arabic Quran that you might understand.”",
     description:
-      "A structured course in Quranic Arabic grammar, covering Nahw (syntax) and Sarf (morphology). Students learn to read and understand the Quran directly from its original Arabic text, rather than relying solely on translation.",
-  },
-  {
-    id: "ilm",
-    title: "Ilm-ul-Quran",
-    subtitle: "Quran Translation, Tafseer, Authentic (Sahih) Hadith",
-    arabic: "الرَّحْمَٰنُ عَلَّمَ الْقُرْآنَ",
-    translation: "“The Most Merciful taught the Quran.”",
-    description:
-      "An advanced course covering word-for-word Quran translation, classical Tafseer, and authentic Sahih Hadith. Guides students from recitation and grammar toward a complete understanding and practical application of the Quran's teachings.",
+      "A simple, grammar-light path into Quranic Arabic — no complex Nahw or Sarf terminology. Built around real Quranic examples, this course helps students understand the Quran directly and read other Arabic Islamic books with confidence.",
+    languages: ["Urdu", "English"],
+    comingSoon: true,
+    comingSoonNote: "Our course book is being written and will be ready soon.",
   },
 ];
 

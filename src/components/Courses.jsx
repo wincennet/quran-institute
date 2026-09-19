@@ -18,7 +18,7 @@ export default function Courses() {
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7 mt-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-14 max-w-3xl mx-auto">
           {COURSES.map((course, i) => (
             <Reveal key={course.id} delay={i * 0.1}>
               <CourseCard

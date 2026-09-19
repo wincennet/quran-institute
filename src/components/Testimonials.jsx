@@ -1,21 +1,25 @@
 import { Quote } from "lucide-react";
 import Reveal from "./Reveal";
 
-const PLACEHOLDER_TESTIMONIALS = [
+const TESTIMONIALS = [
   {
-    name: "Sample parent, United Kingdom",
+    name: "A student, learning alongside his two brothers",
     quote:
-      "My daughter looks forward to her class every week — the teacher is patient and her Tajweed has improved so much in just a few months.",
+      "Assalamualaikum. Me, and my 2 brothers have read Quran with this institute for around 8 years. All three of us have finished our qaida, and have finished the Quran back to back twice. The tajweed is very intricate, and we were even taught the translation of the Quran. We were also taught various daily duas, and even taught parts of prayer. I highly recommend signing up with this institute. The teachers are very kind to their students, and will even come to teach you at your own personal timings.",
   },
   {
-    name: "Sample student, United States",
+    name: "A student",
     quote:
-      "I started with almost no Arabic. Now I can follow along with translation classes and actually understand what I'm reciting.",
+      "My Quran Teacher is very dedicated. She encourages students to practice Quran with tajweed. She is also very patient with her students. Excellent teacher!",
   },
   {
-    name: "Sample parent, Australia",
+    name: "A parent",
     quote:
-      "Scheduling across timezones was our biggest worry before we joined — it turned out to be the easiest part.",
+      "We are very happy to have Quran teacher from this institute for our children. She is very knowledgeable, kind, and patient. We have had a memorable and wonderful experience with her as a teacher. May Allah bless her and help her progress in her work. Ameen.",
+  },
+  {
+    name: "A student",
+    quote: "I really enjoy my Quran class and would definitely recommend my institute.",
   },
 ];
 
@@ -30,15 +34,12 @@ export default function Testimonials() {
           <h2 className="font-heading text-brown text-3xl md:text-4xl font-medium mt-3">
             What our students and parents say
           </h2>
-          <p className="text-brown-light text-xs mt-3 italic">
-            Sample quotes shown below — real testimonials coming soon.
-          </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7 mt-14">
-          {PLACEHOLDER_TESTIMONIALS.map((t, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-7 mt-14">
+          {TESTIMONIALS.map((t, i) => (
             <Reveal
-              key={t.name}
+              key={i}
               delay={i * 0.1}
               className="bg-cream-light rounded-2xl border border-gold/20 p-7"
             >
