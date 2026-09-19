@@ -36,7 +36,7 @@ export const COURSES = [
     arabic: "إِنَّآ أَنزَلْنَٰهُ قُرْءَٰنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ",
     translation: "“Indeed, We have sent it down as an Arabic Quran that you might understand.”",
     description:
-      "A simple, grammar-light path into Quranic Arabic — no complex Nahw or Sarf terminology. Built around real Quranic examples, this course helps students understand the Quran directly and read other Arabic Islamic books with confidence.",
+      "A simple, grammar-light path into Quranic Arabic, built around real Quranic examples. This course helps students understand the Quran directly and read other Arabic Islamic books with confidence.",
     languages: ["Urdu", "English"],
     comingSoon: true,
     comingSoonNote: "Our course book is being written and will be ready soon.",
