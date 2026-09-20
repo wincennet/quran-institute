@@ -11,7 +11,7 @@ export default function Hero() {
         <img
           src={heroQuran}
           alt=""
-          className="w-full h-full object-cover object-[68%_center]"
+          className="w-full h-full object-cover object-[68%_center] -scale-x-100"
         />
         {/* brown tint, low opacity so the photo still reads through */}
         <div className="absolute inset-0 bg-brown/45" />
