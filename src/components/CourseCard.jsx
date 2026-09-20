@@ -1,12 +1,18 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { whatsappLink } from "../lib/constants";
+import { CheckCircle2 } from "lucide-react";
+import { LEARNING_FORMATS, whatsappLink } from "../lib/constants";
 
 export default function CourseCard({ course, expanded, onToggle }) {
   const ref = useRef(null);
   const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const [hovering, setHovering] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState(course.formats?.[0] ?? null);
+
+  const activeFormat = LEARNING_FORMATS.find(
+    (format) => format.id === selectedFormat?.toLowerCase(),
+  );
 
   const handleMouseMove = (event) => {
     const rect = ref.current.getBoundingClientRect();
@@ -98,11 +104,53 @@ export default function CourseCard({ course, expanded, onToggle }) {
             {course.comingSoonNote}
           </p>
         )}
+
+        {course.formats && (
+          <div className="mt-5 pt-5 border-t border-gold/20">
+            <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+              Choose your format
+            </p>
+            <div className="flex gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
+              {course.formats.map((format) => (
+                <button
+                  key={format}
+                  type="button"
+                  onClick={() => setSelectedFormat(format)}
+                  aria-pressed={selectedFormat === format}
+                  className={`text-sm font-medium rounded-full px-4 py-1.5 border transition-colors ${
+                    selectedFormat === format
+                      ? "bg-gold text-cream-light border-gold"
+                      : "text-brown-light border-gold/30 hover:border-gold"
+                  }`}
+                >
+                  {format}
+                </button>
+              ))}
+            </div>
+
+            {activeFormat && (
+              <ul className="mt-4 space-y-2">
+                {activeFormat.points.map((point) => (
+                  <li
+                    key={point}
+                    className="flex items-start gap-2.5 text-brown-light text-sm leading-relaxed"
+                  >
+                    <CheckCircle2 className="text-gold shrink-0 mt-0.5" size={16} />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
         <a
           href={whatsappLink(
             course.comingSoon
               ? `Assalamu alaikum, please let me know when ${course.title} becomes available.`
-              : `Assalamu alaikum, I'd like to know more about ${course.title}.`,
+              : `Assalamu alaikum, I'd like to know more about ${course.title}${
+                  selectedFormat ? ` (${selectedFormat} classes)` : ""
+                }.`,
           )}
           target="_blank"
           rel="noreferrer"
