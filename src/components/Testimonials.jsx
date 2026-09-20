@@ -8,9 +8,9 @@ const TESTIMONIALS = [
       "Assalamualaikum. Me, and my 2 brothers have read Quran with this institute for around 8 years. All three of us have finished our qaida, and have finished the Quran back to back twice. The tajweed is very intricate, and we were even taught the translation of the Quran. We were also taught various daily duas, and even taught parts of prayer. I highly recommend signing up with this institute. The teachers are very kind to their students, and will even come to teach you at your own personal timings.",
   },
   {
-    name: "A student, United States",
+    name: "A parent, United States",
     quote:
-      "My Quran Teacher is very dedicated. She encourages students to practice Quran with tajweed. She is also very patient with her students. Excellent teacher!",
+      "The Quran Teacher is very dedicated. She encourages students to practice Quran with tajweed. She is also very patient with her students. Excellent teacher!",
   },
   {
     name: "A parent, Australia",
