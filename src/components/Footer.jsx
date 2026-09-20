@@ -11,9 +11,9 @@ const SOCIAL_ICONS = {
 };
 
 const QUICK_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Courses", href: "#courses" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/#about" },
+  { label: "Courses", href: "/#courses" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Footer() {

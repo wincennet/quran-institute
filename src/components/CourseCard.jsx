@@ -1,44 +1,12 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
-import { LEARNING_FORMATS, whatsappLink } from "../lib/constants";
+import { Link } from "react-router-dom";
 
-function PickerRow({ label, options, selected, onSelect }) {
-  return (
-    <div>
-      <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">{label}</p>
-      <div className="flex flex-wrap gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
-        {options.map((option) => (
-          <button
-            key={option}
-            type="button"
-            onClick={() => onSelect(option)}
-            aria-pressed={selected === option}
-            className={`text-sm font-medium rounded-full px-4 py-1.5 border transition-colors ${
-              selected === option
-                ? "bg-gold text-cream-light border-gold"
-                : "text-brown-light border-gold/30 hover:border-gold"
-            }`}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function CourseCard({ course, expanded, onToggle }) {
+export default function CourseCard({ course }) {
   const ref = useRef(null);
   const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const [hovering, setHovering] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(course.languages?.[0] ?? null);
-  const [selectedFormat, setSelectedFormat] = useState(course.formats?.[0] ?? null);
-
-  const activeFormat = LEARNING_FORMATS.find(
-    (format) => format.id === selectedFormat?.toLowerCase(),
-  );
 
   const handleMouseMove = (event) => {
     const rect = ref.current.getBoundingClientRect();
@@ -62,10 +30,9 @@ export default function CourseCard({ course, expanded, onToggle }) {
       onMouseLeave={handleLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
       animate={{ scale: hovering ? 1.02 : 1 }}
-      className={`bg-cream-light rounded-2xl border border-gold/25 p-7 shadow-sm cursor-pointer relative ${
+      className={`bg-cream-light rounded-2xl border border-gold/25 p-7 shadow-sm relative ${
         course.comingSoon ? "opacity-90" : ""
       }`}
-      onClick={onToggle}
     >
       <div className="flex items-center justify-between gap-3">
         <span className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
@@ -85,85 +52,16 @@ export default function CourseCard({ course, expanded, onToggle }) {
       </p>
       <p className="text-brown-light text-xs italic mt-2">{course.translation}</p>
 
-      <motion.div
-        initial={false}
-        animate={{ height: expanded ? "auto" : 0, opacity: expanded ? 1 : 0 }}
-        className="overflow-hidden"
+      <p className="text-brown text-sm leading-relaxed mt-5 pt-5 border-t border-gold/20">
+        {course.description}
+      </p>
+
+      <Link
+        to={`/courses/${course.id}`}
+        className="inline-block mt-5 text-sm font-medium text-gold-dark hover:text-gold underline underline-offset-4"
       >
-        <p className="text-brown text-sm leading-relaxed mt-5 pt-5 border-t border-gold/20">
-          {course.description}
-        </p>
-        {course.comingSoonNote && (
-          <p className="text-gold-dark text-xs font-medium italic mt-3">
-            {course.comingSoonNote}
-          </p>
-        )}
-
-        {course.languages && (
-          <div className="mt-5 pt-5 border-t border-gold/20">
-            <PickerRow
-              label="Choose your language"
-              options={course.languages}
-              selected={selectedLanguage}
-              onSelect={setSelectedLanguage}
-            />
-          </div>
-        )}
-
-        {course.formats && (
-          <div className="mt-5 pt-5 border-t border-gold/20">
-            <PickerRow
-              label="Choose your format"
-              options={course.formats}
-              selected={selectedFormat}
-              onSelect={setSelectedFormat}
-            />
-
-            {activeFormat && (
-              <ul className="mt-4 space-y-2">
-                {activeFormat.points.map((point) => (
-                  <li
-                    key={point}
-                    className="flex items-start gap-2.5 text-brown-light text-sm leading-relaxed"
-                  >
-                    <CheckCircle2 className="text-gold shrink-0 mt-0.5" size={16} />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-
-        <a
-          href={whatsappLink(
-            course.comingSoon
-              ? `Assalamu alaikum, please let me know when ${course.title} becomes available.`
-              : `Assalamu alaikum, I'd like to know more about ${course.title}${
-                  selectedLanguage || selectedFormat
-                    ? ` (${[selectedLanguage, selectedFormat && `${selectedFormat} classes`]
-                        .filter(Boolean)
-                        .join(", ")})`
-                    : ""
-                }.`,
-          )}
-          target="_blank"
-          rel="noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="inline-block mt-5 text-sm font-medium text-gold-dark hover:text-gold underline underline-offset-4"
-        >
-          {course.comingSoon
-            ? "Notify me when it's ready on WhatsApp →"
-            : "Ask about this course on WhatsApp →"}
-        </a>
-      </motion.div>
-
-      <button
-        className="mt-5 text-sm font-medium text-brown-light"
-        aria-expanded={expanded}
-      >
-        {expanded ? "Show less" : "Learn more"}
-      </button>
+        Learn more →
+      </Link>
     </motion.div>
   );
 }

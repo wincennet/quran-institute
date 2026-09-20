@@ -1,27 +1,19 @@
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Courses from "./components/Courses";
-import GlobalReach from "./components/GlobalReach";
-import Testimonials from "./components/Testimonials";
-import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
+import HomePage from "./pages/HomePage";
+import CoursePage from "./pages/CoursePage";
 
-// HowItWorks and LearningFormats are parked, not deleted — HowItWorks is
-// coming back later, and LearningFormats' picker now lives inside each
-// CourseCard instead of its own section.
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Courses />
-        <GlobalReach />
-        <Testimonials />
-        <Contact />
-      </main>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/courses/:id" element={<CoursePage />} />
+      </Routes>
       <Footer />
     </>
   );

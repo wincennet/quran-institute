@@ -1,11 +1,8 @@
-import { useState } from "react";
 import Reveal from "./Reveal";
 import CourseCard from "./CourseCard";
 import { COURSES } from "../lib/constants";
 
 export default function Courses() {
-  const [expandedId, setExpandedId] = useState(null);
-
   return (
     <section id="courses" className="bg-cream py-24 kufic-pattern">
       <div className="max-w-6xl mx-auto px-6">
@@ -21,13 +18,7 @@ export default function Courses() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-14 max-w-3xl mx-auto">
           {COURSES.map((course, i) => (
             <Reveal key={course.id} delay={i * 0.1}>
-              <CourseCard
-                course={course}
-                expanded={expandedId === course.id}
-                onToggle={() =>
-                  setExpandedId((current) => (current === course.id ? null : course.id))
-                }
-              />
+              <CourseCard course={course} />
             </Reveal>
           ))}
         </div>

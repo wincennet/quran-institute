@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import { whatsappLink } from "../lib/constants";
 
 const LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Courses", href: "#courses" },
-  { label: "Global Reach", href: "#global-reach" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/#about" },
+  { label: "Courses", href: "/#courses" },
+  { label: "Global Reach", href: "/#global-reach" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -28,9 +29,9 @@ export default function Navbar() {
       }`}
     >
       <nav className="w-full flex items-center justify-between px-5 sm:px-8 lg:px-12 py-3">
-        <a href="#top" className="flex items-center">
+        <Link to="/" className="flex items-center">
           <Logo compact />
-        </a>
+        </Link>
 
         <ul className="hidden md:flex items-center gap-8 font-sans text-sm text-brown">
           {LINKS.map((link) => (
