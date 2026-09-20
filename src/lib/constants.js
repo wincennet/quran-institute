@@ -28,6 +28,7 @@ export const COURSES = [
     description:
       "A comprehensive foundation course in Quran recitation, covering the proper rules of Tajweed, essential daily Duas, the correct method of performing Namaz, and enriching Islamic stories that build character. Designed for students of every age beginning their journey with the Quran.",
     languages: ["Urdu", "English"],
+    formats: ["Group", "Individual"],
   },
   {
     id: "arabi",
@@ -38,6 +39,7 @@ export const COURSES = [
     description:
       "A simple, grammar-light path into Quranic Arabic, built around real Quranic examples. This course helps students understand the Quran directly and read other Arabic Islamic books with confidence.",
     languages: ["Urdu", "English"],
+    formats: ["Group", "Individual"],
     comingSoon: true,
     comingSoonNote: "Our course book is being written and will be ready soon.",
   },

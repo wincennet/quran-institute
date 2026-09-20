@@ -61,6 +61,19 @@ export default function CourseCard({ course, expanded, onToggle }) {
         </div>
       )}
 
+      {course.formats && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {course.formats.map((format) => (
+            <span
+              key={format}
+              className="font-sans text-xs text-gold-dark border border-gold/30 rounded-full px-3 py-1"
+            >
+              {format}
+            </span>
+          ))}
+        </div>
+      )}
+
       <p dir="rtl" className="font-arabic text-gold text-xl mt-5 leading-relaxed">
         {course.arabic}
       </p>
