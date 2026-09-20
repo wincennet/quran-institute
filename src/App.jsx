@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import HomePage from "./pages/HomePage";
 import CoursePage from "./pages/CoursePage";
+import EnrollPage from "./pages/EnrollPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/courses/:id" element={<CoursePage />} />
+        <Route path="/courses/:id/enroll" element={<EnrollPage />} />
       </Routes>
       <Footer />
     </>

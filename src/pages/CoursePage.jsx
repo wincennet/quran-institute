@@ -36,6 +36,8 @@ function CourseDetail({ course }) {
     (format) => format.id === selectedFormat?.toLowerCase(),
   );
 
+  // Only used for the Coming Soon "notify me" form — real courses skip this
+  // form entirely and link to the dedicated enroll page instead.
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStatus("sending");
@@ -44,12 +46,7 @@ function CourseDetail({ course }) {
     data.set("course", course.title);
     if (selectedLanguage) data.set("language", selectedLanguage);
     if (selectedFormat) data.set("format", selectedFormat);
-    data.set(
-      "_subject",
-      course.comingSoon
-        ? `Notify-me request: ${course.title}`
-        : `Enrollment request: ${course.title}`,
-    );
+    data.set("_subject", `Notify-me request: ${course.title}`);
 
     try {
       const response = await fetch(FORMSPREE_ENDPOINT, {
@@ -142,65 +139,77 @@ function CourseDetail({ course }) {
             </div>
           )}
 
-          <form
-            onSubmit={handleSubmit}
-            className="mt-6 pt-6 border-t border-gold/20 space-y-4"
-          >
-            <p className="font-heading text-brown text-lg font-semibold">
-              {course.comingSoon ? "Get notified when this course is ready" : "Enroll in this course"}
-            </p>
-
-            <div>
-              <label htmlFor="name" className="text-xs text-brown-light font-medium">
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="text-xs text-brown-light font-medium">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-full transition-colors"
+          {course.comingSoon ? (
+            <form
+              onSubmit={handleSubmit}
+              className="mt-6 pt-6 border-t border-gold/20 space-y-4"
             >
-              {status === "sending"
-                ? "Sending…"
-                : course.comingSoon
-                  ? "Notify Me"
-                  : "Submit Enrollment Request"}
-            </button>
+              <p className="font-heading text-brown text-lg font-semibold">
+                Get notified when this course is ready
+              </p>
 
-            {status === "success" && (
-              <p className="text-sm text-gold-dark text-center">
-                {course.comingSoon
-                  ? "Got it — we'll let you know as soon as it's ready."
-                  : "Request sent — we'll message you shortly to confirm the details."}
-              </p>
-            )}
-            {status === "error" && (
-              <p className="text-sm text-red-700 text-center">
-                Something went wrong — please try again or message us on WhatsApp from the Contact section.
-              </p>
-            )}
-          </form>
+              <div>
+                <label htmlFor="name" className="text-xs text-brown-light font-medium">
+                  Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="text-xs text-brown-light font-medium">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-full transition-colors"
+              >
+                {status === "sending" ? "Sending…" : "Notify Me"}
+              </button>
+
+              {status === "success" && (
+                <p className="text-sm text-gold-dark text-center">
+                  Got it — we'll let you know as soon as it's ready.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-sm text-red-700 text-center">
+                  Something went wrong — please try again or message us on WhatsApp from the
+                  Contact section.
+                </p>
+              )}
+            </form>
+          ) : (
+            <div className="mt-6 pt-6 border-t border-gold/20">
+              <Link
+                to={{
+                  pathname: `/courses/${course.id}/enroll`,
+                  search: new URLSearchParams({
+                    ...(selectedLanguage ? { language: selectedLanguage } : {}),
+                    ...(selectedFormat ? { format: selectedFormat } : {}),
+                  }).toString(),
+                }}
+                className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"
+              >
+                Enroll Now
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </main>
