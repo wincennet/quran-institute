@@ -3,11 +3,37 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { LEARNING_FORMATS, whatsappLink } from "../lib/constants";
 
+function PickerRow({ label, options, selected, onSelect }) {
+  return (
+    <div>
+      <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">{label}</p>
+      <div className="flex flex-wrap gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
+        {options.map((option) => (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onSelect(option)}
+            aria-pressed={selected === option}
+            className={`text-sm font-medium rounded-full px-4 py-1.5 border transition-colors ${
+              selected === option
+                ? "bg-gold text-cream-light border-gold"
+                : "text-brown-light border-gold/30 hover:border-gold"
+            }`}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CourseCard({ course, expanded, onToggle }) {
   const ref = useRef(null);
   const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const [hovering, setHovering] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(course.languages?.[0] ?? null);
   const [selectedFormat, setSelectedFormat] = useState(course.formats?.[0] ?? null);
 
   const activeFormat = LEARNING_FORMATS.find(
@@ -54,38 +80,6 @@ export default function CourseCard({ course, expanded, onToggle }) {
       <h3 className="font-heading text-brown text-2xl font-semibold mt-2">{course.title}</h3>
       <p className="text-brown-light text-sm mt-1">{course.subtitle}</p>
 
-      {course.languages && (
-        <div className="flex flex-wrap gap-2 mt-4">
-          {course.languages.map((lang) => (
-            <span
-              key={lang}
-              className="font-sans text-xs text-gold-dark border border-gold/30 rounded-full px-3 py-1"
-            >
-              {lang}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {course.formats && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {course.formats.map((format) => (
-            <span
-              key={format}
-              className="font-sans text-xs text-gold-dark border border-gold/30 rounded-full px-3 py-1"
-            >
-              {format}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {course.groupDuration && (
-        <p className="text-brown-light text-xs mt-3">
-          Group batch duration: <span className="text-gold-dark font-medium">{course.groupDuration}</span>
-        </p>
-      )}
-
       <p dir="rtl" className="font-arabic text-gold text-xl mt-5 leading-relaxed">
         {course.arabic}
       </p>
@@ -105,28 +99,25 @@ export default function CourseCard({ course, expanded, onToggle }) {
           </p>
         )}
 
+        {course.languages && (
+          <div className="mt-5 pt-5 border-t border-gold/20">
+            <PickerRow
+              label="Choose your language"
+              options={course.languages}
+              selected={selectedLanguage}
+              onSelect={setSelectedLanguage}
+            />
+          </div>
+        )}
+
         {course.formats && (
           <div className="mt-5 pt-5 border-t border-gold/20">
-            <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-              Choose your format
-            </p>
-            <div className="flex gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
-              {course.formats.map((format) => (
-                <button
-                  key={format}
-                  type="button"
-                  onClick={() => setSelectedFormat(format)}
-                  aria-pressed={selectedFormat === format}
-                  className={`text-sm font-medium rounded-full px-4 py-1.5 border transition-colors ${
-                    selectedFormat === format
-                      ? "bg-gold text-cream-light border-gold"
-                      : "text-brown-light border-gold/30 hover:border-gold"
-                  }`}
-                >
-                  {format}
-                </button>
-              ))}
-            </div>
+            <PickerRow
+              label="Choose your format"
+              options={course.formats}
+              selected={selectedFormat}
+              onSelect={setSelectedFormat}
+            />
 
             {activeFormat && (
               <ul className="mt-4 space-y-2">
@@ -149,7 +140,11 @@ export default function CourseCard({ course, expanded, onToggle }) {
             course.comingSoon
               ? `Assalamu alaikum, please let me know when ${course.title} becomes available.`
               : `Assalamu alaikum, I'd like to know more about ${course.title}${
-                  selectedFormat ? ` (${selectedFormat} classes)` : ""
+                  selectedLanguage || selectedFormat
+                    ? ` (${[selectedLanguage, selectedFormat && `${selectedFormat} classes`]
+                        .filter(Boolean)
+                        .join(", ")})`
+                    : ""
                 }.`,
           )}
           target="_blank"
