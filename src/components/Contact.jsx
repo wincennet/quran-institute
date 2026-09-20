@@ -46,7 +46,7 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-14">
           <Reveal className="space-y-6">
             <a
-              href={whatsappLink("Assalamu alaikum, I'd like to book a free trial class.")}
+              href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-4 bg-gold hover:bg-gold-dark transition-colors text-cream-light rounded-2xl px-6 py-5"

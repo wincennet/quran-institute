@@ -75,12 +75,12 @@ export default function Hero() {
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
-            href={whatsappLink("Assalamu alaikum, I'd like to book a free trial class.")}
+            href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
             target="_blank"
             rel="noreferrer"
             className="w-full sm:w-auto bg-gold hover:bg-gold-dark text-cream-light font-medium px-8 py-3 rounded-full transition-colors"
           >
-            Book a Free Trial Class
+            Book a Free Individual Trial Class
           </a>
           <a
             href="#courses"

@@ -51,7 +51,7 @@ export const PLATFORMS = ["Google Meet", "Zoom", "WhatsApp", "Discord"];
 
 export const STEPS = [
   {
-    title: "Book a free trial",
+    title: "Book a free individual trial",
     description:
       "Message us on WhatsApp — individual classes start with a free trial lesson, or we'll let you know when the next group batch opens for enrollment.",
   },

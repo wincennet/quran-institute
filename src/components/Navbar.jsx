@@ -43,12 +43,12 @@ export default function Navbar() {
         </ul>
 
         <a
-          href={whatsappLink("Assalamu alaikum, I'd like to book a free trial class.")}
+          href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
           target="_blank"
           rel="noreferrer"
           className="hidden md:inline-block bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-full transition-colors"
         >
-          Book a Free Trial
+          Book a Free Individual Trial
         </a>
 
         <button
@@ -72,12 +72,12 @@ export default function Navbar() {
             ))}
           </ul>
           <a
-            href={whatsappLink("Assalamu alaikum, I'd like to book a free trial class.")}
+            href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
             target="_blank"
             rel="noreferrer"
             className="mt-4 block text-center bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-full transition-colors"
           >
-            Book a Free Trial
+            Book a Free Individual Trial
           </a>
         </div>
       )}
