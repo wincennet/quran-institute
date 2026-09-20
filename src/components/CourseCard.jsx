@@ -74,6 +74,12 @@ export default function CourseCard({ course, expanded, onToggle }) {
         </div>
       )}
 
+      {course.groupDuration && (
+        <p className="text-brown-light text-xs mt-3">
+          Group batch duration: <span className="text-gold-dark font-medium">{course.groupDuration}</span>
+        </p>
+      )}
+
       <p dir="rtl" className="font-arabic text-gold text-xl mt-5 leading-relaxed">
         {course.arabic}
       </p>

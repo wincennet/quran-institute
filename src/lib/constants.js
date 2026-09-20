@@ -29,6 +29,7 @@ export const COURSES = [
       "A comprehensive foundation course in Quran recitation, covering the proper rules of Tajweed, essential daily Duas, the correct method of performing Namaz, and enriching Islamic stories that build character. Designed for students of every age beginning their journey with the Quran.",
     languages: ["Urdu", "English"],
     formats: ["Group", "Individual"],
+    groupDuration: "About 6 months",
   },
   {
     id: "arabi",
@@ -40,6 +41,7 @@ export const COURSES = [
       "A simple, grammar-light path into Quranic Arabic, built around real Quranic examples. This course helps students understand the Quran directly and read other Arabic Islamic books with confidence.",
     languages: ["Urdu", "English"],
     formats: ["Group", "Individual"],
+    groupDuration: "About 1 year",
     comingSoon: true,
     comingSoonNote: "Our course book is being written and will be ready soon.",
   },
@@ -50,7 +52,8 @@ export const PLATFORMS = ["Google Meet", "Zoom", "WhatsApp", "Discord"];
 export const STEPS = [
   {
     title: "Book a free trial",
-    description: "Message us on WhatsApp and tell us your child's (or your own) current level.",
+    description:
+      "Message us on WhatsApp — individual classes start with a free trial lesson, or we'll let you know when the next group batch opens for enrollment.",
   },
   {
     title: "Get matched with a teacher",
@@ -91,6 +94,7 @@ export const LEARNING_FORMATS = [
     id: "group",
     title: "Group Classes",
     points: [
+      "New batches announced before they start",
       "Classes held as per a fixed schedule",
       "Fixed timings",
       "Held on Zoom",
@@ -102,6 +106,7 @@ export const LEARNING_FORMATS = [
     id: "individual",
     title: "Individual Classes",
     points: [
+      "Free trial lesson included",
       "Customizable schedule",
       "Flexible timings",
       "Choose your own platform",
