@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import PickerRow from "../components/PickerRow";
 import { COURSES } from "../lib/constants";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
@@ -33,7 +32,6 @@ export default function EnrollPage() {
 }
 
 function EnrollForm({ course, language, format }) {
-  const [gender, setGender] = useState(null);
   const [status, setStatus] = useState("idle");
 
   const handleSubmit = async (event) => {
@@ -44,7 +42,6 @@ function EnrollForm({ course, language, format }) {
     data.set("course", course.title);
     if (language) data.set("language", language);
     if (format) data.set("format", format);
-    if (gender) data.set("gender", gender);
     data.set("_subject", `Enrollment request: ${course.title}`);
 
     try {
@@ -163,7 +160,27 @@ function EnrollForm({ course, language, format }) {
               />
             </div>
 
-            <PickerRow label="Gender" options={GENDERS} selected={gender} onSelect={setGender} />
+            <div>
+              <label htmlFor="gender" className="text-xs text-brown-light font-medium">
+                Gender
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                required
+                defaultValue=""
+                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              >
+                <option value="" disabled>
+                  Select gender
+                </option>
+                {GENDERS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <button
               type="submit"
