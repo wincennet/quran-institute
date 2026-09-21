@@ -44,9 +44,7 @@ function CourseDetail({ course }) {
     const form = event.target;
     const data = new FormData(form);
     data.set("course", course.title);
-    if (selectedFormat === "Individual" && selectedLanguage) {
-      data.set("language", selectedLanguage);
-    }
+    if (selectedLanguage) data.set("language", selectedLanguage);
     if (selectedFormat) data.set("format", selectedFormat);
     data.set("_subject", `Notify-me request: ${course.title}`);
 
@@ -105,6 +103,17 @@ function CourseDetail({ course }) {
             </p>
           )}
 
+          {course.languages && (
+            <div className="mt-6 pt-6 border-t border-gold/20">
+              <PickerRow
+                label="Choose your language"
+                options={course.languages}
+                selected={selectedLanguage}
+                onSelect={setSelectedLanguage}
+              />
+            </div>
+          )}
+
           {course.formats && (
             <div className="mt-6 pt-6 border-t border-gold/20">
               <PickerRow
@@ -127,19 +136,6 @@ function CourseDetail({ course }) {
                   ))}
                 </ul>
               )}
-            </div>
-          )}
-
-          {/* Language choice only applies to Individual classes — Group runs
-              on a fixed schedule in one language. */}
-          {selectedFormat === "Individual" && course.languages && (
-            <div className="mt-6 pt-6 border-t border-gold/20">
-              <PickerRow
-                label="Choose your language"
-                options={course.languages}
-                selected={selectedLanguage}
-                onSelect={setSelectedLanguage}
-              />
             </div>
           )}
 
@@ -204,9 +200,7 @@ function CourseDetail({ course }) {
                 to={{
                   pathname: `/courses/${course.id}/enroll`,
                   search: new URLSearchParams({
-                    ...(selectedFormat === "Individual" && selectedLanguage
-                      ? { language: selectedLanguage }
-                      : {}),
+                    ...(selectedLanguage ? { language: selectedLanguage } : {}),
                     ...(selectedFormat ? { format: selectedFormat } : {}),
                   }).toString(),
                 }}
