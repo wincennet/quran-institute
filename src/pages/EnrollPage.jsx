@@ -25,8 +25,11 @@ export default function EnrollPage() {
     );
   }
 
-  const language = searchParams.get("language") || course.languages?.[0] || "";
   const format = searchParams.get("format") || course.formats?.[0] || "";
+  // Language only applies to Individual classes — Group runs on a fixed
+  // schedule in one language, so don't fall back to a default for it.
+  const language =
+    format === "Individual" ? searchParams.get("language") || course.languages?.[0] || "" : "";
 
   return <EnrollForm course={course} language={language} format={format} />;
 }
