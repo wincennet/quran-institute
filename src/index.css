@@ -21,6 +21,11 @@
 
 html {
   scroll-behavior: smooth;
+  /* Android Chrome auto-inflates text in narrow blocks ("font boosting"),
+     which is why buttons/text can look oversized there but fine on iOS
+     Safari (which doesn't do this). This turns that off everywhere. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
