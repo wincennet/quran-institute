@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import PickerRow from "../components/PickerRow";
-import { COURSES, LEARNING_FORMATS } from "../lib/constants";
+import DaysPicker from "../components/DaysPicker";
+import { COURSES, DAYS_OF_WEEK, LEARNING_FORMATS } from "../lib/constants";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
@@ -30,11 +31,21 @@ export default function CoursePage() {
 function CourseDetail({ course }) {
   const [selectedLanguage, setSelectedLanguage] = useState(course.languages?.[0] ?? null);
   const [selectedFormat, setSelectedFormat] = useState(course.formats?.[0] ?? null);
+  const [selectedDays, setSelectedDays] = useState([]);
   const [status, setStatus] = useState("idle");
 
   const activeFormat = LEARNING_FORMATS.find(
     (format) => format.id === selectedFormat?.toLowerCase(),
   );
+  // Language choice and the customised timetable are for Individual students
+  // only — Group classes run on a fixed batch schedule in one language.
+  const isIndividual = selectedFormat === "Individual";
+
+  const toggleDay = (day) => {
+    setSelectedDays((current) =>
+      current.includes(day) ? current.filter((d) => d !== day) : [...current, day],
+    );
+  };
 
   // Only used for the Coming Soon "notify me" form — real courses skip this
   // form entirely and link to the dedicated enroll page instead.
@@ -44,8 +55,9 @@ function CourseDetail({ course }) {
     const form = event.target;
     const data = new FormData(form);
     data.set("course", course.title);
-    if (selectedLanguage) data.set("language", selectedLanguage);
+    if (isIndividual && selectedLanguage) data.set("language", selectedLanguage);
     if (selectedFormat) data.set("format", selectedFormat);
+    if (isIndividual && selectedDays.length) data.set("days", selectedDays.join(", "));
     data.set("_subject", `Notify-me request: ${course.title}`);
 
     try {
@@ -103,17 +115,6 @@ function CourseDetail({ course }) {
             </p>
           )}
 
-          {course.languages && (
-            <div className="mt-6 pt-6 border-t border-gold/20">
-              <PickerRow
-                label="Choose your language"
-                options={course.languages}
-                selected={selectedLanguage}
-                onSelect={setSelectedLanguage}
-              />
-            </div>
-          )}
-
           {course.formats && (
             <div className="mt-6 pt-6 border-t border-gold/20">
               <PickerRow
@@ -123,18 +124,49 @@ function CourseDetail({ course }) {
                 onSelect={setSelectedFormat}
               />
 
+              {/* Group and Individual each get their own section below — Group
+                  runs on a fixed batch/language, Individual is fully customised. */}
               {activeFormat && (
-                <ul className="mt-4 space-y-2">
-                  {activeFormat.points.map((point) => (
-                    <li
-                      key={point}
-                      className="flex items-start gap-2.5 text-brown-light text-sm leading-relaxed"
-                    >
-                      <CheckCircle2 className="text-gold shrink-0 mt-0.5" size={16} />
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="mt-5 rounded-xl border border-gold/20 bg-cream p-5">
+                  <p className="font-heading text-brown font-semibold">{activeFormat.title}</p>
+                  <ul className="mt-4 space-y-2">
+                    {activeFormat.points.map((point) => (
+                      <li
+                        key={point}
+                        className="flex items-start gap-2.5 text-brown-light text-sm leading-relaxed"
+                      >
+                        <CheckCircle2 className="text-gold shrink-0 mt-0.5" size={16} />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {isIndividual && course.languages && (
+                    <div className="mt-5 pt-5 border-t border-gold/15">
+                      <PickerRow
+                        label="Choose your language"
+                        options={course.languages}
+                        selected={selectedLanguage}
+                        onSelect={setSelectedLanguage}
+                      />
+                    </div>
+                  )}
+
+                  {isIndividual && (
+                    <div className="mt-5 pt-5 border-t border-gold/15">
+                      <DaysPicker
+                        label="Choose your days"
+                        options={DAYS_OF_WEEK}
+                        selected={selectedDays}
+                        onToggle={toggleDay}
+                      />
+                      <p className="text-brown-light text-xs italic mt-3">
+                        Pick the days that work for you — we&apos;ll arrange your fee based on
+                        the schedule you choose.
+                      </p>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -200,8 +232,11 @@ function CourseDetail({ course }) {
                 to={{
                   pathname: `/courses/${course.id}/enroll`,
                   search: new URLSearchParams({
-                    ...(selectedLanguage ? { language: selectedLanguage } : {}),
+                    ...(isIndividual && selectedLanguage ? { language: selectedLanguage } : {}),
                     ...(selectedFormat ? { format: selectedFormat } : {}),
+                    ...(isIndividual && selectedDays.length
+                      ? { days: selectedDays.join(",") }
+                      : {}),
                   }).toString(),
                 }}
                 className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"

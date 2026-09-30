@@ -11,6 +11,20 @@
         "dev"
       ],
       "port": 5173
+    },
+    {
+      "name": "quran-institute-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "C:\\Users\\hasan\\OneDrive\\Desktop\\quran-institute",
+        "run",
+        "preview",
+        "--",
+        "--port",
+        "4173"
+      ],
+      "port": 4173
     }
   ]
 }

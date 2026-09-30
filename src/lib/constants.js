@@ -45,9 +45,31 @@ export const COURSES = [
     comingSoon: true,
     comingSoonNote: "Our course book is being written and will be ready soon.",
   },
+  {
+    id: "hifz",
+    title: "Hifz-ul-Quran",
+    subtitle: "Quran Memorization",
+    arabic: "وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِن مُّدَّكِرٍ",
+    translation:
+      "“And We have certainly made the Qur’an easy for remembrance, so is there any who will remember?”",
+    description:
+      "A dedicated memorization course guiding students to commit the Quran to memory correctly, portion by portion, with a structured revision cycle so what's memorized is retained for life.",
+    languages: ["Urdu", "English"],
+    formats: ["Individual"],
+  },
 ];
 
 export const PLATFORMS = ["Google Meet", "Zoom", "WhatsApp", "Discord"];
+
+export const DAYS_OF_WEEK = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export const STEPS = [
   {
@@ -107,7 +129,8 @@ export const LEARNING_FORMATS = [
     title: "Individual Classes",
     points: [
       "Free trial lesson included",
-      "Customizable schedule",
+      "Choose your own language",
+      "Customised timetable — pick your own days, fee arranged accordingly",
       "Flexible timings",
       "Choose your own platform",
       "All courses available",

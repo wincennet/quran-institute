@@ -25,13 +25,20 @@ export default function EnrollPage() {
     );
   }
 
-  const language = searchParams.get("language") || course.languages?.[0] || "";
   const format = searchParams.get("format") || course.formats?.[0] || "";
+  const isIndividual = format === "Individual";
+  const language = isIndividual ? searchParams.get("language") || course.languages?.[0] || "" : "";
+  const days = isIndividual
+    ? (searchParams.get("days") || "")
+        .split(",")
+        .map((d) => d.trim())
+        .filter(Boolean)
+    : [];
 
-  return <EnrollForm course={course} language={language} format={format} />;
+  return <EnrollForm course={course} language={language} format={format} days={days} />;
 }
 
-function EnrollForm({ course, language, format }) {
+function EnrollForm({ course, language, format, days }) {
   const [status, setStatus] = useState("idle");
 
   const handleSubmit = async (event) => {
@@ -42,6 +49,7 @@ function EnrollForm({ course, language, format }) {
     data.set("course", course.title);
     if (language) data.set("language", language);
     if (format) data.set("format", format);
+    if (days.length) data.set("days", days.join(", "));
     data.set("_subject", `Enrollment request: ${course.title}`);
 
     try {
@@ -73,8 +81,16 @@ function EnrollForm({ course, language, format }) {
           </span>
           <h1 className="font-heading text-brown text-3xl font-semibold mt-2">{course.title}</h1>
           <p className="text-brown-light text-sm mt-1">
-            {[language, format && `${format} classes`].filter(Boolean).join(" · ")}
+            {[language, format && `${format} classes`, days.length && days.join(", ")]
+              .filter(Boolean)
+              .join(" · ")}
           </p>
+          {days.length > 0 && (
+            <p className="text-gold-dark text-xs italic mt-2">
+              Your fee will be arranged based on the {days.length} day
+              {days.length > 1 ? "s" : ""} you selected — we&apos;ll confirm it on WhatsApp.
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <div>
