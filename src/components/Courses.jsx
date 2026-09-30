@@ -18,42 +18,42 @@ export default function Courses() {
           </h2>
         </Reveal>
 
-        {groupCourses.length > 0 && (
-          <div className="mt-16">
-            <Reveal className="text-center max-w-xl mx-auto">
-              <span className="font-sans text-gold-dark text-xs uppercase tracking-[0.2em]">
-                Group Courses
-              </span>
-              <h3 className="font-heading text-brown text-xl md:text-2xl font-semibold mt-2">
-                Fixed-schedule batches, learn alongside other students
-              </h3>
-            </Reveal>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10 max-w-3xl mx-auto">
-              {groupCourses.map((course, i) => (
-                <Reveal key={course.id} delay={i * 0.1}>
-                  <CourseCard course={course} format="Group" />
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        )}
-
         {individualCourses.length > 0 && (
           <div className="mt-16">
             <Reveal className="text-center max-w-xl mx-auto">
-              <span className="font-sans text-gold-dark text-xs uppercase tracking-[0.2em]">
+              <h3 className="font-heading text-brown text-3xl md:text-4xl font-bold">
                 Individual Courses
-              </span>
-              <h3 className="font-heading text-brown text-xl md:text-2xl font-semibold mt-2">
-                One-to-one — choose your own language and timetable
               </h3>
+              <p className="text-brown-light text-sm mt-2">
+                One-to-one — choose your own language and timetable
+              </p>
             </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10 max-w-3xl mx-auto">
               {individualCourses.map((course, i) => (
                 <Reveal key={course.id} delay={i * 0.1}>
                   <CourseCard course={course} format="Individual" />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {groupCourses.length > 0 && (
+          <div className="mt-16">
+            <Reveal className="text-center max-w-xl mx-auto">
+              <h3 className="font-heading text-brown text-3xl md:text-4xl font-bold">
+                Group Courses
+              </h3>
+              <p className="text-brown-light text-sm mt-2">
+                Fixed-schedule batches, learn alongside other students
+              </p>
+            </Reveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10 max-w-3xl mx-auto">
+              {groupCourses.map((course, i) => (
+                <Reveal key={course.id} delay={i * 0.1}>
+                  <CourseCard course={course} format="Group" />
                 </Reveal>
               ))}
             </div>
