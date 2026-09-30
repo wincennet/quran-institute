@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import PickerRow from "../components/PickerRow";
 import DaysPicker from "../components/DaysPicker";
@@ -9,6 +9,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
 export default function CoursePage() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const course = COURSES.find((c) => c.id === id);
 
   if (!course) {
@@ -25,12 +26,17 @@ export default function CoursePage() {
     );
   }
 
-  return <CourseDetail course={course} />;
+  const requestedFormat = searchParams.get("format");
+  const initialFormat = course.formats?.includes(requestedFormat)
+    ? requestedFormat
+    : (course.formats?.[0] ?? null);
+
+  return <CourseDetail course={course} initialFormat={initialFormat} />;
 }
 
-function CourseDetail({ course }) {
+function CourseDetail({ course, initialFormat }) {
   const [selectedLanguage, setSelectedLanguage] = useState(course.languages?.[0] ?? null);
-  const [selectedFormat, setSelectedFormat] = useState(course.formats?.[0] ?? null);
+  const [selectedFormat, setSelectedFormat] = useState(initialFormat);
   const [selectedDays, setSelectedDays] = useState([]);
   const [status, setStatus] = useState("idle");
 

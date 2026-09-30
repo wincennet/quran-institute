@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 
-export default function CourseCard({ course }) {
+export default function CourseCard({ course, format }) {
   const ref = useRef(null);
   const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
   const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
@@ -57,7 +57,10 @@ export default function CourseCard({ course }) {
       </p>
 
       <Link
-        to={`/courses/${course.id}`}
+        to={{
+          pathname: `/courses/${course.id}`,
+          search: format ? `?format=${encodeURIComponent(format)}` : "",
+        }}
         className="inline-block mt-5 text-sm font-medium text-gold-dark hover:text-gold underline underline-offset-4"
       >
         Learn more →
