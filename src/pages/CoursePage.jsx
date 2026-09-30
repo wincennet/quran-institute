@@ -36,10 +36,12 @@ export default function CoursePage() {
 
 function CourseDetail({ course, initialFormat }) {
   const [selectedLanguage, setSelectedLanguage] = useState(course.languages?.[0] ?? null);
-  const [selectedFormat, setSelectedFormat] = useState(initialFormat);
   const [selectedDays, setSelectedDays] = useState([]);
   const [status, setStatus] = useState("idle");
 
+  // Format is fixed by which homepage section the student came from
+  // (Group or Individual) — this page never offers a way to switch it.
+  const selectedFormat = initialFormat;
   const activeFormat = LEARNING_FORMATS.find(
     (format) => format.id === selectedFormat?.toLowerCase(),
   );
@@ -121,20 +123,12 @@ function CourseDetail({ course, initialFormat }) {
             </p>
           )}
 
-          {course.formats && (
+          {activeFormat && (
             <div className="mt-6 pt-6 border-t border-gold/20">
-              <PickerRow
-                label="Choose your format"
-                options={course.formats}
-                selected={selectedFormat}
-                onSelect={setSelectedFormat}
-              />
-
-              {/* Group and Individual each get their own section below — Group
-                  runs on a fixed batch/language, Individual is fully customised. */}
-              {activeFormat && (
-                <div className="mt-5 rounded-xl border border-gold/20 bg-cream p-5">
-                  <p className="font-heading text-brown font-semibold">{activeFormat.title}</p>
+              {/* Format is fixed to whichever section the student came from —
+                  no toggle here, so Individual never offers a Group option. */}
+              <div className="rounded-xl border border-gold/20 bg-cream p-5">
+                <p className="font-heading text-brown font-semibold">{activeFormat.title}</p>
                   <ul className="mt-4 space-y-2">
                     {activeFormat.points.map((point) => (
                       <li
@@ -173,7 +167,6 @@ function CourseDetail({ course, initialFormat }) {
                     </div>
                   )}
                 </div>
-              )}
             </div>
           )}
 
