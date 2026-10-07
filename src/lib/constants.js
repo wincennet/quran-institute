@@ -111,6 +111,9 @@ export const STATS = [
   { value: 45, suffix: "+", label: "Countries reached" },
 ];
 
+// Length of every one-to-one class, in minutes.
+const CLASS_MINUTES = 30;
+
 export const LEARNING_FORMATS = [
   {
     id: "group",
@@ -130,6 +133,7 @@ export const LEARNING_FORMATS = [
     points: [
       "Free trial lesson included",
       "Customised timetable",
+      `${CLASS_MINUTES}-minute classes`,
       "Flexible timings",
       "Choose your own platform",
       "All courses available",
@@ -173,7 +177,7 @@ export const REACHED_COUNTRIES = [
 // Pakistan (see useCountry); everyone else sees `default` (USD). With these
 // rates a full Mon-Fri week is $50 / 5,000 PKR and Sat + Sun is $30 / 3,000 PKR.
 export const PRICING = {
-  classMinutes: 30,
+  classMinutes: CLASS_MINUTES,
   maxDays: 5,
   weekendDays: ["Saturday", "Sunday"],
   perDay: {
