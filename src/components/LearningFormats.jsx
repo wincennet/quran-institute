@@ -9,16 +9,16 @@ const ORDERED_FORMATS = ["individual", "group"].map((id) =>
 
 export default function LearningFormats() {
   return (
-    <section id="formats" className="bg-cream py-24">
+    <section id="formats" className="bg-brown py-24">
       <div className="max-w-6xl mx-auto px-6">
         <Reveal className="text-center max-w-2xl mx-auto">
-          <span className="font-sans text-gold-dark text-sm uppercase tracking-[0.25em]">
+          <span className="font-sans text-gold text-sm uppercase tracking-[0.25em]">
             Class Formats
           </span>
-          <h2 className="font-heading text-brown text-3xl md:text-4xl font-medium mt-3">
+          <h2 className="font-heading text-cream-light text-3xl md:text-4xl font-medium mt-3">
             Choose how you&apos;d like to learn
           </h2>
-          <p className="text-brown-light text-sm mt-3">
+          <p className="text-cream/75 text-sm mt-3">
             One-to-one lessons built around you, or a group batch on a fixed schedule.
           </p>
         </Reveal>
