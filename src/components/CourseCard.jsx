@@ -28,10 +28,7 @@ export default function CourseCard({ course, format }) {
       </p>
       <p className="text-brown-light text-xs italic mt-2">{course.translation}</p>
 
-      <p className="text-brown text-sm leading-relaxed mt-5 pt-5 border-t border-gold/20">
-        {course.description}
-      </p>
-
+      {/* The full description lives on the course page, not on the card. */}
       <div className="mt-auto pt-6 flex flex-wrap items-center gap-2.5">
         {/* Free trial is for one-to-one classes, and not for courses still being prepared. */}
         {format === "Individual" && !course.comingSoon && (
