@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Info } from "lucide-react";
 import DaysPicker from "../components/DaysPicker";
 import useCountry from "../hooks/useCountry";
 import useDocumentMeta from "../hooks/useDocumentMeta";
@@ -56,8 +56,13 @@ function CourseDetail({ course, initialFormat }) {
   // classes run on a fixed batch schedule. Language is chosen on the enroll page.
   const isIndividual = selectedFormat === "Individual";
 
-  // Individual students pick their class days here and see the monthly fee,
-  // then continue to the enrollment form.
+  // Individual students pick their class days in their own section below the
+  // course details and see the monthly fee, then continue to the enrollment form.
+  const showSchedule = isIndividual && !course.comingSoon;
+  const region = isPakistan ? "PK" : "default";
+  const weekdayRate = formatPrice(PRICING.perDay.weekday[region], isPakistan);
+  const weekendRate = formatPrice(PRICING.perDay.weekend[region], isPakistan);
+  const weekdays = DAYS_OF_WEEK.filter((day) => !PRICING.weekendDays.includes(day));
   const monthlyFee = formatPrice(priceForDays(selectedDays, isPakistan), isPakistan);
 
   const toggleDay = (day) => {
@@ -150,45 +155,6 @@ function CourseDetail({ course, initialFormat }) {
                       </li>
                     ))}
                   </ul>
-
-                  {isIndividual && !course.comingSoon && (
-                    <div className="mt-5 pt-5 border-t border-gold/15">
-                      <DaysPicker
-                        label={`Choose your days (up to ${PRICING.maxDays} a week)`}
-                        options={DAYS_OF_WEEK}
-                        selected={selectedDays}
-                        onToggle={toggleDay}
-                        max={PRICING.maxDays}
-                      />
-
-                      <div className="mt-5 rounded-xl border border-gold/25 bg-cream-light px-5 py-4">
-                        {selectedDays.length > 0 ? (
-                          <>
-                            <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-                              Your monthly fee
-                            </p>
-                            <p className="mt-1">
-                              <span className="font-heading text-brown text-4xl font-semibold">
-                                {monthlyFee}
-                              </span>
-                              <span className="text-brown-light text-sm"> / month</span>
-                            </p>
-                            <p className="text-brown-light text-xs mt-2">
-                              {selectedDays.length} class{selectedDays.length > 1 ? "es" : ""} a
-                              week, {PRICING.classMinutes} minutes each. Your first class is free.
-                            </p>
-                          </>
-                        ) : (
-                          <p className="text-brown-light text-sm">
-                            Pick the days that suit you and your monthly fee will appear here.
-                          </p>
-                        )}
-                      </div>
-                      <p className="text-brown-light text-xs italic mt-3">
-                        Class times are agreed with you on WhatsApp after you enroll.
-                      </p>
-                    </div>
-                  )}
                 </div>
             </div>
           )}
@@ -249,8 +215,94 @@ function CourseDetail({ course, initialFormat }) {
               )}
             </form>
           ) : (
+            !isIndividual && (
+              // Group classes run on a fixed batch schedule, so there are no
+              // days to choose — straight to enrollment.
+              <div className="mt-6 pt-6 border-t border-gold/20">
+                <Link
+                  to={{
+                    pathname: `/courses/${course.id}/enroll`,
+                    search: new URLSearchParams({
+                      ...(selectedFormat ? { format: selectedFormat } : {}),
+                    }).toString(),
+                  }}
+                  className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"
+                >
+                  Continue to enrollment
+                </Link>
+              </div>
+            )
+          )}
+        </div>
+
+        {showSchedule && (
+          <section className="bg-cream-light rounded-2xl border border-gold/25 p-8 md:p-10 mt-6">
+            <span className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+              Schedule &amp; fee
+            </span>
+            <h2 className="font-heading text-brown text-2xl md:text-3xl font-semibold mt-2">
+              Choose your days
+            </h2>
+            <p className="text-brown-light text-sm mt-1">
+              Pick up to {PRICING.maxDays} days a week. Your monthly fee depends on the days you
+              choose.
+            </p>
+
+            <div className="mt-6 flex gap-3 rounded-xl border border-gold/30 bg-cream px-4 py-3">
+              <Info className="text-gold-dark shrink-0 mt-0.5" size={18} />
+              <p className="text-brown text-sm leading-relaxed">
+                <strong className="font-semibold">Weekends are priced separately.</strong>{" "}
+                Weekday classes are {weekdayRate} a month for each day you choose; Saturday and
+                Sunday classes are {weekendRate} a month for each day.
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-5">
+              <DaysPicker
+                label={`Weekdays · ${weekdayRate} / month per day`}
+                options={weekdays}
+                selected={selectedDays}
+                onToggle={toggleDay}
+                max={PRICING.maxDays}
+              />
+              <DaysPicker
+                label={`Weekend · ${weekendRate} / month per day`}
+                options={PRICING.weekendDays}
+                selected={selectedDays}
+                onToggle={toggleDay}
+                max={PRICING.maxDays}
+              />
+            </div>
+
+            <div className="mt-6 rounded-xl border border-gold/25 bg-cream px-5 py-4">
+              {selectedDays.length > 0 ? (
+                <>
+                  <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+                    Your monthly fee
+                  </p>
+                  <p className="mt-1">
+                    <span className="font-heading text-brown text-4xl font-semibold">
+                      {monthlyFee}
+                    </span>
+                    <span className="text-brown-light text-sm"> / month</span>
+                  </p>
+                  <p className="text-brown-light text-xs mt-2">
+                    {selectedDays.length} class{selectedDays.length > 1 ? "es" : ""} a week,{" "}
+                    {PRICING.classMinutes} minutes each. Your first class is free.
+                  </p>
+                </>
+              ) : (
+                <p className="text-brown-light text-sm">
+                  Pick the days that suit you and your monthly fee will appear here.
+                </p>
+              )}
+            </div>
+            <p className="text-brown-light text-xs italic mt-3">
+              Class times are agreed with you on WhatsApp after you enroll.
+            </p>
+
             <div className="mt-6 pt-6 border-t border-gold/20">
-              {isIndividual && selectedDays.length === 0 ? (
+              {selectedDays.length === 0 ? (
                 <button
                   type="button"
                   disabled
@@ -263,8 +315,8 @@ function CourseDetail({ course, initialFormat }) {
                   to={{
                     pathname: `/courses/${course.id}/enroll`,
                     search: new URLSearchParams({
-                      ...(selectedFormat ? { format: selectedFormat } : {}),
-                      ...(isIndividual ? { days: selectedDays.join(",") } : {}),
+                      format: selectedFormat,
+                      days: selectedDays.join(","),
                     }).toString(),
                   }}
                   className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"
@@ -273,8 +325,8 @@ function CourseDetail({ course, initialFormat }) {
                 </Link>
               )}
             </div>
-          )}
-        </div>
+          </section>
+        )}
       </div>
     </main>
   );
