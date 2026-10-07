@@ -38,7 +38,7 @@ export default function CourseCard({ course, format }) {
             )}
             target="_blank"
             rel="noreferrer"
-            className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-semibold px-5 py-3 rounded-full shadow-sm transition-colors"
+            className="bg-gold hover:bg-gold-dark text-cream-light text-[13px] font-semibold px-4 py-2 rounded-full shadow-sm transition-colors"
           >
             Book a free trial
           </a>
@@ -48,7 +48,7 @@ export default function CourseCard({ course, format }) {
             pathname: `/courses/${course.id}`,
             search: format ? `?format=${encodeURIComponent(format)}` : "",
           }}
-          className="bg-cream hover:bg-cream/60 border border-gold/40 text-brown text-sm font-medium px-4 py-3 rounded-full transition-colors"
+          className="bg-cream hover:bg-cream/60 border border-gold/40 text-brown text-[13px] font-medium px-3.5 py-2 rounded-full transition-colors"
         >
           View course →
         </Link>
