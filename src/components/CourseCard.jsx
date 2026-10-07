@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
+import { whatsappLink } from "../lib/constants";
 
 // A wide, horizontal card: the course name, summary and button on the left,
 // the Quranic verse that anchors the course on the right (stacked on phones).
@@ -54,15 +55,30 @@ export default function CourseCard({ course, format }) {
 
         <p className="text-brown text-sm leading-relaxed mt-5">{course.description}</p>
 
-        <Link
-          to={{
-            pathname: `/courses/${course.id}`,
-            search: format ? `?format=${encodeURIComponent(format)}` : "",
-          }}
-          className="inline-block mt-6 bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-6 py-2.5 rounded-full transition-colors"
-        >
-          View course →
-        </Link>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          {/* Free trial is for one-to-one classes, and not for courses still being prepared. */}
+          {format === "Individual" && !course.comingSoon && (
+            <a
+              href={whatsappLink(
+                `Assalamu alaikum, I'd like to book a free individual trial class for ${course.title}.`,
+              )}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-semibold px-7 py-3 rounded-full shadow-sm transition-colors"
+            >
+              Book a free trial
+            </a>
+          )}
+          <Link
+            to={{
+              pathname: `/courses/${course.id}`,
+              search: format ? `?format=${encodeURIComponent(format)}` : "",
+            }}
+            className="bg-cream hover:bg-cream/60 border border-gold/40 text-brown text-sm font-medium px-6 py-3 rounded-full transition-colors"
+          >
+            View course →
+          </Link>
+        </div>
       </div>
 
       <div className="md:w-[38%] shrink-0 flex flex-col justify-center border-t md:border-t-0 md:border-l border-gold/20 p-7 md:p-8">
