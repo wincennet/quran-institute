@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// A horizontally scrollable row of course cards: swipe on a phone, scroll or
+// A horizontally scrollable row of cards: swipe on a phone, scroll or
 // use the arrows on a computer. The row is centred when all cards fit, and
 // only scrolls when they don't.
-export default function CourseRow({ children }) {
+export default function ScrollRow({ children }) {
   const scroller = useRef(null);
   const [edges, setEdges] = useState({ canPrev: false, canNext: false });
 
@@ -49,7 +49,7 @@ export default function CourseRow({ children }) {
       {edges.canPrev && (
         <button
           type="button"
-          aria-label="Previous courses"
+          aria-label="Scroll left"
           onClick={() => scrollByCards(-1)}
           className={`${arrowClass} -left-3`}
         >
@@ -59,7 +59,7 @@ export default function CourseRow({ children }) {
       {edges.canNext && (
         <button
           type="button"
-          aria-label="Next courses"
+          aria-label="Scroll right"
           onClick={() => scrollByCards(1)}
           className={`${arrowClass} -right-3`}
         >

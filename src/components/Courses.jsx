@@ -1,6 +1,6 @@
 import Reveal from "./Reveal";
 import CourseCard from "./CourseCard";
-import CourseRow from "./CourseRow";
+import ScrollRow from "./ScrollRow";
 import { COURSES } from "../lib/constants";
 
 export default function Courses() {
@@ -31,11 +31,11 @@ export default function Courses() {
             </Reveal>
 
             <Reveal className="mt-8">
-              <CourseRow>
+              <ScrollRow>
                 {individualCourses.map((course) => (
                   <CourseCard key={course.id} course={course} format="Individual" />
                 ))}
-              </CourseRow>
+              </ScrollRow>
             </Reveal>
           </div>
         )}
@@ -52,11 +52,11 @@ export default function Courses() {
             </Reveal>
 
             <Reveal className="mt-8">
-              <CourseRow>
+              <ScrollRow>
                 {groupCourses.map((course) => (
                   <CourseCard key={course.id} course={course} format="Group" />
                 ))}
-              </CourseRow>
+              </ScrollRow>
             </Reveal>
           </div>
         )}

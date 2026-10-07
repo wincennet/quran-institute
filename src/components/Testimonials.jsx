@@ -1,5 +1,6 @@
 import { Quote } from "lucide-react";
 import Reveal from "./Reveal";
+import ScrollRow from "./ScrollRow";
 
 const TESTIMONIALS = [
   {
@@ -36,19 +37,20 @@ export default function Testimonials() {
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-7 mt-14">
-          {TESTIMONIALS.map((t, i) => (
-            <Reveal
-              key={i}
-              delay={i * 0.1}
-              className="bg-cream-light rounded-2xl border border-gold/20 p-7"
-            >
-              <Quote className="text-gold/60" size={26} />
-              <p className="text-brown text-sm leading-relaxed mt-4">“{t.quote}”</p>
-              <p className="text-brown-light text-xs font-medium mt-5">{t.name}</p>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal className="mt-14">
+          <ScrollRow>
+            {TESTIMONIALS.map((t) => (
+              <div
+                key={t.name + t.quote.slice(0, 20)}
+                className="snap-start shrink-0 w-[82%] sm:w-[22rem] flex flex-col bg-cream-light rounded-2xl border border-gold/20 p-7"
+              >
+                <Quote className="text-gold/60" size={26} />
+                <p className="text-brown text-sm leading-relaxed mt-4">“{t.quote}”</p>
+                <p className="text-brown-light text-xs font-medium mt-auto pt-5">{t.name}</p>
+              </div>
+            ))}
+          </ScrollRow>
+        </Reveal>
       </div>
     </section>
   );
