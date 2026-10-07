@@ -169,5 +169,32 @@ export const REACHED_COUNTRIES = [
   { name: "Singapore", lat: 1.3521, lng: 103.8198 },
 ];
 
+// Monthly fees for one-to-one classes. `PK` prices are shown only to visitors
+// in Pakistan (see useCountry); everyone else sees `default` (USD).
+export const PRICING = {
+  classMinutes: 30,
+  plans: [
+    {
+      id: "weekdays",
+      title: "Weekday Classes",
+      days: "Monday to Friday",
+      classesPerWeek: 5,
+      price: { default: "$50", PK: "5,000 PKR" },
+    },
+    {
+      id: "weekend",
+      title: "Weekend Classes",
+      days: "Saturday & Sunday",
+      classesPerWeek: 2,
+      price: { default: "$30", PK: "3,000 PKR" },
+    },
+  ],
+};
+
+// The "action" URL from MailerLite's embedded-form code (a public endpoint, not
+// a secret). If this is ever emptied, the email popup stays hidden.
+export const MAILERLITE_FORM_URL =
+  "https://assets.mailerlite.com/jsonp/2691946/forms/200652234456826919/subscribe";
+
 export const MISSION_STATEMENT =
   "Our mission is to cover the 5 rights of the Quran: Belief (Iman), Recitation (Tilawah), Understanding (Fahm), Application (Amal), and Conveying the Message (Da'wah).";

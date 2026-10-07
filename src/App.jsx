@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import EmailPopup from "./components/EmailPopup";
 import HomePage from "./pages/HomePage";
 import CoursePage from "./pages/CoursePage";
 import EnrollPage from "./pages/EnrollPage";
@@ -17,6 +18,7 @@ function App() {
         <Route path="/courses/:id/enroll" element={<EnrollPage />} />
       </Routes>
       <Footer />
+      <EmailPopup />
     </>
   );
 }

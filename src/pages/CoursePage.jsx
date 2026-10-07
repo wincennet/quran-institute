@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import PickerRow from "../components/PickerRow";
 import DaysPicker from "../components/DaysPicker";
+import useDocumentMeta from "../hooks/useDocumentMeta";
 import { COURSES, DAYS_OF_WEEK, LEARNING_FORMATS } from "../lib/constants";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
@@ -38,6 +39,11 @@ function CourseDetail({ course, initialFormat }) {
   const [selectedLanguage, setSelectedLanguage] = useState(course.languages?.[0] ?? null);
   const [selectedDays, setSelectedDays] = useState([]);
   const [status, setStatus] = useState("idle");
+
+  useDocumentMeta({
+    title: `${course.title} — ${course.subtitle} | Assiratul Mustaqeem`,
+    description: course.description,
+  });
 
   // Format is fixed by which homepage section the student came from
   // (Group or Individual) — this page never offers a way to switch it.
