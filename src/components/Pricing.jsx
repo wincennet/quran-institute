@@ -2,10 +2,12 @@ import { CheckCircle2 } from "lucide-react";
 import Reveal from "./Reveal";
 import useCountry from "../hooks/useCountry";
 import { PRICING, whatsappLink } from "../lib/constants";
+import { formatPrice, priceForDays } from "../lib/pricing";
 
 export default function Pricing() {
   const country = useCountry();
   const isPakistan = country === "PK";
+  const region = isPakistan ? "PK" : "default";
 
   return (
     <section id="pricing" className="bg-cream-light py-24">
@@ -30,10 +32,10 @@ export default function Pricing() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-14 max-w-3xl mx-auto">
           {PRICING.plans.map((plan, i) => {
-            const price = isPakistan ? plan.price.PK : plan.price.default;
+            const price = formatPrice(priceForDays(plan.dayList, isPakistan), isPakistan);
             const points = [
               plan.days,
-              `${plan.classesPerWeek} classes a week, ${PRICING.classMinutes} minutes each`,
+              `${plan.dayList.length} classes a week, ${PRICING.classMinutes} minutes each`,
               "One-to-one with a qualified teacher",
               "Timing arranged around your schedule",
             ];
@@ -77,7 +79,9 @@ export default function Pricing() {
         </div>
 
         <p className="text-center text-brown-light text-sm mt-8">
-          Not sure which plan fits? Book a free trial and we&apos;ll help you choose.
+          Want different days? Choose up to {PRICING.maxDays} days a week when you pick a course:{" "}
+          {formatPrice(PRICING.perDay.weekday[region], isPakistan)} a month for each weekday and{" "}
+          {formatPrice(PRICING.perDay.weekend[region], isPakistan)} for each weekend day.
         </p>
       </div>
     </section>

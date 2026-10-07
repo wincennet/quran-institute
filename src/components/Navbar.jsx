@@ -71,7 +71,7 @@ export default function Navbar() {
             Free Trial
           </a>
           <Link
-            to="/courses/tarteel/enroll"
+            to="/courses/tarteel?format=Individual"
             className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-4 py-2 rounded-full transition-colors"
           >
             Enroll Now
@@ -115,7 +115,7 @@ export default function Navbar() {
               Free Trial
             </a>
             <Link
-              to="/courses/tarteel/enroll"
+              to="/courses/tarteel?format=Individual"
               onClick={() => setOpen(false)}
               className="block text-center bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-full transition-colors"
             >

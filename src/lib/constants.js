@@ -169,24 +169,31 @@ export const REACHED_COUNTRIES = [
   { name: "Singapore", lat: 1.3521, lng: 103.8198 },
 ];
 
-// Monthly fees for one-to-one classes. `PK` prices are shown only to visitors
-// in Pakistan (see useCountry); everyone else sees `default` (USD).
+// One-to-one fees are charged per class day a week, per month, so a student can
+// pick any days (up to maxDays). `PK` rates are shown only to visitors in
+// Pakistan (see useCountry); everyone else sees `default` (USD). With these
+// rates a full Mon-Fri week is $50 / 5,000 PKR and Sat + Sun is $30 / 3,000 PKR.
 export const PRICING = {
   classMinutes: 30,
+  maxDays: 5,
+  weekendDays: ["Saturday", "Sunday"],
+  perDay: {
+    weekday: { default: 10, PK: 1000 },
+    weekend: { default: 15, PK: 1500 },
+  },
+  // Example packages shown on the homepage; the price is computed from the days.
   plans: [
     {
       id: "weekdays",
       title: "Weekday Classes",
       days: "Monday to Friday",
-      classesPerWeek: 5,
-      price: { default: "$50", PK: "5,000 PKR" },
+      dayList: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
     },
     {
       id: "weekend",
       title: "Weekend Classes",
       days: "Saturday & Sunday",
-      classesPerWeek: 2,
-      price: { default: "$30", PK: "3,000 PKR" },
+      dayList: ["Saturday", "Sunday"],
     },
   ],
 };

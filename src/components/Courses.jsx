@@ -29,7 +29,7 @@ export default function Courses() {
               </p>
             </Reveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10 max-w-3xl mx-auto">
+            <div className="flex flex-col gap-6 mt-10 max-w-4xl mx-auto">
               {individualCourses.map((course, i) => (
                 <Reveal key={course.id} delay={i * 0.1}>
                   <CourseCard course={course} format="Individual" />
@@ -50,7 +50,7 @@ export default function Courses() {
               </p>
             </Reveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-10 max-w-3xl mx-auto">
+            <div className="flex flex-col gap-6 mt-10 max-w-4xl mx-auto">
               {groupCourses.map((course, i) => (
                 <Reveal key={course.id} delay={i * 0.1}>
                   <CourseCard course={course} format="Group" />

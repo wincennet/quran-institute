@@ -60,7 +60,7 @@ export default function Hero() {
             className="mt-10 flex flex-wrap gap-4"
           >
             <Link
-              to="/courses/tarteel/enroll"
+              to="/courses/tarteel?format=Individual"
               className="bg-gold hover:bg-gold-dark text-cream-light font-medium px-7 py-3 rounded-full transition-colors"
             >
               Enroll Now

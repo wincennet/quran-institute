@@ -1,10 +1,15 @@
-import { useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { COURSES } from "../lib/constants";
+import PickerRow from "../components/PickerRow";
+import useCountry from "../hooks/useCountry";
+import { COURSES, DAYS_OF_WEEK, PRICING } from "../lib/constants";
+import { formatPrice, priceForDays } from "../lib/pricing";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 const GENDERS = ["Male", "Female"];
+const INPUT_CLASS =
+  "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
 
 export default function EnrollPage() {
   const { id } = useParams();
@@ -27,19 +32,56 @@ export default function EnrollPage() {
 
   const format = searchParams.get("format") || course.formats?.[0] || "";
   const isIndividual = format === "Individual";
-  const language = isIndividual ? searchParams.get("language") || course.languages?.[0] || "" : "";
+
+  // Only real weekday names, no duplicates, and never more than the weekly cap,
+  // so a hand-edited link can't produce a nonsense fee.
   const days = isIndividual
-    ? (searchParams.get("days") || "")
-        .split(",")
-        .map((d) => d.trim())
-        .filter(Boolean)
+    ? [...new Set((searchParams.get("days") || "").split(",").map((d) => d.trim()))]
+        .filter((d) => DAYS_OF_WEEK.includes(d))
+        .slice(0, PRICING.maxDays)
     : [];
 
-  return <EnrollForm course={course} language={language} format={format} days={days} />;
+  // Individual students choose their days (and see their fee) on the course
+  // page first; anyone who lands here without days is sent there.
+  if (isIndividual && days.length === 0) {
+    return (
+      <Navigate to={{ pathname: `/courses/${course.id}`, search: "?format=Individual" }} replace />
+    );
+  }
+
+  return <EnrollForm course={course} format={format} days={days} />;
 }
 
-function EnrollForm({ course, language, format, days }) {
+function EnrollForm({ course, format, days }) {
   const [status, setStatus] = useState("idle");
+  const isIndividual = format === "Individual";
+  const [language, setLanguage] = useState(course.languages?.[0] ?? null);
+
+  // Country and time zone are pre-filled from the visitor's location and
+  // browser, and stay editable.
+  const detectedCountry = useCountry();
+  const isPakistan = detectedCountry === "PK";
+  const detectedCountryName = useMemo(() => {
+    if (!detectedCountry) return "";
+    try {
+      return new Intl.DisplayNames(["en"], { type: "region" }).of(detectedCountry) ?? "";
+    } catch {
+      return "";
+    }
+  }, [detectedCountry]);
+  const detectedTimeZone = useMemo(() => {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone ?? "";
+    } catch {
+      return "";
+    }
+  }, []);
+  const [countryInput, setCountryInput] = useState(null);
+  const [timeZoneInput, setTimeZoneInput] = useState(null);
+  const country = countryInput ?? detectedCountryName;
+  const timeZone = timeZoneInput ?? detectedTimeZone;
+
+  const monthlyFee = isIndividual ? formatPrice(priceForDays(days, isPakistan), isPakistan) : "";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -47,9 +89,10 @@ function EnrollForm({ course, language, format, days }) {
     const form = event.target;
     const data = new FormData(form);
     data.set("course", course.title);
-    if (language) data.set("language", language);
+    if (isIndividual && language) data.set("language", language);
     if (format) data.set("format", format);
     if (days.length) data.set("days", days.join(", "));
+    if (monthlyFee) data.set("monthly_fee", `${monthlyFee} / month`);
     data.set("_subject", `Enrollment request: ${course.title}`);
 
     try {
@@ -69,7 +112,10 @@ function EnrollForm({ course, language, format, days }) {
     <main className="bg-cream py-16">
       <div className="max-w-2xl mx-auto px-6">
         <Link
-          to={`/courses/${course.id}`}
+          to={{
+            pathname: `/courses/${course.id}`,
+            search: format ? `?format=${encodeURIComponent(format)}` : "",
+          }}
           className="inline-flex items-center gap-2 text-sm font-medium text-brown-light hover:text-brown"
         >
           <ArrowLeft size={16} /> Back to {course.title}
@@ -80,30 +126,55 @@ function EnrollForm({ course, language, format, days }) {
             Enrollment
           </span>
           <h1 className="font-heading text-brown text-3xl font-semibold mt-2">{course.title}</h1>
-          <p className="text-brown-light text-sm mt-1">
-            {[language, format && `${format} classes`, days.length && days.join(", ")]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
-          {days.length > 0 && (
-            <p className="text-gold-dark text-xs italic mt-2">
-              Your fee will be arranged based on the {days.length} day
-              {days.length > 1 ? "s" : ""} you selected — we&apos;ll confirm it on WhatsApp.
-            </p>
+          <p className="text-brown-light text-sm mt-1">{format && `${format} classes`}</p>
+
+          {isIndividual && (
+            <div className="mt-6 rounded-xl border border-gold/25 bg-cream px-5 py-4">
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+                Your plan
+              </p>
+              <p className="text-brown text-sm mt-2">{days.join(", ")}</p>
+              <p className="mt-1">
+                <span className="font-heading text-brown text-3xl font-semibold">
+                  {monthlyFee}
+                </span>
+                <span className="text-brown-light text-sm"> / month</span>
+              </p>
+              <p className="text-brown-light text-xs mt-2">
+                {days.length} class{days.length > 1 ? "es" : ""} a week,{" "}
+                {PRICING.classMinutes} minutes each. Your first class is free.{" "}
+                <Link
+                  to={{ pathname: `/courses/${course.id}`, search: "?format=Individual" }}
+                  className="text-gold-dark hover:text-gold underline underline-offset-2"
+                >
+                  Change days
+                </Link>
+              </p>
+            </div>
           )}
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+            {isIndividual && course.languages && (
+              <PickerRow
+                label="Choose your language"
+                options={course.languages}
+                selected={language}
+                onSelect={setLanguage}
+              />
+            )}
+
             <div>
               <label htmlFor="name" className="text-xs text-brown-light font-medium">
-                Full name
+                Student&apos;s full name
               </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-              />
+              <input id="name" name="name" type="text" required className={INPUT_CLASS} />
+            </div>
+
+            <div>
+              <label htmlFor="guardian" className="text-xs text-brown-light font-medium">
+                Parent or guardian name (for children)
+              </label>
+              <input id="guardian" name="guardian" type="text" className={INPUT_CLASS} />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -111,13 +182,7 @@ function EnrollForm({ course, language, format, days }) {
                 <label htmlFor="email" className="text-xs text-brown-light font-medium">
                   Email
                 </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                />
+                <input id="email" name="email" type="email" required className={INPUT_CLASS} />
               </div>
               <div>
                 <label htmlFor="phone" className="text-xs text-brown-light font-medium">
@@ -129,7 +194,39 @@ function EnrollForm({ course, language, format, days }) {
                   type="tel"
                   required
                   placeholder="+92 300 1234567"
-                  className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className={INPUT_CLASS}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label htmlFor="country" className="text-xs text-brown-light font-medium">
+                  Country you live in
+                </label>
+                <input
+                  id="country"
+                  name="country"
+                  type="text"
+                  required
+                  value={country}
+                  onChange={(event) => setCountryInput(event.target.value)}
+                  className={INPUT_CLASS}
+                />
+              </div>
+              <div>
+                <label htmlFor="timezone" className="text-xs text-brown-light font-medium">
+                  Time zone
+                </label>
+                <input
+                  id="timezone"
+                  name="timezone"
+                  type="text"
+                  required
+                  value={timeZone}
+                  onChange={(event) => setTimeZoneInput(event.target.value)}
+                  placeholder="e.g. London (GMT+1)"
+                  className={INPUT_CLASS}
                 />
               </div>
             </div>
@@ -139,13 +236,7 @@ function EnrollForm({ course, language, format, days }) {
                 <label htmlFor="dob" className="text-xs text-brown-light font-medium">
                   Date of birth
                 </label>
-                <input
-                  id="dob"
-                  name="dob"
-                  type="date"
-                  required
-                  className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                />
+                <input id="dob" name="dob" type="date" required className={INPUT_CLASS} />
               </div>
               <div>
                 <label htmlFor="nationality" className="text-xs text-brown-light font-medium">
@@ -157,7 +248,7 @@ function EnrollForm({ course, language, format, days }) {
                   type="text"
                   required
                   placeholder="e.g. Pakistani"
-                  className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className={INPUT_CLASS}
                 />
               </div>
             </div>
@@ -172,7 +263,7 @@ function EnrollForm({ course, language, format, days }) {
                 type="text"
                 required
                 placeholder="e.g. Bachelor's, High School, Grade 8"
-                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className={INPUT_CLASS}
               />
             </div>
 
@@ -185,7 +276,7 @@ function EnrollForm({ course, language, format, days }) {
                 name="gender"
                 required
                 defaultValue=""
-                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className={INPUT_CLASS}
               >
                 <option value="" disabled>
                   Select gender
@@ -197,6 +288,10 @@ function EnrollForm({ course, language, format, days }) {
                 ))}
               </select>
             </div>
+
+            <p className="text-brown-light text-xs italic">
+              We&apos;ll message you on WhatsApp to agree your class times.
+            </p>
 
             <button
               type="submit"
