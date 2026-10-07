@@ -1,5 +1,6 @@
 import Reveal from "./Reveal";
 import CourseCard from "./CourseCard";
+import CourseRow from "./CourseRow";
 import { COURSES } from "../lib/constants";
 
 export default function Courses() {
@@ -25,17 +26,17 @@ export default function Courses() {
                 Individual Courses
               </h3>
               <p className="text-brown-light text-sm mt-2">
-                One-to-one — choose your own language and timetable
+                One-to-one — choose your own days and timetable
               </p>
             </Reveal>
 
-            <div className="flex flex-col gap-6 mt-10 max-w-4xl mx-auto">
-              {individualCourses.map((course, i) => (
-                <Reveal key={course.id} delay={i * 0.1}>
-                  <CourseCard course={course} format="Individual" />
-                </Reveal>
-              ))}
-            </div>
+            <Reveal className="mt-8">
+              <CourseRow>
+                {individualCourses.map((course) => (
+                  <CourseCard key={course.id} course={course} format="Individual" />
+                ))}
+              </CourseRow>
+            </Reveal>
           </div>
         )}
 
@@ -50,13 +51,13 @@ export default function Courses() {
               </p>
             </Reveal>
 
-            <div className="flex flex-col gap-6 mt-10 max-w-4xl mx-auto">
-              {groupCourses.map((course, i) => (
-                <Reveal key={course.id} delay={i * 0.1}>
-                  <CourseCard course={course} format="Group" />
-                </Reveal>
-              ))}
-            </div>
+            <Reveal className="mt-8">
+              <CourseRow>
+                {groupCourses.map((course) => (
+                  <CourseCard key={course.id} course={course} format="Group" />
+                ))}
+              </CourseRow>
+            </Reveal>
           </div>
         )}
       </div>
