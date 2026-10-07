@@ -1,7 +1,6 @@
 import Hero from "../components/Hero";
 import About from "../components/About";
 import Courses from "../components/Courses";
-import Pricing from "../components/Pricing";
 import GlobalReach from "../components/GlobalReach";
 import Testimonials from "../components/Testimonials";
 import Contact from "../components/Contact";
@@ -15,7 +14,6 @@ export default function HomePage() {
       <Hero />
       <About />
       <Courses />
-      <Pricing />
       <GlobalReach />
       <Testimonials />
       <Contact />

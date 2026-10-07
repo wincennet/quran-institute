@@ -181,21 +181,6 @@ export const PRICING = {
     weekday: { default: 10, PK: 1000 },
     weekend: { default: 15, PK: 1500 },
   },
-  // Example packages shown on the homepage; the price is computed from the days.
-  plans: [
-    {
-      id: "weekdays",
-      title: "Weekday Classes",
-      days: "Monday to Friday",
-      dayList: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    },
-    {
-      id: "weekend",
-      title: "Weekend Classes",
-      days: "Saturday & Sunday",
-      dayList: ["Saturday", "Sunday"],
-    },
-  ],
 };
 
 // The "action" URL from MailerLite's embedded-form code (a public endpoint, not
