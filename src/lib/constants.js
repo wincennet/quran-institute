@@ -129,8 +129,7 @@ export const LEARNING_FORMATS = [
     title: "Individual Classes",
     points: [
       "Free trial lesson included",
-      "Choose your own language",
-      "Customised timetable — pick your own days, fee arranged accordingly",
+      "Customised timetable",
       "Flexible timings",
       "Choose your own platform",
       "All courses available",
