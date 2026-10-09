@@ -96,6 +96,10 @@ export const STEPS = [
 
 export const FEATURES = [
   {
+    title: "Free trial class",
+    description: "Try a one-to-one class with your teacher before you commit.",
+  },
+  {
     title: "Affordable fees",
     description: "Quality Quran education priced to be accessible to families anywhere in the world.",
   },
@@ -110,6 +114,14 @@ export const FEATURES = [
   {
     title: "Choice of Group or Individual Classes",
     description: "Learn one-to-one or join a group — pick whichever fits how you learn best.",
+  },
+  {
+    title: "Flexible timing",
+    description: "Class times that fit your time zone and your family's routine.",
+  },
+  {
+    title: "Free community sessions",
+    description: "Open sessions for our wider community, at no cost.",
   },
 ];
 

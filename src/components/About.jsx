@@ -1,9 +1,9 @@
-import { BookOpenCheck, CalendarCheck, HandCoins, Users } from "lucide-react";
+import { BookOpenCheck, CalendarCheck, Clock, Gift, HandCoins, HeartHandshake, Users } from "lucide-react";
 import Reveal from "./Reveal";
-import Counter from "./Counter";
-import { FEATURES, STATS } from "../lib/constants";
+import { FEATURES } from "../lib/constants";
 
-const ICONS = [HandCoins, CalendarCheck, Users, BookOpenCheck];
+// One icon per feature, in the same order as FEATURES.
+const ICONS = [Gift, HandCoins, CalendarCheck, Users, BookOpenCheck, Clock, HeartHandshake];
 
 // Repeating six-pointed-star tile, drawn in a slightly lighter brown than the
 // section background so it reads as a texture, not a pattern.
@@ -23,35 +23,26 @@ export default function About() {
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-2 gap-8 mt-10 max-w-xs sm:max-w-sm text-left">
-          {STATS.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 0.1}>
-              <p className="font-heading text-gold text-4xl md:text-5xl font-semibold">
-                <Counter value={stat.value} suffix={stat.suffix} />
-              </p>
-              <p className="text-cream/75 text-sm mt-2">{stat.label}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
           {FEATURES.map((feature, i) => {
             const Icon = ICONS[i % ICONS.length];
             return (
               <Reveal
                 key={feature.title}
-                delay={i * 0.08}
-                className="bg-cream rounded-2xl border border-gold/20 p-6 text-center"
+                delay={i * 0.06}
+                className="flex items-start gap-4 bg-cream rounded-xl border border-gold/20 p-4 text-left"
               >
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center mx-auto">
-                  <Icon className="text-gold-dark" size={22} />
+                <div className="w-11 h-11 shrink-0 rounded-full bg-gold/15 flex items-center justify-center">
+                  <Icon className="text-gold-dark" size={20} />
                 </div>
-                <h3 className="font-heading text-brown text-lg font-semibold mt-4">
-                  {feature.title}
-                </h3>
-                <p className="text-brown-light text-sm mt-2 leading-relaxed">
-                  {feature.description}
-                </p>
+                <div>
+                  <h3 className="font-heading text-brown text-lg font-semibold leading-snug">
+                    {feature.title}
+                  </h3>
+                  <p className="text-brown-light text-sm mt-1 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </Reveal>
             );
           })}
