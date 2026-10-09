@@ -4,7 +4,7 @@ import Reveal from "./Reveal";
 
 // A short, left-aligned homepage section: label, big heading, a few lines and a
 // link through to the full page.
-export default function SectionTeaser({ id, background, label, heading, children, to, linkText }) {
+export default function SectionTeaser({ id, background, label, heading, children, to, linkText, extra }) {
   return (
     <section id={id} className={`${background} py-20 md:py-24`}>
       <div className="max-w-6xl mx-auto px-6">
@@ -25,6 +25,7 @@ export default function SectionTeaser({ id, background, label, heading, children
             {linkText}
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </Link>
+          {extra}
         </Reveal>
       </div>
     </section>

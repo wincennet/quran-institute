@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import SectionTeaser from "./SectionTeaser";
+import { MISSION_HEADING } from "../lib/constants";
 
 export default function WhoWeAre() {
   return (
@@ -9,6 +12,20 @@ export default function WhoWeAre() {
       heading="Who We Are"
       to="/who-we-are"
       linkText="Read our story"
+      extra={
+        <div className="mt-12">
+          <p className="font-cinzel text-brown text-base md:text-lg leading-relaxed max-w-2xl">
+            {MISSION_HEADING}
+          </p>
+          <Link
+            to="/mission"
+            className="group inline-flex items-center gap-2 mt-4 font-medium text-gold-dark hover:text-brown transition-colors"
+          >
+            Read our mission
+            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      }
     >
       Assiratul Mustaqeem Institute began at home, with a family that loved Deen-e-Islam. Today
       that family tradition has grown into a proper institute.

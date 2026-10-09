@@ -1,6 +1,5 @@
 import Hero from "../components/Hero";
 import WhoWeAre from "../components/WhoWeAre";
-import Mission from "../components/Mission";
 import About from "../components/About";
 import LearningFormats from "../components/LearningFormats";
 import Courses from "../components/Courses";
@@ -15,7 +14,6 @@ export default function HomePage() {
     <main>
       <Hero />
       <WhoWeAre />
-      <Mission />
       <About />
       <LearningFormats />
       <Courses />
