@@ -11,10 +11,10 @@ import { formatPrice, groupFacts, priceForDays } from "../lib/pricing";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 const GENDERS = ["Male", "Female"];
 const FILLED_BY_OPTIONS = [
-  { id: "parent", label: "I'm a parent or guardian" },
-  { id: "adult", label: "I'm an adult student (18+)" },
-  { id: "minor", label: "I'm a student under 18" },
+  { id: "parent", label: "I'm a parent", hint: "Enroll one or more children" },
+  { id: "student", label: "I'm a student", hint: "Enroll myself" },
 ];
+const MAX_CHILDREN = 6;
 const STEPS = ["Course", "Schedule & fee", "Your details"];
 const INPUT_CLASS =
   "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
@@ -62,6 +62,75 @@ function Field({ id, label, children }) {
       </label>
       {children}
     </div>
+  );
+}
+
+// The questions asked about each student (a parent's child, or the student
+// themselves). `prefix` makes the field names unique per child, e.g. child_2_name.
+function StudentFields({ prefix, idPrefix }) {
+  return (
+    <>
+      <Field id={`${idPrefix}-name`} label="Full name">
+        <input
+          id={`${idPrefix}-name`}
+          name={`${prefix}name`}
+          type="text"
+          required
+          className={INPUT_CLASS}
+        />
+      </Field>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <Field id={`${idPrefix}-dob`} label="Date of birth">
+          <input
+            id={`${idPrefix}-dob`}
+            name={`${prefix}dob`}
+            type="date"
+            required
+            className={INPUT_CLASS}
+          />
+        </Field>
+        <Field id={`${idPrefix}-gender`} label="Gender">
+          <select
+            id={`${idPrefix}-gender`}
+            name={`${prefix}gender`}
+            required
+            defaultValue=""
+            className={INPUT_CLASS}
+          >
+            <option value="" disabled>
+              Select gender
+            </option>
+            {GENDERS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <Field id={`${idPrefix}-nationality`} label="Nationality">
+          <input
+            id={`${idPrefix}-nationality`}
+            name={`${prefix}nationality`}
+            type="text"
+            required
+            placeholder="e.g. Pakistani"
+            className={INPUT_CLASS}
+          />
+        </Field>
+        <Field id={`${idPrefix}-qualification`} label="Class or qualification">
+          <input
+            id={`${idPrefix}-qualification`}
+            name={`${prefix}qualification`}
+            type="text"
+            required
+            placeholder="e.g. Grade 8, High School, Bachelor's"
+            className={INPUT_CLASS}
+          />
+        </Field>
+      </div>
+    </>
   );
 }
 
@@ -125,10 +194,9 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
 
   const course = COURSES.find((c) => c.id === courseId) ?? null;
   const isIndividual = format === "Individual";
+  const [childCount, setChildCount] = useState(1);
   const isParent = who === "parent";
-  // Under-18 students are asked to get a parent to fill the form, so the rest
-  // of the form only opens for a parent/guardian or an adult student.
-  const formReady = who === "parent" || who === "adult";
+  const formReady = who === "parent" || who === "student";
 
   // Start at the first step that still needs an answer.
   const needsDays = isIndividual && days.length === 0;
@@ -173,9 +241,14 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
   const weekdays = DAYS_OF_WEEK.filter((day) => !PRICING.weekendDays.includes(day));
   const groupDetails = course && !isIndividual ? course.groupDetails : undefined;
   const facts = groupDetails ? groupFacts(groupDetails, isPakistan) : [];
-  const monthlyFee = isIndividual
-    ? formatPrice(priceForDays(days, isPakistan), isPakistan)
-    : (facts.find((fact) => fact.label === "Monthly fee")?.value.replace(" / month", "") ?? "");
+  // Fee for one student; a parent enrolling several children pays it for each.
+  const perStudentAmount = isIndividual
+    ? priceForDays(days, isPakistan)
+    : (groupDetails?.price[region] ?? null);
+  const monthlyFee = perStudentAmount === null ? "" : formatPrice(perStudentAmount, isPakistan);
+  const students = isParent ? childCount : 1;
+  const totalFee =
+    perStudentAmount === null ? "" : formatPrice(perStudentAmount * students, isPakistan);
 
   const chooseCourse = (id) => {
     if (id === courseId) return;
@@ -202,16 +275,24 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
     setStatus("sending");
     const data = new FormData(event.target);
     data.set("course", course.title);
-    data.set("filled_by", FILLED_BY_OPTIONS.find((option) => option.id === who)?.label ?? who);
+    data.set("filled_by", isParent ? "Parent" : "Student");
     data.delete("filled_by_choice");
     if (isIndividual) data.set("language", language ?? course.languages?.[0] ?? "");
     data.set("format", format);
     if (days.length) data.set("days", days.join(", "));
-    if (monthlyFee) data.set("monthly_fee", `${monthlyFee} / month`);
+    if (monthlyFee) data.set("monthly_fee", `${monthlyFee} / month per student`);
+    if (isParent) {
+      data.set("children_count", String(childCount));
+      if (totalFee) data.set("total_monthly_fee", `${totalFee} / month`);
+      // A parent's own name and number are the contact for the whole request.
+      data.set("name", data.get("guardian"));
+      data.set("phone", data.get("guardian_phone"));
+    }
     if (facts.length) data.set("group_terms", facts.map((f) => `${f.label}: ${f.value}`).join("; "));
-    // A parent's contact number is the guardian's.
-    if (isParent) data.set("phone", data.get("guardian_phone"));
-    data.set("_subject", `Enrollment request: ${course.title}`);
+    data.set(
+      "_subject",
+      `Enrollment request: ${course.title}${isParent ? ` (${childCount} ${childCount > 1 ? "children" : "child"})` : ""}`,
+    );
 
     try {
       const response = await fetch(FORMSPREE_ENDPOINT, {
@@ -470,6 +551,11 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                       ? `${groupDetails.durationMonths} months · ${groupDetails.daysPerWeek} days a week · ${monthlyFee} / month`
                       : "Fixed group schedule"}
                 </p>
+                {isParent && childCount > 1 && totalFee && (
+                  <p className="text-brown text-sm font-medium mt-1">
+                    {childCount} children: {totalFee} / month in total
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={() => goTo(2)}
@@ -481,16 +567,16 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
 
               <fieldset>
                 <legend className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-                  Who is filling out this form?
+                  Who is enrolling?
                 </legend>
-                <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {FILLED_BY_OPTIONS.map((option) => (
                     <label
                       key={option.id}
-                      className={`cursor-pointer rounded-xl border px-4 py-3 text-sm leading-snug transition-colors ${
+                      className={`cursor-pointer rounded-xl border px-4 py-3 transition-colors ${
                         who === option.id
-                          ? "border-gold bg-gold/15 text-brown font-medium"
-                          : "border-gold/30 text-brown-light hover:border-gold"
+                          ? "border-gold bg-gold/15"
+                          : "border-gold/30 hover:border-gold"
                       }`}
                     >
                       <input
@@ -502,19 +588,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                         required
                         className="sr-only"
                       />
-                      {option.label}
+                      <span className="block text-sm text-brown font-semibold">{option.label}</span>
+                      <span className="block text-brown-light text-xs mt-0.5">{option.hint}</span>
                     </label>
                   ))}
                 </div>
               </fieldset>
-
-              {who === "minor" && (
-                <p className="rounded-xl border border-gold/30 bg-cream px-4 py-3 text-brown text-sm leading-relaxed">
-                  Students under 18 need a parent or guardian to fill out this form. Please ask
-                  them to complete it for you, and choose &ldquo;I&apos;m a parent or
-                  guardian&rdquo; above.
-                </p>
-              )}
 
               {formReady && (
                 <>
@@ -527,66 +606,83 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                     />
                   )}
 
-                  <SectionTitle>Student</SectionTitle>
-                  <Field id="name" label={isParent ? "Student's full name" : "Your full name"}>
-                    <input id="name" name="name" type="text" required className={INPUT_CLASS} />
-                  </Field>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <Field id="dob" label={isParent ? "Student's date of birth" : "Date of birth"}>
-                      <input id="dob" name="dob" type="date" required className={INPUT_CLASS} />
-                    </Field>
-                    <Field id="gender" label="Gender">
-                      <select
-                        id="gender"
-                        name="gender"
-                        required
-                        defaultValue=""
-                        className={INPUT_CLASS}
-                      >
-                        <option value="" disabled>
-                          Select gender
-                        </option>
-                        {GENDERS.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </Field>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <Field id="nationality" label="Nationality">
-                      <input
-                        id="nationality"
-                        name="nationality"
-                        type="text"
-                        required
-                        placeholder="e.g. Pakistani"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
-                    <Field
-                      id="qualification"
-                      label={isParent ? "Student's class or qualification" : "Qualification"}
-                    >
-                      <input
-                        id="qualification"
-                        name="qualification"
-                        type="text"
-                        required
-                        placeholder="e.g. Grade 8, High School, Bachelor's"
-                        className={INPUT_CLASS}
-                      />
-                    </Field>
-                  </div>
-
-                  <SectionTitle>
-                    {isParent ? "Parent or guardian" : "Your contact details"}
-                  </SectionTitle>
                   {isParent ? (
                     <>
+                      <SectionTitle>Parent details</SectionTitle>
+                      <Field id="guardian" label="Your full name">
+                        <input
+                          id="guardian"
+                          name="guardian"
+                          type="text"
+                          required
+                          className={INPUT_CLASS}
+                        />
+                      </Field>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <Field id="guardian_phone" label="Your contact number (WhatsApp)">
+                          <input
+                            id="guardian_phone"
+                            name="guardian_phone"
+                            type="tel"
+                            required
+                            placeholder="+92 300 1234567"
+                            className={INPUT_CLASS}
+                          />
+                        </Field>
+                        <Field id="email" label="Your email">
+                          <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            className={INPUT_CLASS}
+                          />
+                        </Field>
+                      </div>
+
+                      <SectionTitle>Children</SectionTitle>
+                      <Field
+                        id="children_count_select"
+                        label="How many children do you want to enroll?"
+                      >
+                        <select
+                          id="children_count_select"
+                          value={childCount}
+                          onChange={(event) => setChildCount(Number(event.target.value))}
+                          className={INPUT_CLASS}
+                        >
+                          {Array.from({ length: MAX_CHILDREN }, (_, i) => i + 1).map((n) => (
+                            <option key={n} value={n}>
+                              {n}
+                            </option>
+                          ))}
+                        </select>
+                      </Field>
+                      {childCount > 1 && (
+                        <p className="text-brown-light text-xs">
+                          The course, days and fee you chose apply to each child. If your children
+                          need different days, tell us on WhatsApp and we&apos;ll arrange it.
+                        </p>
+                      )}
+
+                      {Array.from({ length: childCount }, (_, index) => (
+                        <div
+                          key={index}
+                          className="rounded-xl border border-gold/25 bg-cream p-4 sm:p-5 space-y-4"
+                        >
+                          <p className="font-heading text-brown text-lg font-semibold">
+                            Child {index + 1}
+                          </p>
+                          <StudentFields prefix={`child_${index + 1}_`} idPrefix={`c${index + 1}`} />
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <SectionTitle>Student details</SectionTitle>
+                      <StudentFields prefix="" idPrefix="s" />
+
+                      <SectionTitle>Parent or guardian</SectionTitle>
                       <Field id="guardian" label="Guardian's full name">
                         <input
                           id="guardian"
@@ -607,7 +703,20 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                             className={INPUT_CLASS}
                           />
                         </Field>
-                        <Field id="email" label="Guardian's email">
+                        <Field id="guardian_email" label="Guardian's email">
+                          <input
+                            id="guardian_email"
+                            name="guardian_email"
+                            type="email"
+                            required
+                            className={INPUT_CLASS}
+                          />
+                        </Field>
+                      </div>
+
+                      <SectionTitle>Your contact details</SectionTitle>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <Field id="email" label="Your email">
                           <input
                             id="email"
                             name="email"
@@ -616,45 +725,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                             className={INPUT_CLASS}
                           />
                         </Field>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <Field id="phone" label="Phone / WhatsApp number">
+                        <Field id="phone" label="Your phone / WhatsApp (optional)">
                           <input
                             id="phone"
                             name="phone"
                             type="tel"
-                            required
                             placeholder="+92 300 1234567"
-                            className={INPUT_CLASS}
-                          />
-                        </Field>
-                        <Field id="email" label="Email">
-                          <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            required
-                            className={INPUT_CLASS}
-                          />
-                        </Field>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <Field id="guardian" label="Guardian or emergency contact name (optional)">
-                          <input
-                            id="guardian"
-                            name="guardian"
-                            type="text"
-                            className={INPUT_CLASS}
-                          />
-                        </Field>
-                        <Field id="guardian_phone" label="Their contact number (optional)">
-                          <input
-                            id="guardian_phone"
-                            name="guardian_phone"
-                            type="tel"
                             className={INPUT_CLASS}
                           />
                         </Field>
@@ -694,11 +770,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                   </p>
 
                   <div className="flex justify-between gap-3">
-                    <button
-                      type="button"
-                      onClick={() => goTo(2)}
-                      className={SECONDARY_BUTTON}
-                    >
+                    <button type="button" onClick={() => goTo(2)} className={SECONDARY_BUTTON}>
                       Back
                     </button>
                     <button
