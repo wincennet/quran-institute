@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Check, Info } from "lucide-react";
 import DaysPicker from "../components/DaysPicker";
+import PhoneField from "../components/PhoneField";
 import PickerRow from "../components/PickerRow";
 import useCountry from "../hooks/useCountry";
 import useDocumentMeta from "../hooks/useDocumentMeta";
@@ -67,7 +68,7 @@ function Field({ id, label, children }) {
 
 // The questions asked about each student (a parent's child, or the student
 // themselves). `prefix` makes the field names unique per child, e.g. child_2_name.
-function StudentFields({ prefix, idPrefix }) {
+function StudentFields({ prefix, idPrefix, showNationality = true }) {
   return (
     <>
       <Field id={`${idPrefix}-name`} label="Full name">
@@ -109,16 +110,18 @@ function StudentFields({ prefix, idPrefix }) {
         </Field>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <Field id={`${idPrefix}-nationality`} label="Nationality">
-          <input
-            id={`${idPrefix}-nationality`}
-            name={`${prefix}nationality`}
-            type="text"
-            required
-            placeholder="e.g. Pakistani"
-            className={INPUT_CLASS}
-          />
-        </Field>
+        {showNationality && (
+          <Field id={`${idPrefix}-nationality`} label="Nationality">
+            <input
+              id={`${idPrefix}-nationality`}
+              name={`${prefix}nationality`}
+              type="text"
+              required
+              placeholder="e.g. Pakistani"
+              className={INPUT_CLASS}
+            />
+          </Field>
+        )}
         <Field id={`${idPrefix}-qualification`} label="Class or qualification">
           <input
             id={`${idPrefix}-qualification`}
@@ -619,16 +622,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                         />
                       </Field>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <Field id="guardian_phone" label="Your contact number (WhatsApp)">
-                          <input
-                            id="guardian_phone"
-                            name="guardian_phone"
-                            type="tel"
-                            required
-                            placeholder="+92 300 1234567"
-                            className={INPUT_CLASS}
-                          />
-                        </Field>
+                        <PhoneField
+                          id="guardian_phone"
+                          name="guardian_phone"
+                          label="Your contact number (WhatsApp)"
+                          required
+                        />
                         <Field id="email" label="Your email">
                           <input
                             id="email"
@@ -639,6 +638,16 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                           />
                         </Field>
                       </div>
+                      <Field id="nationality" label="Your nationality">
+                        <input
+                          id="nationality"
+                          name="nationality"
+                          type="text"
+                          required
+                          placeholder="e.g. Pakistani"
+                          className={INPUT_CLASS}
+                        />
+                      </Field>
 
                       <SectionTitle>Children</SectionTitle>
                       <Field
@@ -673,7 +682,11 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                           <p className="font-heading text-brown text-lg font-semibold">
                             Child {index + 1}
                           </p>
-                          <StudentFields prefix={`child_${index + 1}_`} idPrefix={`c${index + 1}`} />
+                          <StudentFields
+                            prefix={`child_${index + 1}_`}
+                            idPrefix={`c${index + 1}`}
+                            showNationality={false}
+                          />
                         </div>
                       ))}
                     </>
@@ -693,16 +706,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                         />
                       </Field>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <Field id="guardian_phone" label="Guardian's contact number (WhatsApp)">
-                          <input
-                            id="guardian_phone"
-                            name="guardian_phone"
-                            type="tel"
-                            required
-                            placeholder="+92 300 1234567"
-                            className={INPUT_CLASS}
-                          />
-                        </Field>
+                        <PhoneField
+                          id="guardian_phone"
+                          name="guardian_phone"
+                          label="Guardian's contact number (WhatsApp)"
+                          required
+                        />
                         <Field id="guardian_email" label="Guardian's email">
                           <input
                             id="guardian_email"
@@ -725,15 +734,11 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                             className={INPUT_CLASS}
                           />
                         </Field>
-                        <Field id="phone" label="Your phone / WhatsApp (optional)">
-                          <input
-                            id="phone"
-                            name="phone"
-                            type="tel"
-                            placeholder="+92 300 1234567"
-                            className={INPUT_CLASS}
-                          />
-                        </Field>
+                        <PhoneField
+                          id="phone"
+                          name="phone"
+                          label="Your phone / WhatsApp (optional)"
+                        />
                       </div>
                     </>
                   )}
