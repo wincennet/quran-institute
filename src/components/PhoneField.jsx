@@ -27,11 +27,11 @@ export default function PhoneField({ id, name, label, required = false }) {
           aria-label="Country code"
           value={iso}
           onChange={(event) => setChosenIso(event.target.value)}
-          className={`${INPUT_CLASS} !w-[8.5rem] shrink-0 px-2`}
+          className={`${INPUT_CLASS} !w-[6.5rem] shrink-0 px-2`}
         >
           {DIAL_CODES.map((country) => (
             <option key={country.iso} value={country.iso}>
-              {`${country.iso} ${country.dial} · ${country.name}`}
+              {`${country.iso} ${country.dial}`}
             </option>
           ))}
         </select>
