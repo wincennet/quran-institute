@@ -14,8 +14,8 @@ export default function HomePage() {
     <main>
       <Hero />
       <WhoWeAre />
-      <About />
       <Courses />
+      <About />
       <LearningFormats />
       <GlobalReach />
       <Testimonials />
