@@ -15,7 +15,7 @@ export default function DaysPicker({ label, options, selected, onToggle, max }) 
               onClick={() => onToggle(option)}
               disabled={isBlocked}
               aria-pressed={isSelected}
-              className={`text-sm font-medium rounded-full px-4 py-1.5 border transition-colors ${
+              className={`text-sm font-medium rounded-md px-4 py-1.5 border transition-colors ${
                 isSelected
                   ? "bg-gold text-cream-light border-gold"
                   : isBlocked

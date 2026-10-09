@@ -136,7 +136,7 @@ export default function EmailPopup() {
               href={whatsappLink("Assalamu alaikum, I'd like to book a free trial class.")}
               target="_blank"
               rel="noreferrer"
-              className="mt-6 inline-flex items-center justify-center gap-2 w-full bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"
+              className="mt-6 inline-flex items-center justify-center gap-2 w-full bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-md transition-colors"
             >
               <MessageCircle size={18} /> Book on WhatsApp
             </a>
@@ -175,7 +175,7 @@ export default function EmailPopup() {
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-full transition-colors"
+              className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-md transition-colors"
             >
               {status === "sending" ? "Sending…" : "Send me the free trial"}
             </button>

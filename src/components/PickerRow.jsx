@@ -9,7 +9,7 @@ export default function PickerRow({ label, options, selected, onSelect }) {
             type="button"
             onClick={() => onSelect(option)}
             aria-pressed={selected === option}
-            className={`text-sm font-medium rounded-full px-4 py-1.5 border transition-colors ${
+            className={`text-sm font-medium rounded-md px-4 py-1.5 border transition-colors ${
               selected === option
                 ? "bg-gold text-cream-light border-gold"
                 : "text-brown-light border-gold/30 hover:border-gold"

@@ -212,7 +212,7 @@ function CourseDetail({ course, initialFormat }) {
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-full transition-colors"
+                className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-md transition-colors"
               >
                 {status === "sending" ? "Sending…" : "Notify Me"}
               </button>
@@ -241,7 +241,7 @@ function CourseDetail({ course, initialFormat }) {
                       ...(selectedFormat ? { format: selectedFormat } : {}),
                     }).toString(),
                   }}
-                  className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"
+                  className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-md transition-colors"
                 >
                   Continue to enrollment
                 </Link>
@@ -321,7 +321,7 @@ function CourseDetail({ course, initialFormat }) {
                 <button
                   type="button"
                   disabled
-                  className="block w-full text-center bg-gold/40 text-cream-light font-medium py-3 rounded-full cursor-not-allowed"
+                  className="block w-full text-center bg-gold/40 text-cream-light font-medium py-3 rounded-md cursor-not-allowed"
                 >
                   Choose your days to continue
                 </button>
@@ -334,7 +334,7 @@ function CourseDetail({ course, initialFormat }) {
                       days: selectedDays.join(","),
                     }).toString(),
                   }}
-                  className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-full transition-colors"
+                  className="block w-full text-center bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-md transition-colors"
                 >
                   Continue to enrollment
                 </Link>

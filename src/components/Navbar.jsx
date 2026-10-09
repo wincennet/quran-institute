@@ -29,9 +29,6 @@ export default function Navbar() {
   const linkColor = onDarkHero
     ? "text-cream-light hover:text-gold"
     : "text-brown hover:text-gold";
-  const outlineButtonColor = onDarkHero
-    ? "border-cream-light/50 text-cream-light hover:bg-cream-light/10"
-    : "border-gold-dark/50 text-brown hover:bg-cream-light";
 
   return (
     <header
@@ -39,7 +36,7 @@ export default function Navbar() {
         scrolled ? "bg-cream-light/95 backdrop-blur shadow-sm" : "bg-transparent"
       }`}
     >
-      <nav className="w-full flex items-center justify-between px-5 sm:px-8 lg:px-12 py-3">
+      <nav className="w-full max-w-7xl mx-auto flex items-center justify-between px-5 sm:px-8 lg:px-12 py-3">
         <Link to="/" className="flex items-center">
           <Logo compact onDark={onDarkHero} />
         </Link>
@@ -55,23 +52,9 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden md:flex items-center gap-2">
-          <a
-            href="/#courses"
-            className={`border text-sm font-medium px-4 py-2 rounded-full transition-colors ${outlineButtonColor}`}
-          >
-            Our Courses
-          </a>
-          <a
-            href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
-            target="_blank"
-            rel="noreferrer"
-            className={`border text-sm font-medium px-4 py-2 rounded-full transition-colors ${outlineButtonColor}`}
-          >
-            Free Trial
-          </a>
           <Link
             to="/courses/tarteel?format=Individual"
-            className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-4 py-2 rounded-full transition-colors"
+            className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-md transition-colors"
           >
             Enroll Now
           </Link>
@@ -101,7 +84,7 @@ export default function Navbar() {
             <a
               href="/#courses"
               onClick={() => setOpen(false)}
-              className="block text-center border border-gold-dark/50 text-brown text-sm font-medium px-5 py-2 rounded-full transition-colors"
+              className="block text-center border border-gold-dark/50 text-brown text-sm font-medium px-5 py-2 rounded-md transition-colors"
             >
               Our Courses
             </a>
@@ -109,14 +92,14 @@ export default function Navbar() {
               href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
               target="_blank"
               rel="noreferrer"
-              className="block text-center border border-gold-dark/50 text-brown text-sm font-medium px-5 py-2 rounded-full transition-colors"
+              className="block text-center bg-gold hover:bg-gold-dark border border-gold hover:border-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-md transition-colors"
             >
               Free Trial
             </a>
             <Link
               to="/courses/tarteel?format=Individual"
               onClick={() => setOpen(false)}
-              className="block text-center bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-full transition-colors"
+              className="block text-center border border-gold-dark/50 text-brown text-sm font-medium px-5 py-2 rounded-md transition-colors"
             >
               Enroll Now
             </Link>
