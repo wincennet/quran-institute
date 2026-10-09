@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { MessageCircle, X } from "lucide-react";
-import { MAILERLITE_FORM_URL, whatsappLink } from "../lib/constants";
+import { MAILERLITE_FORM_URL, MAILERLITE_STUDENT_FORM_URL, whatsappLink } from "../lib/constants";
 
 const STORAGE_KEY = "emailPopup:v1";
 const DISMISS_DAYS = 14;
@@ -38,6 +38,7 @@ export default function EmailPopup() {
 
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("idle");
+  const [audience, setAudience] = useState("parent");
   const hasShown = useRef(false);
   const emailInput = useRef(null);
 
@@ -84,9 +85,15 @@ export default function EmailPopup() {
     const data = new FormData(event.target);
     data.set("ml-submit", "1");
     data.set("anticsrf", "true");
+    // Parents and students are different MailerLite groups, each with its own
+    // email series.
+    const url =
+      audience === "student" && MAILERLITE_STUDENT_FORM_URL
+        ? MAILERLITE_STUDENT_FORM_URL
+        : MAILERLITE_FORM_URL;
 
     try {
-      const response = await fetch(MAILERLITE_FORM_URL, { method: "POST", body: data });
+      const response = await fetch(url, { method: "POST", body: data });
       const result = await response.json().catch(() => null);
       if (response.ok && result?.success !== false) {
         writeState({ subscribed: true });
@@ -100,6 +107,9 @@ export default function EmailPopup() {
   };
 
   if (!enabled || !open) return null;
+
+  const asksAudience = Boolean(MAILERLITE_STUDENT_FORM_URL);
+  const isStudent = asksAudience && audience === "student";
 
   return (
     <div
@@ -144,7 +154,7 @@ export default function EmailPopup() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <span className="font-sans text-gold-dark text-xs uppercase tracking-[0.25em]">
-              Free for parents
+              {asksAudience ? "Free trial class" : "Free for parents"}
             </span>
             <h2
               id="email-popup-title"
@@ -153,9 +163,36 @@ export default function EmailPopup() {
               Get a free trial class and simple Tajweed tips
             </h2>
             <p className="text-brown-light text-sm leading-relaxed">
-              Leave your email and we&apos;ll send your trial class details, plus short tips to
-              help your child recite the Quran correctly.
+              {isStudent
+                ? "Leave your email and we'll send your trial class details, plus short tips to help you recite the Quran correctly."
+                : "Leave your email and we'll send your trial class details, plus short tips to help your child recite the Quran correctly."}
             </p>
+
+            {asksAudience && (
+              <fieldset>
+                <legend className="text-xs text-brown-light font-medium">I am a…</legend>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {[
+                    { id: "parent", label: "Parent" },
+                    { id: "student", label: "Student" },
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setAudience(option.id)}
+                      aria-pressed={audience === option.id}
+                      className={`text-sm font-medium rounded-md px-4 py-2 border transition-colors ${
+                        audience === option.id
+                          ? "bg-gold text-cream-light border-gold"
+                          : "text-brown-light border-gold/30 hover:border-gold"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            )}
 
             <div>
               <label htmlFor="popup-email" className="text-xs text-brown-light font-medium">
