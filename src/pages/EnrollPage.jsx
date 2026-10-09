@@ -8,6 +8,11 @@ import { formatPrice, priceForDays } from "../lib/pricing";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 const GENDERS = ["Male", "Female"];
+const FILLED_BY_OPTIONS = [
+  { id: "parent", label: "I'm a parent or guardian" },
+  { id: "adult", label: "I'm an adult student (18+)" },
+  { id: "minor", label: "I'm a student under 18" },
+];
 const INPUT_CLASS =
   "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
 
@@ -56,6 +61,11 @@ function EnrollForm({ course, format, days }) {
   const [status, setStatus] = useState("idle");
   const isIndividual = format === "Individual";
   const [language, setLanguage] = useState(course.languages?.[0] ?? null);
+  const [who, setWho] = useState("");
+  const isParent = who === "parent";
+  // Under-18 students are asked to get a parent to fill the form, so the rest
+  // of the form only opens for a parent/guardian or an adult student.
+  const formReady = who === "parent" || who === "adult";
 
   // Country and time zone are pre-filled from the visitor's location and
   // browser, and stay editable.
@@ -89,6 +99,8 @@ function EnrollForm({ course, format, days }) {
     const form = event.target;
     const data = new FormData(form);
     data.set("course", course.title);
+    data.set("filled_by", FILLED_BY_OPTIONS.find((option) => option.id === who)?.label ?? who);
+    data.delete("filled_by_choice");
     if (isIndividual && language) data.set("language", language);
     if (format) data.set("format", format);
     if (days.length) data.set("days", days.join(", "));
@@ -154,7 +166,44 @@ function EnrollForm({ course, format, days }) {
           )}
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-            {isIndividual && course.languages && (
+            <fieldset>
+              <legend className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+                Who is filling out this form?
+              </legend>
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {FILLED_BY_OPTIONS.map((option) => (
+                  <label
+                    key={option.id}
+                    className={`cursor-pointer rounded-xl border px-4 py-3 text-sm leading-snug transition-colors ${
+                      who === option.id
+                        ? "border-gold bg-gold/15 text-brown font-medium"
+                        : "border-gold/30 text-brown-light hover:border-gold"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="filled_by_choice"
+                      value={option.id}
+                      checked={who === option.id}
+                      onChange={() => setWho(option.id)}
+                      required
+                      className="sr-only"
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            {who === "minor" && (
+              <p className="rounded-xl border border-gold/30 bg-cream px-4 py-3 text-brown text-sm leading-relaxed">
+                Students under 18 need a parent or guardian to fill out this form. Please ask
+                them to complete it for you, and choose &ldquo;I&apos;m a parent or
+                guardian&rdquo; above.
+              </p>
+            )}
+
+            {formReady && isIndividual && course.languages && (
               <PickerRow
                 label="Choose your language"
                 options={course.languages}
@@ -163,24 +212,28 @@ function EnrollForm({ course, format, days }) {
               />
             )}
 
+            {formReady && (
+              <>
             <div>
               <label htmlFor="name" className="text-xs text-brown-light font-medium">
-                Student&apos;s full name
+                {isParent ? "Child's full name" : "Your full name"}
               </label>
               <input id="name" name="name" type="text" required className={INPUT_CLASS} />
             </div>
 
-            <div>
-              <label htmlFor="guardian" className="text-xs text-brown-light font-medium">
-                Parent or guardian name (for children)
-              </label>
-              <input id="guardian" name="guardian" type="text" className={INPUT_CLASS} />
-            </div>
+            {isParent && (
+              <div>
+                <label htmlFor="guardian" className="text-xs text-brown-light font-medium">
+                  Parent or guardian name
+                </label>
+                <input id="guardian" name="guardian" type="text" required className={INPUT_CLASS} />
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label htmlFor="email" className="text-xs text-brown-light font-medium">
-                  Email
+                  {isParent ? "Parent or guardian email" : "Email"}
                 </label>
                 <input id="email" name="email" type="email" required className={INPUT_CLASS} />
               </div>
@@ -234,7 +287,7 @@ function EnrollForm({ course, format, days }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label htmlFor="dob" className="text-xs text-brown-light font-medium">
-                  Date of birth
+                  {isParent ? "Child's date of birth" : "Date of birth"}
                 </label>
                 <input id="dob" name="dob" type="date" required className={INPUT_CLASS} />
               </div>
@@ -311,6 +364,8 @@ function EnrollForm({ course, format, days }) {
                 Something went wrong — please try again or message us on WhatsApp from the Contact
                 section.
               </p>
+            )}
+              </>
             )}
           </form>
         </div>

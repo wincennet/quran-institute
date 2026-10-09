@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import Reveal from "./Reveal";
+import ScrollRow from "./ScrollRow";
 import { LEARNING_FORMATS } from "../lib/constants";
 
 // Individual first, matching the order of the course sections below.
@@ -23,25 +24,31 @@ export default function LearningFormats() {
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-14 max-w-3xl mx-auto">
-          {ORDERED_FORMATS.map((format, i) => (
-            <Reveal
-              key={format.id}
-              delay={i * 0.1}
-              className="bg-cream-light rounded-2xl border border-gold/25 p-8"
-            >
-              <h3 className="font-heading text-brown text-2xl font-semibold">{format.title}</h3>
-              <ul className="mt-6 space-y-3">
-                {format.points.map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-brown-light text-sm leading-relaxed">
-                    <CheckCircle2 className="text-gold shrink-0 mt-0.5" size={18} />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          ))}
-        </div>
+        {/* A row you swipe sideways on a phone; both cards simply sit side by side
+            on larger screens. */}
+        <Reveal className="mt-14">
+          <ScrollRow>
+            {ORDERED_FORMATS.map((format) => (
+              <div
+                key={format.id}
+                className="snap-start shrink-0 w-[82%] sm:w-[24rem] bg-cream-light rounded-2xl border border-gold/25 p-8"
+              >
+                <h3 className="font-heading text-brown text-2xl font-semibold">{format.title}</h3>
+                <ul className="mt-6 space-y-3">
+                  {format.points.map((point) => (
+                    <li
+                      key={point}
+                      className="flex items-start gap-3 text-brown-light text-sm leading-relaxed"
+                    >
+                      <CheckCircle2 className="text-gold shrink-0 mt-0.5" size={18} />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </ScrollRow>
+        </Reveal>
       </div>
     </section>
   );
