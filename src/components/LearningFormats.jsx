@@ -12,7 +12,7 @@ export default function LearningFormats() {
   return (
     <section id="formats" className="bg-cream-light py-24">
       <div className="max-w-6xl mx-auto px-6">
-        <Reveal className="text-center max-w-2xl mx-auto">
+        <Reveal className="text-left max-w-2xl">
           <span className="font-sans text-gold-dark text-sm uppercase tracking-[0.25em]">
             Class Formats
           </span>
