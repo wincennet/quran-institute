@@ -16,8 +16,8 @@ export default function HomePage() {
       <WhoWeAre />
       <Courses />
       <LearningFormats />
-      <About />
       <GlobalReach />
+      <About />
       <Testimonials />
       <Contact />
       <WhatsAppButton />

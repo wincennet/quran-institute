@@ -25,22 +25,22 @@ export default function GlobalReach() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="global-reach" className="bg-brown py-24 text-cream-light">
-      <div className="max-w-4xl mx-auto px-6 text-center">
-        <Reveal className="max-w-2xl mx-auto">
+    <section id="global-reach" className="bg-[#352b23] py-24 text-cream-light">
+      <div className="max-w-6xl mx-auto px-6 text-left">
+        <Reveal className="max-w-2xl">
           <span className="font-sans text-gold text-sm uppercase tracking-[0.25em]">
             Global Reach
           </span>
           <h2 className="font-heading text-cream-light text-3xl md:text-4xl font-medium mt-3">
             Students in 45+ countries, one classroom
           </h2>
-          <p className="text-cream/70 text-sm md:text-base mt-4 max-w-xl mx-auto leading-relaxed">
+          <p className="text-cream/70 text-sm md:text-base mt-4 max-w-xl leading-relaxed">
             Drag the globe to explore where our students learn from — a small sample of the
             countries Assiratul Mustaqeem has reached over 13 years.
           </p>
         </Reveal>
 
-        <Reveal delay={0.15} className="mt-12">
+        <Reveal delay={0.15} className="mt-12 max-w-4xl mx-auto">
           {prefersReducedMotion ? (
             <div>
               <GlobeIcon className="text-gold mx-auto mb-6" size={48} strokeWidth={1.2} />
