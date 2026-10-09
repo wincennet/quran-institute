@@ -221,31 +221,31 @@ export const MISSION_STATEMENT =
 export const MISSION_RIGHTS = [
   {
     title: "Belief",
-    term: "Iman",
+    term: "الإيمان",
     description:
       "We help students trust the Quran as the word of Allah and build a firm, loving faith in it from the start.",
   },
   {
     title: "Recitation",
-    term: "Tilawah",
+    term: "التلاوة",
     description:
       "We teach correct, beautiful recitation with Tajweed, patiently and one-to-one, so students read with confidence.",
   },
   {
     title: "Understanding",
-    term: "Fahm",
+    term: "الفهم",
     description:
       "We go beyond the words to the meaning, so students know what they are reciting and why it matters.",
   },
   {
     title: "Application",
-    term: "Amal",
+    term: "العمل",
     description:
       "We help students bring the Quran into daily life, in their character, their prayer, and their choices at home.",
   },
   {
     title: "Conveying the Message",
-    term: "Da’wah",
+    term: "الدعوة",
     description:
       "We prepare students to share what they’ve learned with their family and community, with kindness and with knowledge.",
   },

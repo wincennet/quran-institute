@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import About from "../components/About";
 import ScrollPanel from "../components/ScrollPanel";
+import jumpTo from "../lib/jumpTo";
 import useDocumentMeta from "../hooks/useDocumentMeta";
 import {
   MISSION_HEADING,
@@ -56,33 +57,31 @@ function MissionSection() {
   return (
     <section id="mission-full" className="bg-cream py-24">
       <div className="max-w-4xl mx-auto px-6 text-left">
-        <span className="block font-sans text-gold-dark text-sm uppercase tracking-[0.25em]">
+        <h2 className="font-heading text-brown text-4xl md:text-6xl font-medium leading-[1.1]">
           Our Mission
-        </span>
-        <h2 className="font-heading text-brown text-4xl md:text-6xl font-medium leading-[1.1] mt-3">
-          {MISSION_HEADING}
         </h2>
-        <p className="text-brown-light text-base md:text-lg leading-relaxed mt-6 max-w-2xl">
+        <h3 className="font-heading text-brown text-xl md:text-2xl font-semibold leading-snug mt-6 max-w-2xl">
+          {MISSION_HEADING}
+        </h3>
+        <p className="text-brown-light text-base md:text-lg leading-relaxed mt-4 max-w-2xl">
           {MISSION_INTRO}
         </p>
 
         <ol className="mt-12 space-y-5">
-          {MISSION_RIGHTS.map((right, i) => (
+          {MISSION_RIGHTS.map((right) => (
             <li
               key={right.title}
-              className="flex gap-5 bg-cream-light rounded-2xl border border-gold/25 p-6 md:p-7"
+              className="bg-cream-light rounded-2xl border border-gold/25 p-6 md:p-7"
             >
-              <span className="shrink-0 w-10 h-10 rounded-full bg-gold text-cream-light font-heading text-xl font-semibold flex items-center justify-center">
-                {i + 1}
-              </span>
-              <div>
-                <h3 className="font-heading text-brown text-xl md:text-2xl font-semibold">
-                  {right.title} <span className="text-gold-dark font-medium">({right.term})</span>
-                </h3>
-                <p className="text-brown-light text-sm md:text-base leading-relaxed mt-2">
-                  {right.description}
-                </p>
-              </div>
+              <h4 className="font-heading text-brown text-xl md:text-2xl font-semibold">
+                {right.title}{" "}
+                <span className="font-arabic text-gold-dark text-xl md:text-2xl font-semibold">
+                  ({right.term})
+                </span>
+              </h4>
+              <p className="text-brown-light text-sm md:text-base leading-relaxed mt-2">
+                {right.description}
+              </p>
             </li>
           ))}
         </ol>
@@ -102,9 +101,12 @@ export default function AboutFlowPage({ start }) {
     if (start !== "mission") return;
     // Wait for the router's scroll-to-top, then jump (instantly) to the mission.
     const frame = requestAnimationFrame(() => {
-      const section = document.getElementById("mission-full");
-      if (section) {
-        window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY, behavior: "instant" });
+      // The story section sits directly above the mission and isn't animated,
+      // so its bottom edge is the mission's resting position (the mission's own
+      // box is shifted while it animates in).
+      const story = document.getElementById("story");
+      if (story) {
+        jumpTo(story.offsetTop + story.offsetHeight);
       }
     });
     return () => cancelAnimationFrame(frame);
