@@ -234,3 +234,14 @@ export const MISSION_RIGHTS = [
       "We prepare students to share what they’ve learned with their family and community, with kindness and with knowledge.",
   },
 ];
+
+// Full "Who We Are" story, shown on /who-we-are.
+export const STORY_PARAGRAPHS = [
+  "Assiratul Mustaqeem Institute began at home, with a family that loved Deen-e-Islam. Our mother, a qualified teacher who completed her Alima course with Arabic and Tajweed training, began teaching at a young age, after her marriage. She raised her children with Islamic values and taught them Tajweed, and in 2013 she began teaching the Quran online. She taught her own children first, and since then our family has taught students living abroad.",
+  "Today that family tradition has grown into a proper institute. We know how hard it can be to find a patient, qualified Quran teacher where you live, especially for families raising children far from home. So we bring the classroom to you, with a teacher who gives your child her full attention and never rushes them.",
+  "Every student learns at their own pace. We don’t compare learners or hurry anyone. We teach for as long as it takes, because the goal is not finishing a book but building a lasting bond with the Quran.",
+];
+
+export const MISSION_HEADING = "To give the Quran its five rights, in every student’s life.";
+export const MISSION_INTRO =
+  "At Assiratul Mustaqeem Institute, we don’t teach the Quran as only a book to read. We teach it as a way of life, through five rights it holds over every believer:";

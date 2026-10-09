@@ -6,6 +6,8 @@ import EmailPopup from "./components/EmailPopup";
 import HomePage from "./pages/HomePage";
 import CoursePage from "./pages/CoursePage";
 import EnrollPage from "./pages/EnrollPage";
+import StoryPage from "./pages/StoryPage";
+import MissionPage from "./pages/MissionPage";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/who-we-are" element={<StoryPage />} />
+        <Route path="/mission" element={<MissionPage />} />
         <Route path="/courses/:id" element={<CoursePage />} />
         <Route path="/courses/:id/enroll" element={<EnrollPage />} />
       </Routes>
