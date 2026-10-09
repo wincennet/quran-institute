@@ -5,6 +5,8 @@ import Logo from "./Logo";
 import { whatsappLink } from "../lib/constants";
 
 const LINKS = [
+  { label: "Who We Are", href: "/#who-we-are" },
+  { label: "Mission", href: "/#mission" },
   { label: "About", href: "/#about" },
   { label: "Courses", href: "/#courses" },
   { label: "Global Reach", href: "/#global-reach" },
@@ -54,7 +56,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-2">
           <Link
             to="/courses/tarteel?format=Individual"
-            className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-5 py-2 rounded-md transition-colors"
+            className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-4 py-2 rounded-md transition-colors"
           >
             Enroll Now
           </Link>

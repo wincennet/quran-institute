@@ -200,3 +200,37 @@ export const MAILERLITE_FORM_URL =
 
 export const MISSION_STATEMENT =
   "Our mission is to cover the 5 rights of the Quran: Belief (Iman), Recitation (Tilawah), Understanding (Fahm), Application (Amal), and Conveying the Message (Da'wah).";
+
+// The five rights of the Quran that the institute teaches around.
+export const MISSION_RIGHTS = [
+  {
+    title: "Belief",
+    term: "Iman",
+    description:
+      "We help students trust the Quran as the word of Allah and build a firm, loving faith in it from the start.",
+  },
+  {
+    title: "Recitation",
+    term: "Tilawah",
+    description:
+      "We teach correct, beautiful recitation with Tajweed, patiently and one-to-one, so students read with confidence.",
+  },
+  {
+    title: "Understanding",
+    term: "Fahm",
+    description:
+      "We go beyond the words to the meaning, so students know what they are reciting and why it matters.",
+  },
+  {
+    title: "Application",
+    term: "Amal",
+    description:
+      "We help students bring the Quran into daily life, in their character, their prayer, and their choices at home.",
+  },
+  {
+    title: "Conveying the Message",
+    term: "Da’wah",
+    description:
+      "We prepare students to share what they’ve learned with their family and community, with kindness and with knowledge.",
+  },
+];
