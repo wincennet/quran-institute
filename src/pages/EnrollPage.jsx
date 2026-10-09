@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import PickerRow from "../components/PickerRow";
 import useCountry from "../hooks/useCountry";
 import { COURSES, DAYS_OF_WEEK, PRICING } from "../lib/constants";
-import { formatPrice, priceForDays } from "../lib/pricing";
+import { formatPrice, groupFacts, priceForDays } from "../lib/pricing";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 const GENDERS = ["Male", "Female"];
@@ -91,7 +91,12 @@ function EnrollForm({ course, format, days }) {
   const country = countryInput ?? detectedCountryName;
   const timeZone = timeZoneInput ?? detectedTimeZone;
 
-  const monthlyFee = isIndividual ? formatPrice(priceForDays(days, isPakistan), isPakistan) : "";
+  // Group courses with fixed terms show their facts (and fee) instead of a custom plan.
+  const groupDetails = !isIndividual ? course.groupDetails : undefined;
+  const facts = groupDetails ? groupFacts(groupDetails, isPakistan) : [];
+  const monthlyFee = isIndividual
+    ? formatPrice(priceForDays(days, isPakistan), isPakistan)
+    : (facts.find((fact) => fact.label === "Monthly fee")?.value.replace(" / month", "") ?? "");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -105,6 +110,7 @@ function EnrollForm({ course, format, days }) {
     if (format) data.set("format", format);
     if (days.length) data.set("days", days.join(", "));
     if (monthlyFee) data.set("monthly_fee", `${monthlyFee} / month`);
+    if (facts.length) data.set("group_terms", facts.map((f) => `${f.label}: ${f.value}`).join("; "));
     data.set("_subject", `Enrollment request: ${course.title}`);
 
     try {
@@ -162,6 +168,22 @@ function EnrollForm({ course, format, days }) {
                   Change days
                 </Link>
               </p>
+            </div>
+          )}
+
+          {groupDetails && (
+            <div className="mt-6 rounded-xl border border-gold/25 bg-cream px-5 py-4">
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+                Your course
+              </p>
+              <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-4">
+                {facts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt className="text-brown-light text-xs">{fact.label}</dt>
+                    <dd className="font-heading text-brown text-lg font-semibold">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           )}
 

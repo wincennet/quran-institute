@@ -5,7 +5,7 @@ import DaysPicker from "../components/DaysPicker";
 import useCountry from "../hooks/useCountry";
 import useDocumentMeta from "../hooks/useDocumentMeta";
 import { COURSES, DAYS_OF_WEEK, LEARNING_FORMATS, PRICING } from "../lib/constants";
-import { formatPrice, priceForDays } from "../lib/pricing";
+import { formatPrice, groupFacts, priceForDays } from "../lib/pricing";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
@@ -155,6 +155,21 @@ function CourseDetail({ course, initialFormat }) {
                       </li>
                     ))}
                   </ul>
+
+                  {selectedFormat === "Group" && course.groupDetails && (
+                    <dl className="mt-5 pt-5 border-t border-gold/15 grid grid-cols-2 gap-x-4 gap-y-5">
+                      {groupFacts(course.groupDetails, isPakistan).map((fact) => (
+                        <div key={fact.label}>
+                          <dt className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
+                            {fact.label}
+                          </dt>
+                          <dd className="font-heading text-brown text-xl font-semibold mt-1">
+                            {fact.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
                 </div>
             </div>
           )}

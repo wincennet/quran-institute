@@ -29,7 +29,14 @@ export const COURSES = [
       "A comprehensive foundation course in Quran recitation, covering the proper rules of Tajweed, essential daily Duas, the correct method of performing Namaz, and enriching Islamic stories that build character. Designed for students of every age beginning their journey with the Quran.",
     languages: ["Urdu", "English"],
     formats: ["Group", "Individual"],
-    groupDuration: "About 6 months",
+    // Fixed terms for the group batch (shown on the course and enrollment pages).
+    // `price` is per month; `PK` is shown only to visitors in Pakistan.
+    groupDetails: {
+      durationMonths: 6,
+      daysPerWeek: 2,
+      classMinutes: 60,
+      price: { default: 15, PK: 2000 },
+    },
   },
   {
     id: "arabi",
