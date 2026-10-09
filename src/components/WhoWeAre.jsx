@@ -14,12 +14,16 @@ export default function WhoWeAre() {
       linkText="Read our story"
       extra={
         <div className="mt-12">
-          <p className="font-cinzel text-brown text-base md:text-lg leading-relaxed max-w-2xl">
+          <p className="font-cinzel font-semibold text-brown text-base md:text-lg leading-relaxed max-w-2xl">
             {MISSION_HEADING}
+          </p>
+          <p className="text-brown-light text-base md:text-lg leading-relaxed mt-3 max-w-2xl">
+            We don’t teach the Quran as only a book to read. We teach it as a way of life, through
+            five rights it holds over every believer.
           </p>
           <Link
             to="/mission"
-            className="group inline-flex items-center gap-2 mt-4 font-medium text-gold-dark hover:text-brown transition-colors"
+            className="group inline-flex items-center gap-2 mt-4 font-light underline underline-offset-4 text-gold-dark hover:text-brown transition-colors"
           >
             Read our mission
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />

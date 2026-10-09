@@ -20,7 +20,7 @@ export default function SectionTeaser({ id, background, label, heading, children
           </p>
           <Link
             to={to}
-            className="group inline-flex items-center gap-2 mt-8 font-medium text-gold-dark hover:text-brown transition-colors"
+            className="group inline-flex items-center gap-2 mt-8 font-light underline underline-offset-4 text-gold-dark hover:text-brown transition-colors"
           >
             {linkText}
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />

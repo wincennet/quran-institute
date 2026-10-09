@@ -5,8 +5,7 @@ import Logo from "./Logo";
 import { whatsappLink } from "../lib/constants";
 
 const LINKS = [
-  { label: "Who We Are", href: "/#who-we-are" },
-  { label: "About", href: "/#about" },
+  { label: "About Us", href: "/#who-we-are" },
   { label: "Courses", href: "/#courses" },
   { label: "Global Reach", href: "/#global-reach" },
   { label: "Contact", href: "/#contact" },
