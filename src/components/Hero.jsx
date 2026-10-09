@@ -56,24 +56,24 @@ export default function Hero() {
             Group and one-to-one courses: Tarteel-ul-Quran, Al-Quran-ul-Arabi and Hifz-ul-Quran.
           </motion.p>
 
-          <motion.div {...fadeUp(0.3)} className="mt-8 md:mt-10 flex flex-wrap gap-3 md:gap-4">
+          <motion.div {...fadeUp(0.3)} className="mt-8 md:mt-10 flex flex-wrap gap-2 md:gap-4">
             <a
               href={whatsappLink("Assalamu alaikum, I'd like to book a free individual trial class.")}
               target="_blank"
               rel="noreferrer"
-              className="bg-gold hover:bg-gold-dark text-cream-light font-medium px-4 md:px-5 py-2.5 text-sm md:text-base rounded-md border border-gold hover:border-gold-dark transition-colors"
+              className="bg-gold hover:bg-gold-dark text-cream-light font-medium px-3.5 md:px-5 py-2.5 text-sm md:text-base rounded-md border border-gold hover:border-gold-dark transition-colors"
             >
               Free Trial
             </a>
             <Link
               to="/courses/tarteel?format=Individual"
-              className="border border-cream-light/60 text-cream-light hover:bg-cream-light/10 font-medium px-4 md:px-5 py-2.5 text-sm md:text-base rounded-md transition-colors"
+              className="border border-cream-light/60 text-cream-light hover:bg-cream-light/10 font-medium px-3.5 md:px-5 py-2.5 text-sm md:text-base rounded-md transition-colors"
             >
               Enroll Now
             </Link>
             <a
               href="#courses"
-              className="hidden sm:inline-block border border-cream-light/60 text-cream-light hover:bg-cream-light/10 font-medium px-4 md:px-5 py-2.5 text-sm md:text-base rounded-md transition-colors"
+              className="border border-cream-light/60 text-cream-light hover:bg-cream-light/10 font-medium px-3.5 md:px-5 py-2.5 text-sm md:text-base rounded-md transition-colors"
             >
               Our Courses
             </a>

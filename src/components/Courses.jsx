@@ -11,7 +11,7 @@ export default function Courses() {
   return (
     <section id="courses" className="bg-[#352b23] py-24" style={STAR_PATTERN_STYLE}>
       <div className="max-w-6xl mx-auto px-6">
-        <Reveal className="text-center max-w-2xl mx-auto">
+        <Reveal className="text-left max-w-2xl">
           <span className="font-sans text-gold text-sm uppercase tracking-[0.25em]">
             Our Courses
           </span>
@@ -22,7 +22,7 @@ export default function Courses() {
 
         {individualCourses.length > 0 && (
           <div className="mt-16">
-            <Reveal className="text-center max-w-xl mx-auto">
+            <Reveal className="text-left max-w-xl">
               <h3 className="font-heading text-cream-light text-3xl md:text-4xl font-bold">
                 Individual Courses
               </h3>
@@ -43,7 +43,7 @@ export default function Courses() {
 
         {groupCourses.length > 0 && (
           <div className="mt-16">
-            <Reveal className="text-center max-w-xl mx-auto">
+            <Reveal className="text-left max-w-xl">
               <h3 className="font-heading text-cream-light text-3xl md:text-4xl font-bold">
                 Group Courses
               </h3>

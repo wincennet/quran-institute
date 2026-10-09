@@ -30,6 +30,15 @@ export default function CourseCard({ course, format }) {
 
       {/* The full description lives on the course page, not on the card. */}
       <div className="mt-auto pt-6 flex flex-wrap items-center gap-2.5">
+        <Link
+          to={{
+            pathname: `/courses/${course.id}`,
+            search: format ? `?format=${encodeURIComponent(format)}` : "",
+          }}
+          className="bg-cream hover:bg-cream/60 border border-gold/40 text-brown text-[13px] font-medium px-3.5 py-2 rounded-md transition-colors"
+        >
+          View course →
+        </Link>
         {/* Free trial is for one-to-one classes, and not for courses still being prepared. */}
         {format === "Individual" && !course.comingSoon && (
           <a
@@ -43,15 +52,6 @@ export default function CourseCard({ course, format }) {
             Book a free trial
           </a>
         )}
-        <Link
-          to={{
-            pathname: `/courses/${course.id}`,
-            search: format ? `?format=${encodeURIComponent(format)}` : "",
-          }}
-          className="bg-cream hover:bg-cream/60 border border-gold/40 text-brown text-[13px] font-medium px-3.5 py-2 rounded-md transition-colors"
-        >
-          View course →
-        </Link>
       </div>
     </div>
   );
