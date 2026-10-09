@@ -217,7 +217,8 @@ export const MAILERLITE_FORM_URL =
 // Second MailerLite embedded form, for students signing up themselves (so they
 // get their own email series instead of the parents' one). While this is empty
 // the popup stays parents-only. Paste the form's "action" URL here once it exists.
-export const MAILERLITE_STUDENT_FORM_URL = "";
+export const MAILERLITE_STUDENT_FORM_URL =
+  "https://assets.mailerlite.com/jsonp/2691946/forms/200860777553331356/subscribe";
 
 export const MISSION_STATEMENT =
   "Our mission is to cover the 5 rights of the Quran: Belief (Iman), Recitation (Tilawah), Understanding (Fahm), Application (Amal), and Conveying the Message (Da'wah).";
