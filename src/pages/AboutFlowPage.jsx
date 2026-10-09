@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import About from "../components/About";
+import ScrollPanel from "../components/ScrollPanel";
 import useDocumentMeta from "../hooks/useDocumentMeta";
 import {
   MISSION_HEADING,
@@ -112,8 +113,12 @@ export default function AboutFlowPage({ start }) {
   return (
     <main>
       <StorySection />
-      <MissionSection />
-      <About />
+      <ScrollPanel>
+        <MissionSection />
+      </ScrollPanel>
+      <ScrollPanel>
+        <About />
+      </ScrollPanel>
     </main>
   );
 }
