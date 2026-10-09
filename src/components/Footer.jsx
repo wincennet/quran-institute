@@ -11,14 +11,14 @@ const SOCIAL_ICONS = {
 };
 
 const QUICK_LINKS = [
-  { label: "About", href: "/#about" },
+  { label: "About Us", href: "/#who-we-are" },
   { label: "Courses", href: "/#courses" },
   { label: "Contact", href: "/#contact" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-brown text-cream-light pt-16 pb-8">
+    <footer className="bg-[#352b23] text-cream-light pt-16 pb-8">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
