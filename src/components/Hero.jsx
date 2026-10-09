@@ -66,7 +66,7 @@ export default function Hero() {
               Free Trial
             </a>
             <Link
-              to="/courses/tarteel?format=Individual"
+              to="/enroll"
               className="border border-cream-light/60 text-cream-light hover:bg-cream-light/10 font-medium px-3.5 md:px-5 py-2.5 text-sm md:text-base rounded-md transition-colors"
             >
               Enroll Now

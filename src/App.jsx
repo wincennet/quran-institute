@@ -6,6 +6,7 @@ import EmailPopup from "./components/EmailPopup";
 import HomePage from "./pages/HomePage";
 import CoursePage from "./pages/CoursePage";
 import EnrollPage from "./pages/EnrollPage";
+import LegacyEnrollRedirect from "./pages/LegacyEnrollRedirect";
 import AboutFlowPage from "./pages/AboutFlowPage";
 
 function App() {
@@ -18,7 +19,8 @@ function App() {
         <Route path="/who-we-are" element={<AboutFlowPage start="story" />} />
         <Route path="/mission" element={<AboutFlowPage start="mission" />} />
         <Route path="/courses/:id" element={<CoursePage />} />
-        <Route path="/courses/:id/enroll" element={<EnrollPage />} />
+        <Route path="/enroll" element={<EnrollPage />} />
+        <Route path="/courses/:id/enroll" element={<LegacyEnrollRedirect />} />
       </Routes>
       <Footer />
       <EmailPopup />

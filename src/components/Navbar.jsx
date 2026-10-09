@@ -53,7 +53,7 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-2">
           <Link
-            to="/courses/tarteel?format=Individual"
+            to="/enroll"
             className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-4 py-2 rounded-md transition-colors"
           >
             Enroll Now
@@ -97,7 +97,7 @@ export default function Navbar() {
               Free Trial
             </a>
             <Link
-              to="/courses/tarteel?format=Individual"
+              to="/enroll"
               onClick={() => setOpen(false)}
               className="block text-center border border-gold-dark/50 text-brown text-sm font-medium px-5 py-2 rounded-md transition-colors"
             >
