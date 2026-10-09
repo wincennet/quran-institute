@@ -1,9 +1,9 @@
-import { BookOpenCheck, CalendarCheck, Clock, Gift, HandCoins, HeartHandshake, Users } from "lucide-react";
+import { BookOpenCheck, CalendarCheck, Clock, Gift, HandCoins, HeartHandshake, MonitorSmartphone, Users } from "lucide-react";
 import Reveal from "./Reveal";
 import { FEATURES } from "../lib/constants";
 
 // One icon per feature, in the same order as FEATURES.
-const ICONS = [Gift, HandCoins, CalendarCheck, Users, BookOpenCheck, Clock, HeartHandshake];
+const ICONS = [Gift, HandCoins, CalendarCheck, Users, BookOpenCheck, Clock, HeartHandshake, MonitorSmartphone];
 
 // Repeating six-pointed-star tile, drawn in a slightly lighter brown than the
 // section background so it reads as a texture, not a pattern.

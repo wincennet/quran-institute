@@ -123,6 +123,10 @@ export const FEATURES = [
     title: "Free community sessions",
     description: "Open sessions for our wider community, at no cost.",
   },
+  {
+    title: "Anywhere, any device",
+    description: "Join from your phone, tablet or computer, wherever you are.",
+  },
 ];
 
 export const STATS = [
