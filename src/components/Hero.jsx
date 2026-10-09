@@ -13,25 +13,23 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-screen flex items-start md:items-center overflow-hidden bg-black"
+      className="relative min-h-screen flex items-start md:items-center overflow-hidden bg-[#352b23]"
     >
       {/* Background photo. On a phone the photo is too wide to fill the screen
           without cropping the Quran away, so it sits along the bottom edge at a
           size where the whole book shows, and fades into black behind the text.
           From md up it fills the section as before. */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 isolate bg-[#352b23]">
         <img
           src={heroQuran}
           alt=""
-          className="absolute bottom-0 inset-x-0 w-full h-[58%] object-cover object-[12%_center] -scale-x-100 md:inset-0 md:h-full md:object-[68%_center]"
+          className="absolute bottom-0 inset-x-0 w-full h-[58%] object-cover object-[12%_center] -scale-x-100 mix-blend-lighten md:inset-0 md:h-full md:object-[68%_center]"
         />
         {/* phone: blend only the top edge of the photo into the dark behind the
             text, so the Quran itself stays fully visible */}
-        <div className="absolute bottom-0 inset-x-0 h-[58%] bg-gradient-to-b from-black to-transparent to-45% md:hidden" />
-        {/* desktop: soft brown tint so the photo matches the site palette, with
-            extra density behind the text that fades out toward the book */}
-        <div className="absolute inset-0 hidden md:block bg-brown/45" />
-        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-brown/85 via-brown/55 to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 h-[58%] bg-gradient-to-b from-[#352b23] to-transparent to-45% md:hidden" />
+        {/* desktop: extra density behind the text, fading out toward the book */}
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-[#352b23]/85 via-[#352b23]/45 to-transparent" />
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-32 md:pt-28 pb-16">
