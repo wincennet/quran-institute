@@ -107,7 +107,7 @@ export default function Testimonials() {
   return (
     <section className="bg-cream py-24">
       <div className="max-w-6xl mx-auto px-6">
-        <Reveal className="text-center max-w-2xl mx-auto">
+        <Reveal className="max-w-2xl">
           <span className="font-sans text-gold-dark text-sm uppercase tracking-[0.25em]">
             Testimonials
           </span>
@@ -128,7 +128,7 @@ export default function Testimonials() {
           </ScrollRow>
         </Reveal>
 
-        <Reveal className="mt-10 text-center">
+        <Reveal className="mt-10">
           {!reviewOpen && (
             <>
               <p className="text-brown-light text-sm">
