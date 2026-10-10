@@ -129,7 +129,7 @@ export const FEATURES = [
   },
   {
     title: "Available in 45+ countries",
-    description: "Students from over 45 countries have learned with us since 2013.",
+    description: "Assiratul Mustaqeem Institute is available in over 45 countries.",
   },
 ];
 
