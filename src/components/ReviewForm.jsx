@@ -62,7 +62,7 @@ export default function ReviewForm({ onClose }) {
   return (
     <div
       ref={panel}
-      className="max-w-md mx-auto text-left bg-cream-light border border-gold/25 rounded-2xl p-5"
+      className="max-w-4xl mx-auto text-left bg-cream-light border border-gold/25 rounded-2xl p-5"
     >
       {status === "success" ? (
         <div>
@@ -110,7 +110,7 @@ export default function ReviewForm({ onClose }) {
             </fieldset>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-[11rem_11rem_1fr] gap-3">
             <div>
               <label htmlFor="review-name" className="text-xs text-brown-light font-medium">
                 Name (first name is fine)
@@ -140,22 +140,22 @@ export default function ReviewForm({ onClose }) {
                 className={INPUT_CLASS}
               />
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="review-text" className="text-xs text-brown-light font-medium">
-              Your review
-            </label>
-            <textarea
-              id="review-text"
-              name="review"
-              required
-              minLength={20}
-              maxLength={1200}
-              rows={3}
-              placeholder="What has your class been like?"
-              className={`${INPUT_CLASS} resize-y`}
-            />
+            <div className="col-span-2 md:col-span-1">
+              <label htmlFor="review-text" className="text-xs text-brown-light font-medium">
+                Your review
+              </label>
+              <textarea
+                id="review-text"
+                name="review"
+                required
+                minLength={20}
+                maxLength={1200}
+                rows={2}
+                placeholder="What has your class been like?"
+                className={`${INPUT_CLASS} resize-y`}
+              />
+            </div>
           </div>
 
           {/* Spam trap: people never see this, so any value in it means a bot. */}
@@ -168,32 +168,34 @@ export default function ReviewForm({ onClose }) {
             className="hidden"
           />
 
-          <label className="flex items-start gap-2 text-xs text-brown-light leading-relaxed">
-            <input
-              type="checkbox"
-              name="may_publish"
-              value="Yes"
-              required
-              className="mt-0.5 accent-[#b8924d]"
-            />
-            <span>You may show my review on the website with my first name and country.</span>
-          </label>
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 pt-1">
+            <label className="flex items-start gap-2 text-xs text-brown-light leading-relaxed">
+              <input
+                type="checkbox"
+                name="may_publish"
+                value="Yes"
+                required
+                className="mt-0.5 accent-[#b8924d]"
+              />
+              <span>You may show my review on the website with my first name and country.</span>
+            </label>
 
-          <div className="flex flex-wrap gap-2 pt-1">
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
-            >
-              {status === "sending" ? "Sending…" : "Send review"}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="border border-gold/40 text-brown-light hover:text-brown hover:border-gold text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
-            >
-              Cancel
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
+              >
+                {status === "sending" ? "Sending…" : "Send review"}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="border border-gold/40 text-brown-light hover:text-brown hover:border-gold text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
 
           {status === "error" && (
