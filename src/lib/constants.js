@@ -127,6 +127,10 @@ export const FEATURES = [
     title: "Anywhere, any device",
     description: "Join from your phone, tablet or computer, wherever you are.",
   },
+  {
+    title: "Available in 45+ countries",
+    description: "Students from over 45 countries have learned with us since 2013.",
+  },
 ];
 
 export const STATS = [

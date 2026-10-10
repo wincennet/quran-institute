@@ -1,10 +1,10 @@
-import { BookOpenCheck, CalendarCheck, Clock, Gift, HandCoins, HeartHandshake, MonitorSmartphone, Users } from "lucide-react";
+import { BookOpenCheck, CalendarCheck, Clock, Gift, Globe, HandCoins, HeartHandshake, MonitorSmartphone, Users } from "lucide-react";
 import Reveal from "./Reveal";
 import ScrollRow from "./ScrollRow";
 import { FEATURES } from "../lib/constants";
 
 // One icon per feature, in the same order as FEATURES.
-const ICONS = [Gift, HandCoins, CalendarCheck, Users, BookOpenCheck, Clock, HeartHandshake, MonitorSmartphone];
+const ICONS = [Gift, HandCoins, CalendarCheck, Users, BookOpenCheck, Clock, HeartHandshake, MonitorSmartphone, Globe];
 
 // On a phone the first few points stack, then the rest sit in a sideways row so
 // the section doesn't run on and on.
