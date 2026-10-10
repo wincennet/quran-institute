@@ -8,6 +8,9 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 const INPUT_CLASS =
   "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
 
+// A little smaller than INPUT_CLASS, for the short single-line fields.
+const SMALL_INPUT_CLASS = INPUT_CLASS.replace("py-2", "py-1.5").replace("text-sm", "text-xs");
+
 const ROLES = [
   { id: "Parent", label: "Parent" },
   { id: "Student", label: "Student" },
@@ -110,38 +113,40 @@ export default function ReviewForm({ onClose }) {
             </fieldset>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-[11rem_11rem_1fr] gap-3">
-            <div>
-              <label htmlFor="review-name" className="text-xs text-brown-light font-medium">
-                Name (first name is fine)
-              </label>
-              <input
-                id="review-name"
-                ref={nameInput}
-                name="name"
-                type="text"
-                required
-                autoComplete="given-name"
-                className={INPUT_CLASS}
-              />
-            </div>
-            <div>
-              <label htmlFor="review-country" className="text-xs text-brown-light font-medium">
-                Country
-              </label>
-              <input
-                id="review-country"
-                name="country"
-                type="text"
-                required
-                autoComplete="country-name"
-                value={country ?? detected}
-                onChange={(event) => setCountry(event.target.value)}
-                className={INPUT_CLASS}
-              />
+          <div className="grid md:grid-cols-[13rem_1fr] gap-3">
+            <div className="space-y-2">
+              <div>
+                <label htmlFor="review-name" className="block text-xs text-brown-light font-medium">
+                  Name (first name is fine)
+                </label>
+                <input
+                  id="review-name"
+                  ref={nameInput}
+                  name="name"
+                  type="text"
+                  required
+                  autoComplete="given-name"
+                  className={SMALL_INPUT_CLASS}
+                />
+              </div>
+              <div>
+                <label htmlFor="review-country" className="block text-xs text-brown-light font-medium">
+                  Country
+                </label>
+                <input
+                  id="review-country"
+                  name="country"
+                  type="text"
+                  required
+                  autoComplete="country-name"
+                  value={country ?? detected}
+                  onChange={(event) => setCountry(event.target.value)}
+                  className={SMALL_INPUT_CLASS}
+                />
+              </div>
             </div>
 
-            <div className="col-span-2 md:col-span-1">
+            <div className="flex flex-col">
               <label htmlFor="review-text" className="text-xs text-brown-light font-medium">
                 Your review
               </label>
@@ -151,9 +156,9 @@ export default function ReviewForm({ onClose }) {
                 required
                 minLength={20}
                 maxLength={1200}
-                rows={2}
+                rows={3}
                 placeholder="What has your class been like?"
-                className={`${INPUT_CLASS} resize-y`}
+                className={`${INPUT_CLASS} flex-1 min-h-[5.5rem] resize-y`}
               />
             </div>
           </div>
