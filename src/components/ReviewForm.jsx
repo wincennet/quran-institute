@@ -35,12 +35,12 @@ export default function ReviewForm({ onClose }) {
   const [country, setCountry] = useState(null);
   const [status, setStatus] = useState("idle");
   const panel = useRef(null);
-  const nameInput = useRef(null);
+  const reviewInput = useRef(null);
 
   // Bring the form into view and ready to type when it opens.
   useEffect(() => {
     panel.current?.scrollIntoView({ block: "center", behavior: "smooth" });
-    nameInput.current?.focus({ preventScroll: true });
+    reviewInput.current?.focus({ preventScroll: true });
   }, []);
 
   const handleSubmit = async (event) => {
@@ -114,54 +114,52 @@ export default function ReviewForm({ onClose }) {
             </fieldset>
           </div>
 
-          <div className="grid md:grid-cols-[13rem_1fr] gap-3">
-            <div className="space-y-2">
-              <div>
-                <label htmlFor="review-name" className="sr-only">
-                  Name
-                </label>
-                <input
-                  id="review-name"
-                  ref={nameInput}
-                  name="name"
-                  type="text"
-                  required
-                  autoComplete="given-name"
-                  placeholder="Name"
-                  className={SMALL_INPUT_CLASS}
-                />
-              </div>
-              <div>
-                <label htmlFor="review-country" className="sr-only">
-                  Country
-                </label>
-                <input
-                  id="review-country"
-                  name="country"
-                  type="text"
-                  required
-                  autoComplete="country-name"
-                  placeholder="Country"
-                  value={country ?? detected}
-                  onChange={(event) => setCountry(event.target.value)}
-                  className={SMALL_INPUT_CLASS}
-                />
-              </div>
-            </div>
+          <div>
+            <label htmlFor="review-text" className="sr-only">
+              Your review
+            </label>
+            <textarea
+              id="review-text"
+              ref={reviewInput}
+              name="review"
+              required
+              minLength={20}
+              maxLength={1200}
+              rows={3}
+              placeholder="Your review"
+              className={`${INPUT_CLASS} min-h-[5.5rem] resize-y`}
+            />
+          </div>
 
-            <div className="flex flex-col">
-              <label htmlFor="review-text" className="sr-only">
-                Your review
+          <div className="grid grid-cols-2 md:grid-cols-[13rem_13rem] gap-3">
+            <div>
+              <label htmlFor="review-name" className="sr-only">
+                Name
               </label>
-              <textarea
-                id="review-text"
-                name="review"
+              <input
+                id="review-name"
+                name="name"
+                type="text"
                 required
-                minLength={20}
-                maxLength={1200}
-                rows={3}
-                placeholder="Your review"
-                className={`${INPUT_CLASS} flex-1 min-h-[5.5rem] resize-y`}
+                autoComplete="given-name"
+                placeholder="Name"
+                className={SMALL_INPUT_CLASS}
+              />
+            </div>
+            <div>
+              <label htmlFor="review-country" className="sr-only">
+                Country
+              </label>
+              <input
+                id="review-country"
+                name="country"
+                type="text"
+                required
+                autoComplete="country-name"
+                placeholder="Country"
+                value={country ?? detected}
+                onChange={(event) => setCountry(event.target.value)}
+                className={SMALL_INPUT_CLASS}
               />
             </div>
           </div>
