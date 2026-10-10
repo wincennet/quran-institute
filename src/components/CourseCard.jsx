@@ -6,7 +6,7 @@ import { whatsappLink } from "../lib/constants";
 export default function CourseCard({ course, format }) {
   return (
     <div
-      className={`snap-start shrink-0 w-[82%] sm:w-[22rem] flex flex-col bg-cream-light rounded-2xl border border-gold/25 p-6 shadow-sm transition-transform duration-200 hover:-translate-y-1 ${
+      className={`snap-start shrink-0 w-[82%] sm:w-[22rem] flex flex-col bg-cream rounded-2xl border border-gold/25 p-6 shadow-sm transition-transform duration-200 hover:-translate-y-1 ${
         course.comingSoon ? "opacity-90" : ""
       }`}
     >
@@ -35,7 +35,7 @@ export default function CourseCard({ course, format }) {
             pathname: `/courses/${course.id}`,
             search: format ? `?format=${encodeURIComponent(format)}` : "",
           }}
-          className="bg-cream hover:bg-cream/60 border border-gold/40 text-brown text-[13px] font-medium px-3.5 py-2 rounded-md transition-colors"
+          className="bg-cream-light hover:bg-cream-light/60 border border-gold/40 text-brown text-[13px] font-medium px-3.5 py-2 rounded-md transition-colors"
         >
           View course →
         </Link>
