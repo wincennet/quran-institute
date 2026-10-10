@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Quote, X } from "lucide-react";
 import Reveal from "./Reveal";
 import ScrollRow from "./ScrollRow";
-import ReviewDialog from "./ReviewDialog";
+import ReviewForm from "./ReviewForm";
 
 const TESTIMONIALS = [
   {
@@ -129,18 +129,23 @@ export default function Testimonials() {
         </Reveal>
 
         <Reveal className="mt-10 text-center">
-          <p className="text-brown-light text-sm">Learning with us? We would love to hear from you.</p>
-          <button
-            type="button"
-            onClick={() => setReviewOpen(true)}
-            className="mt-3 border border-gold-dark text-brown hover:bg-gold hover:border-gold hover:text-cream-light text-sm md:text-base font-medium px-5 py-2.5 rounded-md transition-colors"
-          >
-            Share your review
-          </button>
+          {!reviewOpen && (
+            <>
+              <p className="text-brown-light text-sm">
+                Learning with us? We would love to hear from you.
+              </p>
+              <button
+                type="button"
+                onClick={() => setReviewOpen(true)}
+                className="mt-3 border border-gold-dark text-brown hover:bg-gold hover:border-gold hover:text-cream-light text-sm md:text-base font-medium px-5 py-2.5 rounded-md transition-colors"
+              >
+                Share your review
+              </button>
+            </>
+          )}
+          {reviewOpen && <ReviewForm onClose={() => setReviewOpen(false)} />}
         </Reveal>
       </div>
-
-      {reviewOpen && <ReviewDialog onClose={() => setReviewOpen(false)} />}
 
       {openTestimonial && (
         <TestimonialDialog
