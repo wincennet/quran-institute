@@ -41,9 +41,16 @@ export default function Hero() {
             className="h-16 md:h-24 w-auto"
           />
 
+          <motion.p
+            {...fadeUp(0.05)}
+            className="font-sans text-gold text-[11px] sm:text-sm uppercase tracking-[0.16em] sm:tracking-[0.25em] mt-7 md:mt-9"
+          >
+            Teaching the Quran online since 2013
+          </motion.p>
+
           <motion.h1
             {...fadeUp(0.1)}
-            className="font-heading text-cream-light text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.05] mt-8 md:mt-10"
+            className="font-heading text-cream-light text-[2.6rem] sm:text-6xl md:text-7xl leading-[1.05] mt-4 md:mt-5"
           >
             <span className="block font-light text-balance">Where the Quran moves</span>
             <span className="block font-bold">from lips to heart.</span>
