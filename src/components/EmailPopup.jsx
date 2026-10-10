@@ -122,43 +122,43 @@ export default function EmailPopup() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="email-popup-title"
-        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-cream-light border border-gold/30 rounded-2xl p-7 shadow-xl"
+        className="relative w-full max-w-sm max-h-[90vh] overflow-y-auto bg-cream-light border border-gold/30 rounded-2xl p-5 shadow-xl"
       >
         <button
           type="button"
           onClick={close}
           aria-label="Close"
-          className="absolute top-4 right-4 text-brown-light hover:text-brown transition-colors"
+          className="absolute top-3.5 right-3.5 text-brown-light hover:text-brown transition-colors"
         >
-          <X size={22} />
+          <X size={20} />
         </button>
 
         {status === "success" ? (
-          <div className="text-center py-4">
-            <h2 id="email-popup-title" className="font-heading text-brown text-2xl font-semibold">
+          <div className="text-center py-2">
+            <h2 id="email-popup-title" className="font-heading text-brown text-xl font-semibold">
               Check your email
             </h2>
-            <p className="text-brown-light text-sm leading-relaxed mt-3">
-              We&apos;ve sent you the details for your free trial class, insha&apos;Allah. Prefer
-              to book right now?
+            <p className="text-brown-light text-sm leading-relaxed mt-2">
+              We&apos;ve sent you the details for your free trial class, insha&apos;Allah. Prefer to
+              book right now?
             </p>
             <a
               href={whatsappLink("Assalamu alaikum, I'd like to book a free trial class.")}
               target="_blank"
               rel="noreferrer"
-              className="mt-6 inline-flex items-center justify-center gap-2 w-full bg-gold hover:bg-gold-dark text-cream-light font-medium py-3 rounded-md transition-colors"
+              className="mt-4 inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
             >
-              <MessageCircle size={18} /> Book on WhatsApp
+              <MessageCircle size={16} /> Book on WhatsApp
             </a>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <span className="font-sans text-gold-dark text-xs uppercase tracking-[0.25em]">
               {asksAudience ? "Free trial class" : "Free for parents"}
             </span>
             <h2
               id="email-popup-title"
-              className="font-heading text-brown text-2xl font-semibold leading-snug pr-6"
+              className="font-heading text-brown text-xl font-semibold leading-snug pr-6"
             >
               Get a free trial class and simple Tajweed tips
             </h2>
@@ -169,33 +169,31 @@ export default function EmailPopup() {
             </p>
 
             {asksAudience && (
-              <fieldset>
-                <legend className="text-xs text-brown-light font-medium">I am a…</legend>
-                <div className="mt-2 grid grid-cols-2 gap-2">
-                  {[
-                    { id: "parent", label: "Parent" },
-                    { id: "student", label: "Student" },
-                  ].map((option) => (
-                    <button
-                      key={option.id}
-                      type="button"
-                      onClick={() => setAudience(option.id)}
-                      aria-pressed={audience === option.id}
-                      className={`text-sm font-medium rounded-md px-4 py-2 border transition-colors ${
-                        audience === option.id
-                          ? "bg-gold text-cream-light border-gold"
-                          : "text-brown-light border-gold/30 hover:border-gold"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
+              <fieldset className="flex items-center gap-1.5">
+                <legend className="sr-only">I am a</legend>
+                {[
+                  { id: "parent", label: "Parent" },
+                  { id: "student", label: "Student" },
+                ].map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setAudience(option.id)}
+                    aria-pressed={audience === option.id}
+                    className={`text-xs font-medium rounded-md px-3 py-1.5 border transition-colors ${
+                      audience === option.id
+                        ? "bg-gold text-cream-light border-gold"
+                        : "text-brown-light border-gold/30 hover:border-gold"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </fieldset>
             )}
 
             <div>
-              <label htmlFor="popup-email" className="text-xs text-brown-light font-medium">
+              <label htmlFor="popup-email" className="sr-only">
                 Email
               </label>
               <input
@@ -205,25 +203,26 @@ export default function EmailPopup() {
                 type="email"
                 required
                 autoComplete="email"
-                className="mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                placeholder="Email"
+                className="w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm placeholder:text-brown/40 focus:outline-none focus:ring-2 focus:ring-gold/50"
               />
             </div>
 
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light font-medium py-3 rounded-md transition-colors"
+              className="bg-gold hover:bg-gold-dark disabled:opacity-60 text-cream-light text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
             >
               {status === "sending" ? "Sending…" : "Send me the free trial"}
             </button>
 
             {status === "error" && (
-              <p className="text-sm text-red-700 text-center">
+              <p className="text-sm text-red-700">
                 Something went wrong — please try WhatsApp instead.
               </p>
             )}
 
-            <p className="text-brown-light text-xs text-center leading-relaxed">
+            <p className="text-brown-light text-xs leading-relaxed">
               We&apos;ll email you tips and your trial details. Unsubscribe anytime.
             </p>
           </form>

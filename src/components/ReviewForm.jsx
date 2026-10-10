@@ -6,7 +6,7 @@ import { whatsappLink } from "../lib/constants";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
 const INPUT_CLASS =
-  "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
+  "w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm placeholder:text-brown/40 focus:outline-none focus:ring-2 focus:ring-gold/50";
 
 // A little smaller than INPUT_CLASS, for the short single-line fields.
 const SMALL_INPUT_CLASS = INPUT_CLASS.replace("py-2", "py-1.5").replace("text-sm", "text-xs");
@@ -48,6 +48,7 @@ export default function ReviewForm({ onClose }) {
     setStatus("sending");
     const data = new FormData(event.target);
     data.set("reviewer_role", role);
+    data.set("may_publish", "Yes (agreed by sending)");
     data.set("_subject", `New review to approve (${role})`);
 
     try {
@@ -116,8 +117,8 @@ export default function ReviewForm({ onClose }) {
           <div className="grid md:grid-cols-[13rem_1fr] gap-3">
             <div className="space-y-2">
               <div>
-                <label htmlFor="review-name" className="block text-xs text-brown-light font-medium">
-                  Name (first name is fine)
+                <label htmlFor="review-name" className="sr-only">
+                  Name
                 </label>
                 <input
                   id="review-name"
@@ -126,11 +127,12 @@ export default function ReviewForm({ onClose }) {
                   type="text"
                   required
                   autoComplete="given-name"
+                  placeholder="Name"
                   className={SMALL_INPUT_CLASS}
                 />
               </div>
               <div>
-                <label htmlFor="review-country" className="block text-xs text-brown-light font-medium">
+                <label htmlFor="review-country" className="sr-only">
                   Country
                 </label>
                 <input
@@ -139,6 +141,7 @@ export default function ReviewForm({ onClose }) {
                   type="text"
                   required
                   autoComplete="country-name"
+                  placeholder="Country"
                   value={country ?? detected}
                   onChange={(event) => setCountry(event.target.value)}
                   className={SMALL_INPUT_CLASS}
@@ -147,7 +150,7 @@ export default function ReviewForm({ onClose }) {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="review-text" className="text-xs text-brown-light font-medium">
+              <label htmlFor="review-text" className="sr-only">
                 Your review
               </label>
               <textarea
@@ -157,7 +160,7 @@ export default function ReviewForm({ onClose }) {
                 minLength={20}
                 maxLength={1200}
                 rows={3}
-                placeholder="What has your class been like?"
+                placeholder="Your review"
                 className={`${INPUT_CLASS} flex-1 min-h-[5.5rem] resize-y`}
               />
             </div>
@@ -174,16 +177,9 @@ export default function ReviewForm({ onClose }) {
           />
 
           <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 pt-1">
-            <label className="flex items-start gap-2 text-xs text-brown-light leading-relaxed">
-              <input
-                type="checkbox"
-                name="may_publish"
-                value="Yes"
-                required
-                className="mt-0.5 accent-[#b8924d]"
-              />
-              <span>You may show my review on the website with my first name and country.</span>
-            </label>
+            <p className="text-xs text-brown-light leading-relaxed">
+              By sending, you agree we may show your review with your first name and country.
+            </p>
 
             <div className="flex flex-wrap gap-2">
               <button
