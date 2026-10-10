@@ -789,8 +789,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
 
                   {status === "error" && (
                     <p className="text-sm text-red-700">
-                      Something went wrong — please try again or message us on WhatsApp from the
-                      Contact section.
+                      Something went wrong — please try again or message us on WhatsApp.
                     </p>
                   )}
                 </>

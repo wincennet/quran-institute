@@ -204,8 +204,7 @@ function CourseDetail({ course, initialFormat }) {
               )}
               {status === "error" && (
                 <p className="text-sm text-red-700 text-center">
-                  Something went wrong — please try again or message us on WhatsApp from the
-                  Contact section.
+                  Something went wrong — please try again or message us on WhatsApp.
                 </p>
               )}
             </form>
