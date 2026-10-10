@@ -23,8 +23,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <Logo compact onDark />
-            <p className="font-sans text-gold text-xs uppercase tracking-[0.2em] mt-4">
-              Teaching the Quran online since 2013
+            <p className="font-sans font-bold text-gold text-sm uppercase tracking-[0.2em] mt-4">
+              Since 2013
             </p>
             <p className="text-cream/70 text-sm mt-3 leading-relaxed max-w-xs">
               {MISSION_STATEMENT}

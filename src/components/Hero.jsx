@@ -43,9 +43,9 @@ export default function Hero() {
 
           <motion.p
             {...fadeUp(0.05)}
-            className="font-sans text-gold text-[11px] sm:text-sm uppercase tracking-[0.16em] sm:tracking-[0.25em] mt-7 md:mt-9"
+            className="font-sans font-bold text-gold text-sm md:text-base uppercase tracking-[0.25em] mt-7 md:mt-9"
           >
-            Teaching the Quran online since 2013
+            Since 2013
           </motion.p>
 
           <motion.h1
