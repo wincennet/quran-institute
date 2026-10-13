@@ -15,7 +15,7 @@
 export const BLOG_CATEGORIES = [
   {
     id: "urdu",
-    title: "Urdu Blog",
+    title: "Urdu Blog Post",
     native: "اردو بلاگ",
     description: "Articles in Urdu about learning the Quran, Tajweed and Islamic education.",
     language: "ur",
@@ -23,7 +23,7 @@ export const BLOG_CATEGORIES = [
   },
   {
     id: "english",
-    title: "English Blog",
+    title: "English Blog Post",
     native: null,
     description: "Articles in English about learning the Quran, Tajweed and Islamic education.",
     language: "en",

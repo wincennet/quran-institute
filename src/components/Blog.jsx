@@ -31,11 +31,6 @@ export default function Blog() {
                   <span className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
                     Blog
                   </span>
-                  {category.posts.length === 0 && (
-                    <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.15em] text-brown-light bg-gold/15 border border-gold/30 rounded-full px-3 py-1">
-                      Coming Soon
-                    </span>
-                  )}
                 </div>
                 <h3 className="font-heading text-brown text-2xl font-semibold mt-2">
                   {category.title}
