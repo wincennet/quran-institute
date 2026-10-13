@@ -6,7 +6,7 @@ export const whatsappLink = (text) =>
 export const CONTACT = {
   phoneDisplay: "+923249413931",
   phoneLink: "tel:+923249413931",
-  email: "siratalmustaqeeminstitute0@gmail.com",
+  email: "assiratulmustaqeeminstitute@gmail.com",
   location: "Lahore, Pakistan",
 };
 
@@ -216,13 +216,13 @@ export const PRICING = {
 // The "action" URL from MailerLite's embedded-form code (a public endpoint, not
 // a secret). If this is ever emptied, the email popup stays hidden.
 export const MAILERLITE_FORM_URL =
-  "https://assets.mailerlite.com/jsonp/2691946/forms/200652234456826919/subscribe";
+  "https://assets.mailerlite.com/jsonp/2700976/forms/200946252880282935/subscribe";
 
 // Second MailerLite embedded form, for students signing up themselves (so they
 // get their own email series instead of the parents' one). While this is empty
 // the popup stays parents-only. Paste the form's "action" URL here once it exists.
 export const MAILERLITE_STUDENT_FORM_URL =
-  "https://assets.mailerlite.com/jsonp/2691946/forms/200860777553331356/subscribe";
+  "https://assets.mailerlite.com/jsonp/2700976/forms/200946104124049270/subscribe";
 
 export const MISSION_STATEMENT =
   "Our mission is to cover the 5 rights of the Quran: Belief (Iman), Recitation (Tilawah), Understanding (Fahm), Application (Amal), and Conveying the Message (Da'wah).";
