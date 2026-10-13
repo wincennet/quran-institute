@@ -51,7 +51,7 @@ export default function CourseCard({ course, format }) {
       <div className="[@media(hover:hover)_and_(pointer:fine)]:hidden mt-auto pt-6 flex flex-wrap items-center gap-2.5">
         <Link
           to={courseLink}
-          className="bg-[#d8c6a2] hover:bg-[#cdb98f] border border-gold/50 text-brown text-[13px] font-medium px-3.5 py-2 rounded-md transition-colors"
+          className="bg-cream-light hover:bg-[#ece0c8] border border-gold/40 text-brown text-[13px] font-medium px-3.5 py-2 rounded-md transition-colors"
         >
           View course →
         </Link>

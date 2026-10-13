@@ -7,7 +7,7 @@ import { whatsappLink } from "../lib/constants";
 const LINKS = [
   { label: "About Us", href: "/#who-we-are" },
   { label: "Courses", href: "/#courses" },
-  { label: "Global Reach", href: "/#global-reach" },
+  { label: "Blog", href: "/#blog" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -41,17 +41,17 @@ export default function Navbar() {
           <Logo compact onDark={onDarkHero} />
         </Link>
 
-        <ul className={`hidden md:flex items-center gap-8 font-sans text-sm transition-colors ${linkColor}`}>
-          {LINKS.map((link) => (
-            <li key={link.href}>
-              <a href={link.href} className="transition-colors">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="hidden md:flex items-center gap-2">
+        {/* Links and the Enroll button sit together on the right. */}
+        <div className="hidden md:flex items-center gap-8">
+          <ul className={`flex items-center gap-8 font-sans text-sm transition-colors ${linkColor}`}>
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} className="transition-colors">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
           <Link
             to="/enroll"
             className="bg-gold hover:bg-gold-dark text-cream-light text-sm font-medium px-4 py-2 rounded-md transition-colors"

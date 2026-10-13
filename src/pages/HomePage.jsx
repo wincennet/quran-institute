@@ -5,6 +5,7 @@ import LearningFormats from "../components/LearningFormats";
 import Courses from "../components/Courses";
 import GlobalReach from "../components/GlobalReach";
 import Testimonials from "../components/Testimonials";
+import Blog from "../components/Blog";
 import WhatsAppButton from "../components/WhatsAppButton";
 
 // HowItWorks is parked, not deleted — it's coming back later.
@@ -15,8 +16,9 @@ export default function HomePage() {
       <WhoWeAre />
       <Courses />
       <LearningFormats />
-      <GlobalReach />
       <About />
+      <GlobalReach />
+      <Blog />
       <Testimonials />
       <WhatsAppButton />
     </main>

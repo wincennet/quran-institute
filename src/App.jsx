@@ -8,6 +8,8 @@ import CoursePage from "./pages/CoursePage";
 import EnrollPage from "./pages/EnrollPage";
 import LegacyEnrollRedirect from "./pages/LegacyEnrollRedirect";
 import AboutFlowPage from "./pages/AboutFlowPage";
+import BlogCategoryPage from "./pages/BlogCategoryPage";
+import BlogPostPage from "./pages/BlogPostPage";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/who-we-are" element={<AboutFlowPage start="story" />} />
         <Route path="/mission" element={<AboutFlowPage start="mission" />} />
         <Route path="/courses/:id" element={<CoursePage />} />
+        <Route path="/blog/:category" element={<BlogCategoryPage />} />
+        <Route path="/blog/:category/:slug" element={<BlogPostPage />} />
         <Route path="/enroll" element={<EnrollPage />} />
         <Route path="/courses/:id/enroll" element={<LegacyEnrollRedirect />} />
       </Routes>
