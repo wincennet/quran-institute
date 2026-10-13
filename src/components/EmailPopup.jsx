@@ -43,7 +43,10 @@ export default function EmailPopup() {
   const emailInput = useRef(null);
 
   useEffect(() => {
-    if (!enabled || hasShown.current || shouldStayHidden()) return undefined;
+    // Adding ?popup to any page address opens the popup right away, ignoring the
+    // "already closed" memory, so it can be checked on a browser that has seen it.
+    const forced = new URLSearchParams(window.location.search).has("popup");
+    if (!enabled || hasShown.current || (!forced && shouldStayHidden())) return undefined;
 
     const show = () => {
       if (hasShown.current) return;
@@ -56,7 +59,7 @@ export default function EmailPopup() {
       if (scrollable > 0 && window.scrollY / scrollable >= SHOW_AT_SCROLL) show();
     };
 
-    const timer = setTimeout(show, SHOW_AFTER_MS);
+    const timer = setTimeout(show, forced ? 800 : SHOW_AFTER_MS);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       clearTimeout(timer);
