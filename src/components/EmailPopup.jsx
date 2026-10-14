@@ -34,7 +34,7 @@ function shouldStayHidden() {
 // free-trial link and Tajweed tips. Stays hidden until MAILERLITE_FORM_URL is set.
 export default function EmailPopup() {
   const { pathname } = useLocation();
-  const enabled = Boolean(MAILERLITE_FORM_URL) && !pathname.endsWith("/enroll");
+  const enabled = Boolean(MAILERLITE_FORM_URL) && !pathname.endsWith("/enroll") && pathname !== "/admin";
 
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("idle");

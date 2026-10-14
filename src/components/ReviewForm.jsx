@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import useCountry from "../hooks/useCountry";
+import { submitReview } from "../lib/cms";
 import { FORMSPREE_ENDPOINT, whatsappLink } from "../lib/constants";
-
 
 const INPUT_CLASS =
   "w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm placeholder:text-brown/40 focus:outline-none focus:ring-2 focus:ring-gold/50";
@@ -25,9 +25,10 @@ function countryName(code) {
 }
 
 // Sits inside the Testimonials section (no popup). Reviews are not published
-// automatically: each one is emailed to us through the same Formspree form as
-// enrollments, with its own subject line, and goes on the site only after we have
-// read it and the sender has agreed to it being shown.
+// automatically. Each one is emailed to us through the same Formspree form as
+// enrollments (own subject line) and, when the database is connected, also saved
+// there as "not approved". It appears on the site only after it is approved in the
+// admin page.
 export default function ReviewForm({ onClose }) {
   const detected = countryName(useCountry());
   const [role, setRole] = useState("Parent");
@@ -50,16 +51,26 @@ export default function ReviewForm({ onClose }) {
     data.set("may_publish", "Yes (agreed by sending)");
     data.set("_subject", `New review to approve (${role})`);
 
-    try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
-      });
-      setStatus(response.ok ? "success" : "error");
-    } catch {
-      setStatus("error");
-    }
+    const isBot = Boolean(data.get("_gotcha"));
+    const emailed = fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      body: data,
+      headers: { Accept: "application/json" },
+    })
+      .then((response) => response.ok)
+      .catch(() => false);
+    const stored = isBot
+      ? Promise.resolve(false)
+      : submitReview({
+          role,
+          name: String(data.get("name") ?? "").trim(),
+          country: String(data.get("country") ?? "").trim(),
+          review: String(data.get("review") ?? "").trim(),
+        });
+
+    // Either one arriving is enough: the review reached us.
+    const [wasEmailed, wasStored] = await Promise.all([emailed, stored]);
+    setStatus(wasEmailed || wasStored ? "success" : "error");
   };
 
   return (
@@ -141,6 +152,7 @@ export default function ReviewForm({ onClose }) {
                 type="text"
                 required
                 autoComplete="given-name"
+                maxLength={80}
                 placeholder="Name"
                 className={SMALL_INPUT_CLASS}
               />
@@ -155,6 +167,7 @@ export default function ReviewForm({ onClose }) {
                 type="text"
                 required
                 autoComplete="country-name"
+                maxLength={80}
                 placeholder="Country"
                 value={country ?? detected}
                 onChange={(event) => setCountry(event.target.value)}

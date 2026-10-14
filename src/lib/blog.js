@@ -114,8 +114,8 @@ export function getBlogCategory(id) {
   return BLOG_CATEGORIES.find((category) => category.id === id) ?? null;
 }
 
-export function getSortedPosts(category) {
-  return [...category.posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+export function sortPosts(posts) {
+  return [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export function formatPostDate(isoDate) {

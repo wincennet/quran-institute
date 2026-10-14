@@ -1,14 +1,16 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import useDocumentMeta from "../hooks/useDocumentMeta";
+import useBlogPosts from "../hooks/useBlogPosts";
 import useUrduFont from "../hooks/useUrduFont";
-import { formatPostDate, getBlogCategory, getSortedPosts } from "../lib/blog";
+import { formatPostDate, getBlogCategory } from "../lib/blog";
 
 export default function BlogCategoryPage() {
   const { category: categoryId } = useParams();
   const category = getBlogCategory(categoryId);
 
   useUrduFont(category?.language === "ur");
+  const { posts, loading } = useBlogPosts(categoryId);
 
   useDocumentMeta({
     title: category ? `${category.title} | Assiratul Mustaqeem Institute` : "Blog",
@@ -17,7 +19,6 @@ export default function BlogCategoryPage() {
 
   if (!category) return <Navigate to="/" replace />;
 
-  const posts = getSortedPosts(category);
   const isRtl = category.language === "ur";
 
   return (
@@ -40,7 +41,9 @@ export default function BlogCategoryPage() {
         )}
         <p className="text-brown-light mt-3">{category.description}</p>
 
-        {posts.length === 0 ? (
+        {posts.length === 0 && loading ? (
+          <p className="mt-12 text-brown-light">Loading…</p>
+        ) : posts.length === 0 ? (
           <p className="mt-12 text-brown-light bg-cream-light border border-gold/25 rounded-2xl p-6">
             The first posts are on their way, insha&apos;Allah. Please check back soon.
           </p>

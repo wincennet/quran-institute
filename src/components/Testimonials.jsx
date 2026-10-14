@@ -3,6 +3,7 @@ import { Quote, X } from "lucide-react";
 import Reveal from "./Reveal";
 import ScrollRow from "./ScrollRow";
 import ReviewForm from "./ReviewForm";
+import useApprovedReviews from "../hooks/useApprovedReviews";
 
 const TESTIMONIALS = [
   {
@@ -107,6 +108,7 @@ function TestimonialDialog({ testimonial, onClose }) {
 
 export default function Testimonials() {
   const [openTestimonial, setOpenTestimonial] = useState(null);
+  const approvedReviews = useApprovedReviews();
   const [reviewOpen, setReviewOpen] = useState(false);
 
   return (
@@ -123,7 +125,7 @@ export default function Testimonials() {
 
         <Reveal className="mt-14">
           <ScrollRow>
-            {TESTIMONIALS.map((t) => (
+            {[...approvedReviews, ...TESTIMONIALS].map((t) => (
               <TestimonialCard
                 key={t.name + t.quote.slice(0, 20)}
                 testimonial={t}

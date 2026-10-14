@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -11,6 +12,9 @@ import AboutFlowPage from "./pages/AboutFlowPage";
 import BlogCategoryPage from "./pages/BlogCategoryPage";
 import BlogPostPage from "./pages/BlogPostPage";
 
+// The admin page pulls in the whole database library, so visitors never download it.
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+
 function App() {
   return (
     <>
@@ -23,6 +27,14 @@ function App() {
         <Route path="/courses/:id" element={<CoursePage />} />
         <Route path="/blog/:category" element={<BlogCategoryPage />} />
         <Route path="/blog/:category/:slug" element={<BlogPostPage />} />
+        <Route
+          path="/admin"
+          element={
+            <Suspense fallback={null}>
+              <AdminPage />
+            </Suspense>
+          }
+        />
         <Route path="/enroll" element={<EnrollPage />} />
         <Route path="/courses/:id/enroll" element={<LegacyEnrollRedirect />} />
       </Routes>

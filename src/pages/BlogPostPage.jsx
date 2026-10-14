@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import BlogSlides from "../components/BlogSlides";
 import useDocumentMeta from "../hooks/useDocumentMeta";
+import useBlogPosts from "../hooks/useBlogPosts";
 import useUrduFont from "../hooks/useUrduFont";
 import { formatPostDate, getBlogCategory } from "../lib/blog";
 
@@ -33,7 +34,8 @@ function BodyItem({ item, isRtl }) {
 export default function BlogPostPage() {
   const { category: categoryId, slug } = useParams();
   const category = getBlogCategory(categoryId);
-  const post = category?.posts.find((entry) => entry.slug === slug);
+  const { posts, loading } = useBlogPosts(categoryId);
+  const post = posts.find((entry) => entry.slug === slug);
 
   useUrduFont(category?.language === "ur");
 
@@ -43,6 +45,13 @@ export default function BlogPostPage() {
   });
 
   if (!category) return <Navigate to="/" replace />;
+  if (!post && loading) {
+    return (
+      <main className="bg-cream pt-28 pb-24 min-h-[70vh]">
+        <p className="max-w-2xl mx-auto px-6 text-brown-light">Loading…</p>
+      </main>
+    );
+  }
   if (!post) return <Navigate to={`/blog/${category.id}`} replace />;
 
   const isRtl = category.language === "ur";
