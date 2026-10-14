@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import useCountry from "../hooks/useCountry";
-import { whatsappLink } from "../lib/constants";
+import { FORMSPREE_ENDPOINT, whatsappLink } from "../lib/constants";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
 const INPUT_CLASS =
   "w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm placeholder:text-brown/40 focus:outline-none focus:ring-2 focus:ring-gold/50";

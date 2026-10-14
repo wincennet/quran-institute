@@ -6,10 +6,9 @@ import PhoneField from "../components/PhoneField";
 import PickerRow from "../components/PickerRow";
 import useCountry from "../hooks/useCountry";
 import useDocumentMeta from "../hooks/useDocumentMeta";
-import { COURSES, DAYS_OF_WEEK, PRICING, whatsappLink } from "../lib/constants";
+import { COURSES, DAYS_OF_WEEK, FORMSPREE_ENDPOINT, PRICING, whatsappLink } from "../lib/constants";
 import { formatPrice, groupFacts, priceForDays } from "../lib/pricing";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 const GENDERS = ["Male", "Female"];
 const FILLED_BY_OPTIONS = [
   { id: "parent", label: "I'm a parent", hint: "Enroll one or more children" },

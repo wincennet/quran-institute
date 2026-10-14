@@ -271,3 +271,7 @@ export const STORY_PARAGRAPHS = [
 export const MISSION_HEADING = "To give the Quran its five rights, in every student’s life.";
 export const MISSION_INTRO =
   "At Assiratul Mustaqeem Institute, we don’t teach the Quran as only a book to read. We teach it as a way of life, through five rights it holds over every believer:";
+
+// Where the enrollment, course-interest and review forms are sent. Submissions
+// are emailed to the address set on this form in the Formspree dashboard.
+export const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwlvryyb";

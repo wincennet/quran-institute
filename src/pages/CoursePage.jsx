@@ -3,10 +3,9 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import useCountry from "../hooks/useCountry";
 import useDocumentMeta from "../hooks/useDocumentMeta";
-import { COURSES, LEARNING_FORMATS } from "../lib/constants";
+import { COURSES, FORMSPREE_ENDPOINT, LEARNING_FORMATS } from "../lib/constants";
 import { groupFacts } from "../lib/pricing";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mljrqnlb";
 
 export default function CoursePage() {
   const { id } = useParams();
