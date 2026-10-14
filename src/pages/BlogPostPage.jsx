@@ -1,7 +1,33 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import BlogSlides from "../components/BlogSlides";
 import useDocumentMeta from "../hooks/useDocumentMeta";
 import { formatPostDate, getBlogCategory } from "../lib/blog";
+
+// A body item is a plain paragraph (string), a sub-heading ({ heading }) or a line
+// of Arabic ({ arabic }), which is shown larger and right-to-left.
+function BodyItem({ item, isRtl }) {
+  if (typeof item === "string") return <p>{item}</p>;
+  if (item.heading) {
+    return (
+      <h2
+        className={`pt-3 text-gold-dark font-semibold uppercase tracking-wide ${
+          isRtl ? "font-arabic text-xl" : "font-heading text-lg"
+        }`}
+      >
+        {item.heading}
+      </h2>
+    );
+  }
+  if (item.arabic) {
+    return (
+      <p dir="rtl" lang="ar" className="font-arabic text-gold-dark text-3xl leading-[2] text-right">
+        {item.arabic}
+      </p>
+    );
+  }
+  return null;
+}
 
 export default function BlogPostPage() {
   const { category: categoryId, slug } = useParams();
@@ -17,6 +43,8 @@ export default function BlogPostPage() {
   if (!post) return <Navigate to={`/blog/${category.id}`} replace />;
 
   const isRtl = category.language === "ur";
+  const hasSlides = Array.isArray(post.slides) && post.slides.length > 0;
+  const hasBody = Array.isArray(post.body) && post.body.length > 0;
 
   return (
     <main className="bg-cream pt-28 pb-24 min-h-[70vh]">
@@ -38,15 +66,28 @@ export default function BlogPostPage() {
           </h1>
           <p className="text-brown-light text-sm mt-3">{formatPostDate(post.date)}</p>
 
-          <div
-            className={`mt-8 space-y-5 text-brown ${
-              isRtl ? "font-arabic text-xl leading-[2.2]" : "leading-relaxed"
-            }`}
-          >
-            {post.body.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          {hasSlides && (
+            <div className="mt-8 max-w-md mx-auto">
+              <BlogSlides slides={post.slides} />
+            </div>
+          )}
+
+          {hasBody && (
+            <div
+              className={`mt-10 space-y-5 text-brown ${
+                isRtl ? "font-arabic text-xl leading-[2.2]" : "leading-relaxed"
+              }`}
+            >
+              {hasSlides && (
+                <p className="text-xs uppercase tracking-[0.2em] text-gold-dark font-sans">
+                  Read the text
+                </p>
+              )}
+              {post.body.map((item, index) => (
+                <BodyItem key={index} item={item} isRtl={isRtl} />
+              ))}
+            </div>
+          )}
         </div>
       </article>
     </main>

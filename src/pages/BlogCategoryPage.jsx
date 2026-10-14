@@ -47,27 +47,39 @@ export default function BlogCategoryPage() {
               <li key={post.slug}>
                 <Link
                   to={`/blog/${category.id}/${post.slug}`}
-                  className="block bg-cream-light border border-gold/25 rounded-2xl p-6 transition-transform duration-200 hover:-translate-y-0.5"
+                  className="flex gap-4 bg-cream-light border border-gold/25 rounded-2xl p-4 sm:p-5 transition-transform duration-200 hover:-translate-y-0.5"
                 >
-                  <h2
-                    dir={isRtl ? "rtl" : "ltr"}
-                    lang={category.language}
-                    className={`text-brown font-semibold ${
-                      isRtl ? "font-arabic text-2xl" : "font-heading text-2xl"
-                    }`}
-                  >
-                    {post.title}
-                  </h2>
-                  <p className="text-brown-light text-xs mt-1">{formatPostDate(post.date)}</p>
-                  {post.excerpt && (
-                    <p
+                  {post.cover && (
+                    <img
+                      src={post.cover}
+                      alt=""
+                      width={96}
+                      height={120}
+                      loading="lazy"
+                      className="w-20 sm:w-24 shrink-0 aspect-[4/5] object-cover rounded-lg border border-gold/20"
+                    />
+                  )}
+                  <div className="min-w-0">
+                    <h2
                       dir={isRtl ? "rtl" : "ltr"}
                       lang={category.language}
-                      className="text-brown-light text-sm leading-relaxed mt-3"
+                      className={`text-brown font-semibold ${
+                        isRtl ? "font-arabic text-2xl" : "font-heading text-2xl"
+                      }`}
                     >
-                      {post.excerpt}
-                    </p>
-                  )}
+                      {post.title}
+                    </h2>
+                    <p className="text-brown-light text-xs mt-1">{formatPostDate(post.date)}</p>
+                    {post.excerpt && (
+                      <p
+                        dir={isRtl ? "rtl" : "ltr"}
+                        lang={category.language}
+                        className="text-brown-light text-sm leading-relaxed mt-3"
+                      >
+                        {post.excerpt}
+                      </p>
+                    )}
+                  </div>
                 </Link>
               </li>
             ))}

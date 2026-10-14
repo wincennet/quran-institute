@@ -10,6 +10,14 @@
 //     body: ["First paragraph.", "Second paragraph."],
 //   }
 //
+// A post can also be a set of slides (for example the same slides posted on
+// Instagram). Put the image files in public/blog/<slug>/ and add:
+//
+//     cover: "/blog/<slug>/slide-1.webp",             // thumbnail in the list
+//     slides: [{ src: "/blog/<slug>/slide-1.webp", alt: "What the slide says" }],
+//
+// `body` items can be a paragraph (string), { heading: "..." } or { arabic: "..." }.
+//
 // To add another kind of content later (for example videos), add another
 // category object; the homepage card and the pages appear automatically.
 export const BLOG_CATEGORIES = [
@@ -27,7 +35,47 @@ export const BLOG_CATEGORIES = [
     native: null,
     description: "Articles in English about learning the Quran, Tajweed and Islamic education.",
     language: "en",
-    posts: [],
+    posts: [
+      {
+        slug: "dua-of-prophet-yunus",
+        title: "Feeling stuck? The dua of Prophet Yunus",
+        date: "2026-10-14",
+        excerpt:
+          "Prophet Yunus made this dua in the darkest place on earth, and Allah answered him.",
+        cover: "/blog/dua-of-prophet-yunus/slide-1.webp",
+        slides: [
+          {
+            src: "/blog/dua-of-prophet-yunus/slide-1.webp",
+            alt: "Feeling stuck? Prophet Yunus عليه السلام made this dua in the darkest place on earth.",
+          },
+          {
+            src: "/blog/dua-of-prophet-yunus/slide-2.webp",
+            alt: "The Prophet in the darkness, and the dua that came from his heart: There is no deity except You; exalted are You. Indeed, I have been among the wrongdoers.",
+          },
+          {
+            src: "/blog/dua-of-prophet-yunus/slide-3.webp",
+            alt: "Allah answered him, and what to remember when you feel there is no way out.",
+          },
+        ],
+        body: [
+          "Feeling stuck? Prophet Yunus عليه السلام made this dua in the darkest place on earth.",
+          { heading: "The Prophet in the darkness" },
+          "Prophet Yunus عليه السلام left his people and was swallowed by a great fish. He found himself in darkness, with no human help available.",
+          "But he was not beyond Allah’s reach. Allah heard him even there.",
+          { heading: "The dua that came from his heart" },
+          "Instead of blaming others, Prophet Yunus عليه السلام turned to Allah and made this beautiful dua:",
+          { arabic: "لَا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ" },
+          "“There is no deity except You; exalted are You. Indeed, I have been among the wrongdoers.”",
+          { heading: "Allah answered him" },
+          "Allah says that He answered Yunus عليه السلام and saved him from distress. Allah also says that He saves the believers.",
+          "His story reminds us to turn to Allah with humility, admit our mistakes, and never give up on making dua.",
+          { heading: "When you feel there is no way out" },
+          "You may be facing sadness, regret, fear, or a situation you cannot change. Remember the dua of Prophet Yunus عليه السلام.",
+          "Call upon Allah sincerely. Acknowledge your shortcomings. Ask for His help and mercy.",
+          "No darkness is beyond Allah’s knowledge, and no sincere dua is hidden from Him.",
+        ],
+      },
+    ],
   },
 ];
 
