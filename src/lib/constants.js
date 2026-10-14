@@ -11,9 +11,9 @@ export const CONTACT = {
 };
 
 export const SOCIALS = [
-  { name: "Facebook", url: "https://www.facebook.com/asiratulmustaqeeminstitute" },
-  { name: "YouTube", url: "https://www.youtube.com/@Asirat-ul-mustaqeeminstitute" },
-  { name: "TikTok", url: "https://www.tiktok.com/@siratalmustaqeeminstitut?lang=en" },
+  { name: "Facebook", url: "https://www.facebook.com/assiratulmustaqeeminstitute/" },
+  { name: "YouTube", url: "https://www.youtube.com/@AssiratulmustaqeemInstitute" },
+  { name: "TikTok", url: "https://www.tiktok.com/@assiratulmustaqeeminst" },
   { name: "X", url: "https://x.com/asiratulmustaqm" },
   { name: "Instagram", url: "https://www.instagram.com/asiratul_mustaqeeminstitute/" },
 ];
