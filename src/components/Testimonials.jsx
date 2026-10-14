@@ -6,6 +6,11 @@ import ReviewForm from "./ReviewForm";
 
 const TESTIMONIALS = [
   {
+    name: "Saima, parent, United States",
+    quote:
+      "Our Quran teacher is very patient, kind, and knowledgeable. They explain the lessons clearly and make learning the Quran easy and enjoyable. They create a positive learning environment and encourage students to improve their recitation, pronunciation, and understanding of the Quran. We truly appreciate their dedication, support, and efforts in teaching the Quran. May Allah bless them and reward them abundantly for their hard work. Ameen! 🤲❤️",
+  },
+  {
     name: "A student, United States",
     quote:
       "Assalamualaikum. Me, and my 2 brothers have read Quran with this institute for around 8 years. All three of us have finished our qaida, and have finished the Quran back to back twice. The tajweed is very intricate, and we were even taught the translation of the Quran. We were also taught various daily duas, and even taught parts of prayer. I highly recommend signing up with this institute. The teachers are very kind to their students, and will even come to teach you at your own personal timings.",
