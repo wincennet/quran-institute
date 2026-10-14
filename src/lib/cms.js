@@ -57,18 +57,41 @@ export async function submitReview({ role, name, country, review }) {
 }
 
 // Post text is typed into a plain box in the admin page. Blank lines separate
-// paragraphs; a line starting with "## " is a heading; a line starting with "ar: "
-// is a line of Arabic (shown larger, right to left).
+// paragraphs; a line starting with "## " is a heading (the admin page's Heading
+// button adds it); a block starting with "ar: " is a line of Arabic (shown larger,
+// right to left).
 export function parseBody(text) {
-  return String(text ?? "")
+  const items = [];
+  const blocks = String(text ?? "")
     .split(/\n\s*\n/)
     .map((block) => block.trim())
-    .filter(Boolean)
-    .map((block) => {
-      if (block.startsWith("## ")) return { heading: block.slice(3).trim() };
-      if (block.startsWith("ar: ")) return { arabic: block.slice(4).trim() };
-      return block;
-    });
+    .filter(Boolean);
+
+  for (const block of blocks) {
+    if (block.startsWith("ar: ")) {
+      items.push({ arabic: block.slice(4).trim() });
+      continue;
+    }
+    // Heading lines are pulled out wherever they are; the other lines in between
+    // stay together as one paragraph.
+    let paragraph = [];
+    const flush = () => {
+      if (paragraph.length) items.push(paragraph.join("\n"));
+      paragraph = [];
+    };
+    for (const rawLine of block.split("\n")) {
+      const line = rawLine.trim();
+      if (!line) continue;
+      if (line.startsWith("## ")) {
+        flush();
+        items.push({ heading: line.slice(3).trim() });
+      } else {
+        paragraph.push(line);
+      }
+    }
+    flush();
+  }
+  return items;
 }
 
 // Turns a database row into the same shape as the posts written in blog.js.

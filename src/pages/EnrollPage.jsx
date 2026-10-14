@@ -15,7 +15,7 @@ const FILLED_BY_OPTIONS = [
   { id: "student", label: "I'm a student", hint: "Enroll myself" },
 ];
 const MAX_CHILDREN = 6;
-const STEPS = ["Course", "Schedule & fee", "Your details"];
+const STEPS = ["You & course", "Schedule & fee", "Your details"];
 const INPUT_CLASS =
   "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
 const PRIMARY_BUTTON =
@@ -202,7 +202,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
 
   // Start at the first step that still needs an answer.
   const needsDays = isIndividual && days.length === 0;
-  const startStep = !course || !format ? 1 : needsDays ? 2 : 3;
+  const startStep = !who || !course || !format ? 1 : needsDays ? 2 : 3;
   const [step, setStep] = useState(startStep);
   const [furthest, setFurthest] = useState(startStep);
 
@@ -361,7 +361,38 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
           {/* Step 1: course and format */}
           {step === 1 && (
             <section className="mt-8">
-              <h2 className="font-heading text-brown text-2xl font-semibold">Choose your course</h2>
+              <fieldset>
+                <legend className="font-heading text-brown text-2xl font-semibold">
+                  Who is enrolling?
+                </legend>
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {FILLED_BY_OPTIONS.map((option) => (
+                    <label
+                      key={option.id}
+                      className={`cursor-pointer rounded-xl border px-4 py-3 transition-colors ${
+                        who === option.id
+                          ? "border-gold bg-gold/15"
+                          : "border-gold/30 hover:border-gold"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="who_choice"
+                        value={option.id}
+                        checked={who === option.id}
+                        onChange={() => setWho(option.id)}
+                        className="sr-only"
+                      />
+                      <span className="block text-sm text-brown font-semibold">{option.label}</span>
+                      <span className="block text-brown-light text-xs mt-0.5">{option.hint}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <h2 className="font-heading text-brown text-2xl font-semibold mt-10">
+                Choose your course
+              </h2>
               <div className="mt-4 space-y-3">
                 {enrollableCourses.map((option) => (
                   <label
@@ -414,7 +445,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
               <div className="mt-8 flex justify-end">
                 <button
                   type="button"
-                  disabled={!course || !format}
+                  disabled={!who || !course || !format}
                   onClick={() => goTo(2)}
                   className={PRIMARY_BUTTON}
                 >
@@ -566,36 +597,6 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                   Change
                 </button>
               </div>
-
-              <fieldset>
-                <legend className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-                  Who is enrolling?
-                </legend>
-                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {FILLED_BY_OPTIONS.map((option) => (
-                    <label
-                      key={option.id}
-                      className={`cursor-pointer rounded-xl border px-4 py-3 transition-colors ${
-                        who === option.id
-                          ? "border-gold bg-gold/15"
-                          : "border-gold/30 hover:border-gold"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="filled_by_choice"
-                        value={option.id}
-                        checked={who === option.id}
-                        onChange={() => setWho(option.id)}
-                        required
-                        className="sr-only"
-                      />
-                      <span className="block text-sm text-brown font-semibold">{option.label}</span>
-                      <span className="block text-brown-light text-xs mt-0.5">{option.hint}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
 
               {formReady && (
                 <>
