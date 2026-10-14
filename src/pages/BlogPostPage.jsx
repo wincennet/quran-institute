@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import BlogSlides from "../components/BlogSlides";
 import useDocumentMeta from "../hooks/useDocumentMeta";
+import useUrduFont from "../hooks/useUrduFont";
 import { formatPostDate, getBlogCategory } from "../lib/blog";
 
 // A body item is a plain paragraph (string), a sub-heading ({ heading }) or a line
@@ -11,8 +12,8 @@ function BodyItem({ item, isRtl }) {
   if (item.heading) {
     return (
       <h2
-        className={`pt-3 text-gold-dark font-semibold uppercase tracking-wide ${
-          isRtl ? "font-arabic text-xl" : "font-heading text-lg"
+        className={`pt-3 text-gold-dark font-semibold ${
+          isRtl ? "font-urdu text-lg leading-[2.4]" : "font-heading text-lg uppercase tracking-wide"
         }`}
       >
         {item.heading}
@@ -33,6 +34,8 @@ export default function BlogPostPage() {
   const { category: categoryId, slug } = useParams();
   const category = getBlogCategory(categoryId);
   const post = category?.posts.find((entry) => entry.slug === slug);
+
+  useUrduFont(category?.language === "ur");
 
   useDocumentMeta({
     title: post ? `${post.title} | Assiratul Mustaqeem Institute` : "Blog",
@@ -59,7 +62,7 @@ export default function BlogPostPage() {
         <div dir={isRtl ? "rtl" : "ltr"} lang={category.language} className="mt-6 text-start">
           <h1
             className={`text-brown font-medium ${
-              isRtl ? "font-arabic text-4xl leading-relaxed" : "font-heading text-4xl md:text-5xl"
+              isRtl ? "font-urdu text-3xl leading-[2.1]" : "font-heading text-4xl md:text-5xl"
             }`}
           >
             {post.title}
@@ -75,12 +78,18 @@ export default function BlogPostPage() {
           {hasBody && (
             <div
               className={`mt-10 space-y-5 text-brown ${
-                isRtl ? "font-arabic text-xl leading-[2.2]" : "leading-relaxed"
+                isRtl ? "font-urdu text-lg leading-[2.7]" : "leading-relaxed"
               }`}
             >
               {hasSlides && (
-                <p className="text-xs uppercase tracking-[0.2em] text-gold-dark font-sans">
-                  Read the text
+                <p
+                  className={`text-gold-dark ${
+                    isRtl
+                      ? "font-urdu text-sm"
+                      : "font-sans text-xs uppercase tracking-[0.2em]"
+                  }`}
+                >
+                  {isRtl ? "متن پڑھیں" : "Read the text"}
                 </p>
               )}
               {post.body.map((item, index) => (

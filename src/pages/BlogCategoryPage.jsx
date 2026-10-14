@@ -1,11 +1,14 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import useDocumentMeta from "../hooks/useDocumentMeta";
+import useUrduFont from "../hooks/useUrduFont";
 import { formatPostDate, getBlogCategory, getSortedPosts } from "../lib/blog";
 
 export default function BlogCategoryPage() {
   const { category: categoryId } = useParams();
   const category = getBlogCategory(categoryId);
+
+  useUrduFont(category?.language === "ur");
 
   useDocumentMeta({
     title: category ? `${category.title} | Assiratul Mustaqeem Institute` : "Blog",
@@ -64,7 +67,7 @@ export default function BlogCategoryPage() {
                       dir={isRtl ? "rtl" : "ltr"}
                       lang={category.language}
                       className={`text-brown font-semibold ${
-                        isRtl ? "font-arabic text-2xl" : "font-heading text-2xl"
+                        isRtl ? "font-urdu text-xl leading-[2.1]" : "font-heading text-2xl"
                       }`}
                     >
                       {post.title}
