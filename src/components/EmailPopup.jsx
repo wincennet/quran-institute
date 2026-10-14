@@ -4,9 +4,7 @@ import { MessageCircle, X } from "lucide-react";
 import { MAILERLITE_FORM_URL, MAILERLITE_STUDENT_FORM_URL, whatsappLink } from "../lib/constants";
 
 const STORAGE_KEY = "emailPopup:v1";
-const DISMISS_DAYS = 14;
-const SHOW_AFTER_MS = 25_000;
-const SHOW_AT_SCROLL = 0.5;
+const SHOW_AFTER_MS = 15_000;
 
 function readState() {
   try {
@@ -24,10 +22,12 @@ function writeState(next) {
   }
 }
 
+// Rules: someone who has not signed up sees the popup on every visit, 15 seconds
+// after the page opens (closing it only hides it for the rest of that visit). Once
+// someone has signed up on this device it never shows again. The site cannot know
+// when a person later unsubscribes in MailerLite, so this is as long as it can go.
 function shouldStayHidden() {
-  const { subscribed, dismissedAt } = readState();
-  if (subscribed) return true;
-  return Boolean(dismissedAt) && Date.now() - dismissedAt < DISMISS_DAYS * 24 * 60 * 60 * 1000;
+  return Boolean(readState().subscribed);
 }
 
 // Collects emails into MailerLite, where an automatic welcome series sends the
@@ -44,7 +44,7 @@ export default function EmailPopup() {
 
   useEffect(() => {
     // Adding ?popup to any page address opens the popup right away, ignoring the
-    // "already closed" memory, so it can be checked on a browser that has seen it.
+    // "already signed up" memory, so it can be checked on a browser that has one.
     const forced = new URLSearchParams(window.location.search).has("popup");
     if (!enabled || hasShown.current || (!forced && shouldStayHidden())) return undefined;
 
@@ -54,23 +54,11 @@ export default function EmailPopup() {
       setOpen(true);
     };
 
-    const onScroll = () => {
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollable > 0 && window.scrollY / scrollable >= SHOW_AT_SCROLL) show();
-    };
-
     const timer = setTimeout(show, forced ? 800 : SHOW_AFTER_MS);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => clearTimeout(timer);
   }, [enabled]);
 
-  const close = useCallback(() => {
-    writeState({ ...readState(), dismissedAt: Date.now() });
-    setOpen(false);
-  }, []);
+  const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
     if (!open) return undefined;
