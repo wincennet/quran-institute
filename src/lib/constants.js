@@ -279,6 +279,6 @@ export const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwlvryyb";
 // Connection to the Supabase project that stores blog posts and reviews (see
 // supabase/schema.sql). Both values are public by design: the "anon" key is safe in
 // the page, because the database rules decide what visitors may read or write.
-// While these are empty the site shows only its built-in posts and reviews.
-export const SUPABASE_URL = "";
-export const SUPABASE_ANON_KEY = "";
+// If they are empty the site shows only its built-in posts and reviews.
+export const SUPABASE_URL = "https://xwzmznkighuuprgrnzbf.supabase.co";
+export const SUPABASE_ANON_KEY = "sb_publishable_5ePEUQsiheJMf3lohpifqg_vRBifH65";
