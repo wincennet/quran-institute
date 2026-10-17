@@ -128,14 +128,13 @@ export const FEATURES = [
     description: "Join from your phone, tablet or computer, wherever you are.",
   },
   {
-    title: "Available in 45+ countries",
-    description: "Assiratul Mustaqeem Institute is available in over 45 countries.",
+    title: "Available globally",
+    description: "Assiratul Mustaqeem Institute teaches students all around the world.",
   },
 ];
 
 export const STATS = [
   { value: 2013, suffix: "", label: "Since" },
-  { value: 45, suffix: "+", label: "Countries reached" },
 ];
 
 // Length of every one-to-one class, in minutes.
@@ -170,7 +169,7 @@ export const LEARNING_FORMATS = [
 ];
 
 // A representative spread of countries across regions for the Global Reach globe.
-// Not exhaustive — illustrates the 45+ country reach with real coordinates.
+// Not exhaustive — illustrates the global reach with real coordinates.
 export const REACHED_COUNTRIES = [
   { name: "Pakistan", lat: 30.3753, lng: 69.3451 },
   { name: "United Kingdom", lat: 55.3781, lng: -3.436 },

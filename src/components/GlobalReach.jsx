@@ -32,7 +32,7 @@ export default function GlobalReach() {
             Global Reach
           </span>
           <h2 className="font-heading text-cream-light text-3xl md:text-4xl font-medium mt-3">
-            Available in 45+ countries, one classroom
+            Available globally, one classroom
           </h2>
           <p className="text-cream/70 text-sm md:text-base mt-4 max-w-xl leading-relaxed">
             Drag the globe to explore a small sample of the countries where Assiratul Mustaqeem

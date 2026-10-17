@@ -6,7 +6,14 @@ import PhoneField from "../components/PhoneField";
 import PickerRow from "../components/PickerRow";
 import useCountry from "../hooks/useCountry";
 import useDocumentMeta from "../hooks/useDocumentMeta";
-import { COURSES, DAYS_OF_WEEK, FORMSPREE_ENDPOINT, PRICING, whatsappLink } from "../lib/constants";
+import {
+  COURSES,
+  DAYS_OF_WEEK,
+  FORMSPREE_ENDPOINT,
+  LEARNING_FORMATS,
+  PRICING,
+  whatsappLink,
+} from "../lib/constants";
 import { formatPrice, groupFacts, priceForDays } from "../lib/pricing";
 
 const GENDERS = ["Male", "Female"];
@@ -15,7 +22,7 @@ const FILLED_BY_OPTIONS = [
   { id: "student", label: "I'm a student", hint: "Enroll myself" },
 ];
 const MAX_CHILDREN = 6;
-const STEPS = ["You & course", "Schedule & fee", "Your details"];
+const STEPS = ["You & course", "Class format", "Schedule & fee", "Your details"];
 const INPUT_CLASS =
   "mt-1 w-full rounded-lg border border-gold/30 bg-cream px-4 py-2.5 text-brown text-sm focus:outline-none focus:ring-2 focus:ring-gold/50";
 const PRIMARY_BUTTON =
@@ -200,9 +207,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
   const isParent = who === "parent";
   const formReady = who === "parent" || who === "student";
 
+  // Group classes are for adults, so only a student enrolling themselves can pick them.
+  const groupAllowed = who !== "parent";
+
   // Start at the first step that still needs an answer.
   const needsDays = isIndividual && days.length === 0;
-  const startStep = !who || !course || !format ? 1 : needsDays ? 2 : 3;
+  const startStep = !who || !course ? 1 : !format ? 2 : needsDays ? 3 : 4;
   const [step, setStep] = useState(startStep);
   const [furthest, setFurthest] = useState(startStep);
 
@@ -260,6 +270,15 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
     setDays([]);
     // A course with one format is pre-selected; otherwise the student picks.
     setFormat(next.formats?.length === 1 ? next.formats[0] : null);
+  };
+
+  const chooseWho = (value) => {
+    setWho(value);
+    // A parent can't take a group class; drop a group choice made earlier.
+    if (value === "parent" && format === "Group") {
+      setFormat(null);
+      setDays([]);
+    }
   };
 
   const chooseFormat = (value) => {
@@ -380,7 +399,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                         name="who_choice"
                         value={option.id}
                         checked={who === option.id}
-                        onChange={() => setWho(option.id)}
+                        onChange={() => chooseWho(option.id)}
                         className="sr-only"
                       />
                       <span className="block text-sm text-brown font-semibold">{option.label}</span>
@@ -422,30 +441,10 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                 </p>
               </div>
 
-              {course && course.formats?.length > 1 && (
-                <div className="mt-6">
-                  <PickerRow
-                    label="Class format"
-                    options={course.formats}
-                    selected={format}
-                    onSelect={chooseFormat}
-                  />
-                  <p className="text-brown-light text-xs mt-2">
-                    Individual: one-to-one, on days you choose. Group: a fixed batch with other
-                    students.
-                  </p>
-                </div>
-              )}
-              {course && course.formats?.length === 1 && (
-                <p className="text-brown-light text-sm mt-5">
-                  {course.title} is taught as {format?.toLowerCase()} classes.
-                </p>
-              )}
-
               <div className="mt-8 flex justify-end">
                 <button
                   type="button"
-                  disabled={!who || !course || !format}
+                  disabled={!who || !course}
                   onClick={() => goTo(2)}
                   className={PRIMARY_BUTTON}
                 >
@@ -455,8 +454,92 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
             </section>
           )}
 
-          {/* Step 2: schedule and fee (Individual) or the fixed batch terms (Group) */}
+          {/* Step 2: class format, with the points of each format side by side */}
           {step === 2 && course && (
+            <section className="mt-8">
+              <h2 className="font-heading text-brown text-2xl font-semibold">Choose your class format</h2>
+              <p className="text-brown-light text-sm mt-1">
+                {course.formats.length > 1
+                  ? `${course.title} is available in these formats.`
+                  : `${course.title} is taught as ${course.formats[0].toLowerCase()} classes.`}
+              </p>
+
+              <div
+                className={`mt-5 grid grid-cols-1 gap-4 ${course.formats.length > 1 ? "md:grid-cols-2" : ""}`}
+              >
+                {LEARNING_FORMATS.filter((item) =>
+                  course.formats.some((f) => f.toLowerCase() === item.id),
+                ).map((item) => {
+                  const value = item.id === "group" ? "Group" : "Individual";
+                  const locked = value === "Group" && !groupAllowed;
+                  const selected = format === value;
+                  return (
+                    <label
+                      key={item.id}
+                      className={`block rounded-xl border p-5 transition-colors ${
+                        locked
+                          ? "border-gold/20 bg-cream/60 opacity-70 cursor-not-allowed"
+                          : selected
+                            ? "cursor-pointer border-gold bg-gold/15"
+                            : "cursor-pointer border-gold/30 hover:border-gold"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="format_choice"
+                        checked={selected}
+                        disabled={locked}
+                        onChange={() => chooseFormat(value)}
+                        className="sr-only"
+                      />
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="font-heading text-brown text-xl font-semibold">
+                          {item.title}
+                        </span>
+                        {selected && <Check size={18} className="text-gold-dark shrink-0" />}
+                      </span>
+                      {value === "Group" && (
+                        <span className="block font-sans text-xs uppercase tracking-[0.15em] text-gold-dark mt-1">
+                          Adults only
+                        </span>
+                      )}
+                      <ul className="mt-3 space-y-2">
+                        {item.points.map((point) => (
+                          <li key={point} className="flex gap-2 text-brown text-sm">
+                            <Check size={14} className="text-gold-dark shrink-0 mt-1" />
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                      {locked && (
+                        <span className="block text-brown-light text-xs mt-3">
+                          Group classes are for adults, and students enroll themselves. Go back and
+                          choose &ldquo;I&apos;m a student&rdquo; if you are an adult joining a group.
+                        </span>
+                      )}
+                    </label>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 flex justify-between gap-3">
+                <button type="button" onClick={() => goTo(1)} className={SECONDARY_BUTTON}>
+                  Back
+                </button>
+                <button
+                  type="button"
+                  disabled={!format}
+                  onClick={() => goTo(3)}
+                  className={PRIMARY_BUTTON}
+                >
+                  Continue
+                </button>
+              </div>
+            </section>
+          )}
+
+          {/* Step 3: schedule and fee (Individual) or the fixed batch terms (Group) */}
+          {step === 3 && course && (
             <section className="mt-8">
               {isIndividual ? (
                 <>
@@ -547,13 +630,13 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
               )}
 
               <div className="mt-8 flex justify-between gap-3">
-                <button type="button" onClick={() => goTo(1)} className={SECONDARY_BUTTON}>
+                <button type="button" onClick={() => goTo(2)} className={SECONDARY_BUTTON}>
                   Back
                 </button>
                 <button
                   type="button"
                   disabled={isIndividual && days.length === 0}
-                  onClick={() => goTo(3)}
+                  onClick={() => goTo(4)}
                   className={PRIMARY_BUTTON}
                 >
                   Continue
@@ -562,12 +645,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
             </section>
           )}
 
-          {/* Step 3: student and guardian details. Kept mounted (just hidden) so
+          {/* Step 4: student and guardian details. Kept mounted (just hidden) so
               nothing typed is lost when going back to change the plan. */}
           {course && format && (
             <form
               onSubmit={handleSubmit}
-              hidden={step !== 3}
+              hidden={step !== 4}
               className="mt-8 space-y-5"
             >
               <div className="rounded-xl border border-gold/25 bg-cream px-5 py-4">
@@ -591,7 +674,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                 )}
                 <button
                   type="button"
-                  onClick={() => goTo(2)}
+                  onClick={() => goTo(3)}
                   className="text-gold-dark hover:text-gold underline underline-offset-2 text-xs mt-2"
                 >
                   Change
@@ -775,7 +858,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                   </p>
 
                   <div className="flex justify-between gap-3">
-                    <button type="button" onClick={() => goTo(2)} className={SECONDARY_BUTTON}>
+                    <button type="button" onClick={() => goTo(3)} className={SECONDARY_BUTTON}>
                       Back
                     </button>
                     <button
