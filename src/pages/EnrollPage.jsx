@@ -14,7 +14,7 @@ import {
   PRICING,
   whatsappLink,
 } from "../lib/constants";
-import { formatPrice, groupFacts, priceForDays } from "../lib/pricing";
+import { formatDuration, formatPrice, groupFacts, priceForDays } from "../lib/pricing";
 
 const GENDERS = ["Male", "Female"];
 const FILLED_BY_OPTIONS = [
@@ -435,10 +435,6 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                     <span className="block text-brown-light text-sm mt-0.5">{option.subtitle}</span>
                   </label>
                 ))}
-                <p className="text-brown-light text-xs">
-                  Al-Quran-ul-Arabi is coming soon. We&apos;ll open enrollment when the course book
-                  is ready.
-                </p>
               </div>
 
               <div className="mt-8 flex justify-end">
@@ -664,7 +660,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                   {isIndividual
                     ? `${days.join(", ")} · ${monthlyFee} / month`
                     : groupDetails
-                      ? `${groupDetails.durationMonths} months · ${groupDetails.daysPerWeek} days a week · ${monthlyFee} / month`
+                      ? `${formatDuration(groupDetails.durationMonths)} ·${groupDetails.daysPerWeek} days a week · ${monthlyFee} / month`
                       : "Fixed group schedule"}
                 </p>
                 {isParent && childCount > 1 && totalFee && (

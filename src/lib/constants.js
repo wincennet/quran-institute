@@ -18,6 +18,10 @@ export const SOCIALS = [
   { name: "Instagram", url: "https://www.instagram.com/asiratul_mustaqeeminstitute/" },
 ];
 
+// Monthly group fee, per student. Tarteel and Arabi charge the same.
+// `PK` is shown only to visitors in Pakistan.
+const GROUP_MONTHLY_PRICE = { default: 15, PK: 2000 };
+
 export const COURSES = [
   {
     id: "tarteel",
@@ -30,12 +34,11 @@ export const COURSES = [
     languages: ["Urdu", "English"],
     formats: ["Group", "Individual"],
     // Fixed terms for the group batch (shown on the course and enrollment pages).
-    // `price` is per month; `PK` is shown only to visitors in Pakistan.
     groupDetails: {
       durationMonths: 6,
       daysPerWeek: 2,
       classMinutes: 60,
-      price: { default: 15, PK: 2000 },
+      price: GROUP_MONTHLY_PRICE,
     },
   },
   {
@@ -48,9 +51,12 @@ export const COURSES = [
       "A simple, grammar-light path into Quranic Arabic, built around real Quranic examples. This course helps students understand the Quran directly and read other Arabic Islamic books with confidence.",
     languages: ["Urdu", "English"],
     formats: ["Group", "Individual"],
-    groupDuration: "About 1 year",
-    comingSoon: true,
-    comingSoonNote: "Our course book is being written and will be ready soon.",
+    groupDetails: {
+      durationMonths: 12,
+      daysPerWeek: 2,
+      classMinutes: 60,
+      price: GROUP_MONTHLY_PRICE,
+    },
   },
   {
     id: "hifz",
