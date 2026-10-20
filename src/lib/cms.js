@@ -68,13 +68,15 @@ export function parseBody(text) {
     .map((block) => block.trim())
     .filter(Boolean);
 
+  const arabicMark = /^ar:\s*/i;
+
   for (const block of blocks) {
-    if (block.startsWith("ar: ")) {
-      items.push({ arabic: block.slice(4).trim() });
+    if (arabicMark.test(block)) {
+      items.push({ arabic: block.replace(arabicMark, "").trim() });
       continue;
     }
-    // Heading lines are pulled out wherever they are; the other lines in between
-    // stay together as one paragraph.
+    // Heading and Arabic lines are pulled out wherever they are; the other lines in
+    // between stay together as one paragraph.
     let paragraph = [];
     const flush = () => {
       if (paragraph.length) items.push(paragraph.join("\n"));
@@ -86,6 +88,9 @@ export function parseBody(text) {
       if (line.startsWith("## ")) {
         flush();
         items.push({ heading: line.slice(3).trim() });
+      } else if (arabicMark.test(line)) {
+        flush();
+        items.push({ arabic: line.replace(arabicMark, "").trim() });
       } else {
         paragraph.push(line);
       }

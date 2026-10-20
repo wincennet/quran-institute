@@ -247,10 +247,13 @@ function PostEditor({ initial, onDone }) {
 
   const update = (patch) => setPost((current) => ({ ...current, ...patch }));
 
-  // Turns the selected line(s) into a heading (shown in gold on the site) by putting
-  // "## " in front, with a blank line around it so the text under it is body text.
-  // Tapping it again on a heading turns it back into normal text.
-  const makeHeading = () => {
+  // Marks the selected line(s) by putting `prefix` in front: "## " for a heading
+  // (gold on the site) or "ar: " for a line of Arabic (large, right to left). A blank
+  // line is added around it so the text next to it stays ordinary body text.
+  // Tapping the same button again removes the mark. Switching from one mark to the
+  // other replaces it.
+  const markLines = (prefix) => {
+    const marks = ["## ", "ar: "];
     const field = bodyRef.current;
     if (!field) return;
     const text = post.body;
@@ -265,9 +268,13 @@ function PostEditor({ initial, onDone }) {
       .filter(Boolean);
     if (lines.length === 0) return;
 
-    const allHeadings = lines.every((line) => line.startsWith("## "));
+    const stripMark = (line) => {
+      const mark = marks.find((m) => line.startsWith(m));
+      return mark ? line.slice(mark.length) : line;
+    };
+    const allMarked = lines.every((line) => line.startsWith(prefix));
     const converted = lines
-      .map((line) => (allHeadings ? line.slice(3) : line.startsWith("## ") ? line : `## ${line}`))
+      .map((line) => (allMarked ? stripMark(line) : `${prefix}${stripMark(line)}`))
       .join("\n");
 
     const before = text.slice(0, lineStart);
@@ -445,14 +452,24 @@ function PostEditor({ initial, onDone }) {
           <label htmlFor="post-body" className="text-xs text-brown-light font-medium">
             Text
           </label>
-          <button
-            type="button"
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={makeHeading}
-            className="text-xs font-semibold rounded-md px-3 py-1.5 border border-gold bg-gold/15 text-gold-dark hover:bg-gold/30 transition-colors"
-          >
-            Heading
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => markLines("## ")}
+              className="text-xs font-semibold rounded-md px-3 py-1.5 border border-gold bg-gold/15 text-gold-dark hover:bg-gold/30 transition-colors"
+            >
+              Heading
+            </button>
+            <button
+              type="button"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => markLines("ar: ")}
+              className="text-xs font-semibold rounded-md px-3 py-1.5 border border-gold bg-gold/15 text-gold-dark hover:bg-gold/30 transition-colors"
+            >
+              Arabic
+            </button>
+          </div>
         </div>
         <textarea
           id="post-body"
@@ -467,7 +484,8 @@ function PostEditor({ initial, onDone }) {
         <p className="mt-1 text-xs text-brown-light">
           To make a heading: tap in the line (or select it), then tap <strong>Heading</strong>. It
           shows in gold on the site, and the text under it stays normal text. Tap again to undo.
-          To write Arabic, start a line with <code>ar: </code>.
+          For a line of Arabic (shown large, right to left), tap in it and tap{" "}
+          <strong>Arabic</strong>.
         </p>
       </div>
 
