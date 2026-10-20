@@ -108,6 +108,28 @@ export const BLOG_CATEGORIES = [
       },
     ],
   },
+  // Video categories: posts are added from the admin page (a video file or a
+  // YouTube link, plus optional text). `shape` is the video frame on the post page.
+  {
+    id: "reels",
+    title: "Reel Blogs",
+    native: null,
+    description: "Short video reels about the Quran, Tajweed and everyday Islamic learning.",
+    language: "en",
+    kind: "video",
+    shape: "vertical",
+    posts: [],
+  },
+  {
+    id: "sessions",
+    title: "Session Blogs",
+    native: null,
+    description: "Longer recorded sessions and talks from the institute.",
+    language: "en",
+    kind: "video",
+    shape: "wide",
+    posts: [],
+  },
 ];
 
 export function getBlogCategory(id) {

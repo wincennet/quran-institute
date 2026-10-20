@@ -29,7 +29,7 @@ export default function Blog() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-                    Blog
+                    {category.kind === "video" ? "Video" : "Blog"}
                   </span>
                 </div>
                 <h3 className="font-heading text-brown text-2xl font-semibold mt-2">

@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Play } from "lucide-react";
 import useDocumentMeta from "../hooks/useDocumentMeta";
 import useBlogPosts from "../hooks/useBlogPosts";
 import useUrduFont from "../hooks/useUrduFont";
@@ -55,19 +55,30 @@ export default function BlogCategoryPage() {
                   to={`/blog/${category.id}/${post.slug}`}
                   className="flex gap-4 bg-cream-light border border-gold/25 rounded-2xl p-4 sm:p-5 transition-transform duration-200 hover:-translate-y-0.5"
                 >
-                  {post.cover && (
-                    <img
-                      src={post.cover}
-                      alt=""
-                      width={96}
-                      height={120}
-                      loading="lazy"
-                      className="w-20 sm:w-24 shrink-0 aspect-[4/5] object-cover rounded-lg border border-gold/20"
-                    />
+                  {(post.cover || post.videoUrl) && (
+                    <div className="relative w-20 sm:w-24 shrink-0 aspect-[4/5] overflow-hidden rounded-lg border border-gold/20 bg-gold/15">
+                      {post.cover && (
+                        <img
+                          src={post.cover}
+                          alt=""
+                          width={96}
+                          height={120}
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
+                      )}
+                      {post.videoUrl && (
+                        <span className="absolute inset-0 flex items-center justify-center">
+                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brown/70 text-cream-light">
+                            <Play size={16} className="ml-0.5" fill="currentColor" />
+                          </span>
+                        </span>
+                      )}
+                    </div>
                   )}
                   <div className="min-w-0">
                     <h2
-                      dir={isRtl ? "rtl" : "ltr"}
+                      dir={category.kind === "video" ? "auto" : isRtl ? "rtl" : "ltr"}
                       lang={category.language}
                       className={`text-brown font-semibold ${
                         isRtl ? "font-urdu text-xl leading-[2.1]" : "font-heading text-2xl"
@@ -78,7 +89,7 @@ export default function BlogCategoryPage() {
                     <p className="text-brown-light text-xs mt-1">{formatPostDate(post.date)}</p>
                     {post.excerpt && (
                       <p
-                        dir={isRtl ? "rtl" : "ltr"}
+                        dir={category.kind === "video" ? "auto" : isRtl ? "rtl" : "ltr"}
                         lang={category.language}
                         className="text-brown-light text-sm leading-relaxed mt-3"
                       >

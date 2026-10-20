@@ -13,13 +13,14 @@
 
 create table if not exists public.posts (
   id           uuid primary key default gen_random_uuid(),
-  category     text not null check (category in ('urdu', 'english')),
+  category     text not null check (category in ('urdu', 'english', 'reels', 'sessions')),
   slug         text not null unique,
   title        text not null check (char_length(title) between 1 and 200),
   excerpt      text,
   body         text not null default '',
   cover_url    text,
   slides       jsonb not null default '[]'::jsonb,
+  video_url    text,
   published    boolean not null default false,
   published_at timestamptz,
   created_at   timestamptz not null default now()
@@ -34,6 +35,14 @@ create table if not exists public.reviews (
   approved   boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- Databases created before video posts existed: allow the Reel and Session
+-- sections and add the video column. Safe to run more than once.
+alter table public.posts drop constraint if exists posts_category_check;
+alter table public.posts
+  add constraint posts_category_check
+  check (category in ('urdu', 'english', 'reels', 'sessions'));
+alter table public.posts add column if not exists video_url text;
 
 alter table public.posts enable row level security;
 alter table public.reviews enable row level security;

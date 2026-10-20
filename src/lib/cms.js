@@ -36,7 +36,8 @@ let postsRequest;
 export function fetchPublishedPosts() {
   if (!cmsEnabled) return Promise.resolve([]);
   postsRequest ??= getRows(
-    "posts?select=id,category,slug,title,excerpt,body,cover_url,slides,published_at&published=eq.true&order=published_at.desc",
+    // select=* so a missing newer column (video_url) can never hide every post.
+    "posts?select=*&published=eq.true&order=published_at.desc",
   ).catch(() => []);
   return postsRequest;
 }
@@ -104,8 +105,26 @@ export function toPost(row) {
     excerpt: row.excerpt ?? "",
     cover: row.cover_url || slides[0]?.src || null,
     slides,
+    videoUrl: row.video_url || null,
     body: parseBody(row.body),
   };
+}
+
+// A video link is either a YouTube address (shown as an embedded player) or a
+// direct file (an uploaded video, shown in a plain video player).
+export function parseVideo(url) {
+  if (!url) return null;
+  const match = String(url).match(
+    /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/,
+  );
+  if (match) {
+    return {
+      type: "youtube",
+      embedUrl: `https://www.youtube-nocookie.com/embed/${match[1]}`,
+      isShort: /youtube\.com\/shorts\//.test(url),
+    };
+  }
+  return { type: "file", src: url };
 }
 
 export function reviewToTestimonial(row) {

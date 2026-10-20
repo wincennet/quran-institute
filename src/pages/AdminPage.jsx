@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Check, Trash2, Upload, X } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
-import { BLOG_CATEGORIES } from "../lib/blog";
+import { BLOG_CATEGORIES, getBlogCategory } from "../lib/blog";
+import { parseVideo } from "../lib/cms";
+
+// Supabase's free plan refuses single files bigger than this.
+const MAX_VIDEO_MB = 50;
 
 const INPUT_CLASS =
   "w-full rounded-lg border border-gold/30 bg-cream px-3 py-2 text-brown text-sm placeholder:text-brown/40 focus:outline-none focus:ring-2 focus:ring-gold/50";
@@ -237,6 +241,8 @@ function PostEditor({ initial, onDone }) {
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
   const isUrdu = post.category === "urdu";
+  const isVideo = getBlogCategory(post.category)?.kind === "video";
+  const textDir = isUrdu ? "rtl" : isVideo ? "auto" : "ltr";
   const bodyRef = useRef(null);
 
   const update = (patch) => setPost((current) => ({ ...current, ...patch }));
@@ -308,6 +314,33 @@ function PostEditor({ initial, onDone }) {
     setStatus("idle");
   };
 
+  const uploadVideo = async (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+      setStatus("error");
+      setMessage(
+        `That video is ${Math.round(file.size / 1024 / 1024)} MB, over the ${MAX_VIDEO_MB} MB limit. Upload it to YouTube instead and paste the link below.`,
+      );
+      return;
+    }
+    setStatus("uploading-video");
+    setMessage("");
+    const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
+    const path = `${post.slug || makeSlug(post.title)}/video-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, file, { contentType: file.type || "video/mp4" });
+    if (error) {
+      setStatus("error");
+      setMessage(error.message);
+      return;
+    }
+    update({ video_url: supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl });
+    setStatus("idle");
+  };
+
   const moveSlide = (from, to) => {
     if (to < 0 || to >= post.slides.length) return;
     const next = [...post.slides];
@@ -331,6 +364,11 @@ function PostEditor({ initial, onDone }) {
       published: post.published,
       published_at: post.published ? post.published_at ?? new Date().toISOString() : post.published_at,
     };
+    // Only sent when there is a video (or the post already had the column), so
+    // text posts keep saving even before the video_url column has been added.
+    if (isVideo && (post.video_url || "video_url" in initial)) {
+      row.video_url = post.video_url?.trim() || null;
+    }
     const query = post.id
       ? supabase.from("posts").update(row).eq("id", post.id)
       : supabase.from("posts").insert(row);
@@ -359,7 +397,7 @@ function PostEditor({ initial, onDone }) {
       <div className="grid sm:grid-cols-[10rem_1fr] gap-3">
         <div>
           <label htmlFor="post-category" className="text-xs text-brown-light font-medium">
-            Language
+            Section
           </label>
           <select
             id="post-category"
@@ -369,7 +407,7 @@ function PostEditor({ initial, onDone }) {
           >
             {BLOG_CATEGORIES.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.id === "urdu" ? "Urdu" : "English"}
+                {category.kind === "video" ? category.title : category.id === "urdu" ? "Urdu" : "English"}
               </option>
             ))}
           </select>
@@ -383,7 +421,7 @@ function PostEditor({ initial, onDone }) {
             required
             value={post.title}
             onChange={(event) => update({ title: event.target.value })}
-            dir={isUrdu ? "rtl" : "ltr"}
+            dir={textDir}
             className={`${INPUT_CLASS} mt-1`}
           />
         </div>
@@ -397,7 +435,7 @@ function PostEditor({ initial, onDone }) {
           id="post-excerpt"
           value={post.excerpt}
           onChange={(event) => update({ excerpt: event.target.value })}
-          dir={isUrdu ? "rtl" : "ltr"}
+          dir={textDir}
           className={`${INPUT_CLASS} mt-1`}
         />
       </div>
@@ -422,7 +460,7 @@ function PostEditor({ initial, onDone }) {
           rows={10}
           value={post.body}
           onChange={(event) => update({ body: event.target.value })}
-          dir={isUrdu ? "rtl" : "ltr"}
+          dir={textDir}
           placeholder="Leave a blank line between paragraphs."
           className={`${INPUT_CLASS} mt-1 resize-y leading-relaxed`}
         />
@@ -433,8 +471,51 @@ function PostEditor({ initial, onDone }) {
         </p>
       </div>
 
+      {isVideo && (
+        <div>
+          <p className="text-xs text-brown-light font-medium">Video</p>
+          {post.video_url && (
+            <p className="mt-1 text-xs text-green-700 break-all">
+              {parseVideo(post.video_url)?.type === "youtube" ? "YouTube link" : "Uploaded video"}:{" "}
+              {post.video_url}
+            </p>
+          )}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <label className={`${SECONDARY} inline-flex items-center gap-2 cursor-pointer`}>
+              <Upload size={14} />
+              {status === "uploading-video" ? "Uploading video…" : "Upload a video file"}
+              <input
+                type="file"
+                accept="video/*"
+                onChange={uploadVideo}
+                disabled={status === "uploading-video"}
+                className="sr-only"
+              />
+            </label>
+            {post.video_url && (
+              <button type="button" onClick={() => update({ video_url: "" })} className={SECONDARY}>
+                Remove video
+              </button>
+            )}
+          </div>
+          <input
+            aria-label="Or paste a YouTube link"
+            value={post.video_url ?? ""}
+            onChange={(event) => update({ video_url: event.target.value })}
+            placeholder="Or paste a YouTube link (watch, youtu.be or Shorts)"
+            className={`${INPUT_CLASS} mt-2`}
+          />
+          <p className="mt-1 text-xs text-brown-light">
+            Uploaded files can be up to {MAX_VIDEO_MB} MB (MP4 works best on phones). For longer
+            sessions, upload to YouTube and paste the link here.
+          </p>
+        </div>
+      )}
+
       <div>
-        <p className="text-xs text-brown-light font-medium">Slides (optional, the first is the cover)</p>
+        <p className="text-xs text-brown-light font-medium">
+          {isVideo ? "Cover image (optional)" : "Slides (optional, the first is the cover)"}
+        </p>
         {post.slides.length > 0 && (
           <ul className="mt-2 flex flex-wrap gap-3">
             {post.slides.map((slide, position) => (
@@ -510,7 +591,7 @@ function PostEditor({ initial, onDone }) {
       </details>
 
       <div className="flex gap-2 pt-1">
-        <button type="submit" disabled={status === "saving" || status === "uploading"} className={PRIMARY}>
+        <button type="submit" disabled={status === "saving" || status === "uploading" || status === "uploading-video"} className={PRIMARY}>
           {status === "saving" ? "Saving…" : "Save post"}
         </button>
         <button type="button" onClick={onDone} className={SECONDARY}>
@@ -574,12 +655,17 @@ function PostsAdmin() {
         {rows.map((row) => (
           <li key={row.id} className="bg-cream-light border border-gold/25 rounded-2xl p-4">
             <p className="text-xs text-brown-light">
-              {row.category === "urdu" ? "Urdu" : "English"} · {formatDate(row.created_at)} ·{" "}
+              {getBlogCategory(row.category)?.kind === "video"
+                ? getBlogCategory(row.category).title
+                : row.category === "urdu"
+                  ? "Urdu"
+                  : "English"}{" "}
+              · {formatDate(row.created_at)} ·{" "}
               <span className={row.published ? "text-green-700" : "text-gold-dark"}>
                 {row.published ? "Published" : "Draft"}
               </span>
             </p>
-            <p className="mt-1 text-brown font-medium" dir={row.category === "urdu" ? "rtl" : "ltr"}>
+            <p className="mt-1 text-brown font-medium" dir={row.category === "urdu" ? "rtl" : "auto"}>
               {row.title}
             </p>
             <div className="mt-3 flex gap-2">
