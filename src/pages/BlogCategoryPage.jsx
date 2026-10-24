@@ -22,7 +22,7 @@ export default function BlogCategoryPage() {
   const isRtl = category.language === "ur";
 
   return (
-    <main className="bg-cream pt-28 pb-24 min-h-[70vh]">
+    <main className="bg-cream-light pt-28 pb-24 min-h-[70vh]">
       <div className="max-w-3xl mx-auto px-6 text-left">
         <Link
           to="/#blog"
@@ -44,7 +44,7 @@ export default function BlogCategoryPage() {
         {posts.length === 0 && loading ? (
           <p className="mt-12 text-brown-light">Loading…</p>
         ) : posts.length === 0 ? (
-          <p className="mt-12 text-brown-light bg-cream-light border border-gold/25 rounded-2xl p-6">
+          <p className="mt-12 text-brown-light bg-cream border border-gold/25 rounded-2xl p-6">
             The first posts are on their way, insha&apos;Allah. Please check back soon.
           </p>
         ) : (
@@ -53,7 +53,7 @@ export default function BlogCategoryPage() {
               <li key={post.slug}>
                 <Link
                   to={`/blog/${category.id}/${post.slug}`}
-                  className="flex gap-4 bg-cream-light border border-gold/25 rounded-2xl p-4 sm:p-5 transition-transform duration-200 hover:-translate-y-0.5"
+                  className="flex gap-4 bg-cream border border-gold/25 rounded-2xl p-4 sm:p-5 transition-transform duration-200 hover:-translate-y-0.5"
                 >
                   {(post.cover || post.videoUrl) && (
                     <div className="relative w-20 sm:w-24 shrink-0 aspect-[4/5] overflow-hidden rounded-lg border border-gold/20 bg-gold/15">

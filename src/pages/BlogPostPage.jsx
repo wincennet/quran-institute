@@ -84,7 +84,7 @@ export default function BlogPostPage() {
   if (!category) return <Navigate to="/" replace />;
   if (!post && loading) {
     return (
-      <main className="bg-cream pt-28 pb-24 min-h-[70vh]">
+      <main className="bg-cream-light pt-28 pb-24 min-h-[70vh]">
         <p className="max-w-2xl mx-auto px-6 text-brown-light">Loading…</p>
       </main>
     );
@@ -96,7 +96,7 @@ export default function BlogPostPage() {
   const hasBody = Array.isArray(post.body) && post.body.length > 0;
 
   return (
-    <main className="bg-cream pt-28 pb-24 min-h-[70vh]">
+    <main className="bg-cream-light pt-28 pb-24 min-h-[70vh]">
       <article className="max-w-2xl mx-auto px-6">
         <Link
           to={`/blog/${category.id}`}

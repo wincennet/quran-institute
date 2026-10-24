@@ -14,7 +14,7 @@ import {
   PRICING,
   whatsappLink,
 } from "../lib/constants";
-import { formatDuration, formatPrice, groupFacts, priceForDays } from "../lib/pricing";
+import { WEEKDAYS, formatDuration, formatPrice, groupFacts, planPricing } from "../lib/pricing";
 
 const GENDERS = ["Male", "Female"];
 const FILLED_BY_OPTIONS = [
@@ -31,6 +31,15 @@ const SECONDARY_BUTTON =
   "border border-gold-dark/50 text-brown hover:bg-cream font-medium px-6 py-3 rounded-md transition-colors";
 
 const enrollableCourses = COURSES.filter((course) => !course.comingSoon);
+
+// Links from the homepage Packages section (/enroll?plan=family&months=6) fill in
+// the days, and for the family plan the parent and number of children.
+const PLAN_PRESETS = {
+  weekdays: { days: WEEKDAYS },
+  weekend: { days: PRICING.weekendDays },
+  family3: { days: WEEKDAYS, who: "parent", children: 3 },
+  family4: { days: WEEKDAYS, who: "parent", children: 4 },
+};
 
 export default function EnrollPage() {
   const [searchParams] = useSearchParams();
@@ -52,11 +61,20 @@ export default function EnrollPage() {
     .filter((d) => DAYS_OF_WEEK.includes(d))
     .slice(0, PRICING.maxDays);
 
+  const preset = PLAN_PRESETS[searchParams.get("plan")] ?? null;
+  const monthsFromLink = [3, 6].includes(Number(searchParams.get("months")))
+    ? Number(searchParams.get("months"))
+    : 1;
+
   return (
     <EnrollFlow
       initialCourseId={courseFromLink?.id ?? null}
       initialFormat={formatFromLink}
-      initialDays={formatFromLink === "Individual" ? daysFromLink : []}
+      initialDays={preset?.days ?? (formatFromLink === "Individual" ? daysFromLink : [])}
+      presetDays={preset?.days ?? []}
+      initialWho={preset?.who ?? ""}
+      initialChildren={preset?.children ?? 1}
+      initialMonths={preset ? monthsFromLink : 1}
     />
   );
 }
@@ -193,17 +211,26 @@ function StepIndicator({ step, furthest, onGo }) {
   );
 }
 
-function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
+function EnrollFlow({
+  initialCourseId,
+  initialFormat,
+  initialDays,
+  presetDays,
+  initialWho,
+  initialChildren,
+  initialMonths,
+}) {
   const [courseId, setCourseId] = useState(initialCourseId);
   const [format, setFormat] = useState(initialFormat);
   const [days, setDays] = useState(initialDays);
   const [language, setLanguage] = useState(null);
-  const [who, setWho] = useState("");
+  const [planMonths, setPlanMonths] = useState(initialMonths);
+  const [who, setWho] = useState(initialWho);
   const [status, setStatus] = useState("idle");
 
   const course = COURSES.find((c) => c.id === courseId) ?? null;
   const isIndividual = format === "Individual";
-  const [childCount, setChildCount] = useState(1);
+  const [childCount, setChildCount] = useState(initialChildren);
   const isParent = who === "parent";
   const formReady = who === "parent" || who === "student";
 
@@ -250,26 +277,41 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
   const region = isPakistan ? "PK" : "default";
   const weekdayRate = formatPrice(PRICING.perDay.weekday[region], isPakistan);
   const weekendRate = formatPrice(PRICING.perDay.weekend[region], isPakistan);
-  const weekdays = DAYS_OF_WEEK.filter((day) => !PRICING.weekendDays.includes(day));
+  const weekdays = WEEKDAYS;
   const groupDetails = course && !isIndividual ? course.groupDetails : undefined;
   const facts = groupDetails ? groupFacts(groupDetails, isPakistan) : [];
-  // Fee for one student; a parent enrolling several children pays it for each.
-  const perStudentAmount = isIndividual
-    ? priceForDays(days, isPakistan)
-    : (groupDetails?.price[region] ?? null);
-  const monthlyFee = perStudentAmount === null ? "" : formatPrice(perStudentAmount, isPakistan);
   const students = isParent ? childCount : 1;
-  const totalFee =
-    perStudentAmount === null ? "" : formatPrice(perStudentAmount * students, isPakistan);
+
+  // One-to-one fees come from planPricing (it knows the family price for 3
+  // children and the prepaid packages). A group fee is per student.
+  const plan = isIndividual ? planPricing(days, isPakistan, students) : null;
+  const perStudentAmount = isIndividual ? plan.monthlyEach : (groupDetails?.price[region] ?? null);
+  const monthlyFee = perStudentAmount === null ? "" : formatPrice(perStudentAmount, isPakistan);
+  const totalAmount = isIndividual
+    ? plan.monthlyTotal
+    : perStudentAmount === null
+      ? null
+      : perStudentAmount * students;
+  const totalFee = totalAmount === null ? "" : formatPrice(totalAmount, isPakistan);
+
+  // Prepaid 3- and 6-month packages exist for the full Mon-Fri and the Sat + Sun
+  // plans. If the days change, the chosen package quietly falls back to monthly.
+  const packages = plan?.packages ?? [];
+  const activePackage = packages.find((pack) => pack.months === planMonths) ?? null;
+  const packageTotal = activePackage ? formatPrice(activePackage.total, isPakistan) : "";
+  const packageLabel = activePackage ? `${activePackage.months} months` : "";
+  // What the student owes in one line, for the summary and the email to us.
+  const feeLine = activePackage ? `${packageTotal} for ${packageLabel}` : `${totalFee} / month`;
 
   const chooseCourse = (id) => {
     if (id === courseId) return;
     const next = COURSES.find((c) => c.id === id);
+    const nextFormat = next.formats?.length === 1 ? next.formats[0] : null;
     setCourseId(id);
     setLanguage(null);
-    setDays([]);
+    setDays(nextFormat === "Individual" ? presetDays : []);
     // A course with one format is pre-selected; otherwise the student picks.
-    setFormat(next.formats?.length === 1 ? next.formats[0] : null);
+    setFormat(nextFormat);
   };
 
   const chooseWho = (value) => {
@@ -282,7 +324,7 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
   };
 
   const chooseFormat = (value) => {
-    if (value !== format) setDays([]);
+    if (value !== format) setDays(value === "Individual" ? presetDays : []);
     setFormat(value);
   };
 
@@ -302,6 +344,11 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
     data.set("format", format);
     if (days.length) data.set("days", days.join(", "));
     if (monthlyFee) data.set("monthly_fee", `${monthlyFee} / month per student`);
+    data.set(
+      "billing_plan",
+      `${activePackage ? `${packageLabel} prepaid` : "Monthly"}${plan?.family ? " (family package)" : ""}`,
+    );
+    data.set("total_to_pay", feeLine);
     if (isParent) {
       data.set("children_count", String(childCount));
       if (totalFee) data.set("total_monthly_fee", `${totalFee} / month`);
@@ -547,6 +594,33 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                     you choose.
                   </p>
 
+                  {isParent && (
+                    <div className="mt-5">
+                      <Field
+                        id="children_count_select"
+                        label="How many children do you want to enroll?"
+                      >
+                        <select
+                          id="children_count_select"
+                          value={childCount}
+                          onChange={(event) => setChildCount(Number(event.target.value))}
+                          className={INPUT_CLASS}
+                        >
+                          {Array.from({ length: MAX_CHILDREN }, (_, i) => i + 1).map((n) => (
+                            <option key={n} value={n}>
+                              {n}
+                            </option>
+                          ))}
+                        </select>
+                      </Field>
+                      <p className="text-brown-light text-xs mt-2">
+                        {plan?.family
+                          ? `Family package: ${childCount} children on Monday to Friday classes get one special price.`
+                          : "Enrolling 3 or 4 children on Monday to Friday classes gets our family package price."}
+                      </p>
+                    </div>
+                  )}
+
                   <div className="mt-5 flex gap-3 rounded-xl border border-gold/30 bg-cream px-4 py-3">
                     <Info className="text-gold-dark shrink-0 mt-0.5" size={18} />
                     <p className="text-brown text-sm leading-relaxed">
@@ -577,15 +651,19 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                     {days.length > 0 ? (
                       <>
                         <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-dark">
-                          Your monthly fee
+                          {plan.family ? "Family package, monthly fee" : "Your monthly fee"}
                         </p>
                         <p className="mt-1">
                           <span className="font-heading text-brown text-4xl font-semibold">
-                            {monthlyFee}
+                            {totalFee}
                           </span>
                           <span className="text-brown-light text-sm"> / month</span>
                         </p>
                         <p className="text-brown-light text-xs mt-2">
+                          {students > 1 &&
+                            (plan.family
+                              ? `For all ${students} children. `
+                              : `${monthlyFee} for each of ${students} children. `)}
                           {days.length} class{days.length > 1 ? "es" : ""} a week,{" "}
                           {PRICING.classMinutes} minutes each. Your first class is free.
                         </p>
@@ -596,6 +674,55 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                       </p>
                     )}
                   </div>
+                  {packages.length > 0 && (
+                    <fieldset className="mt-6">
+                      <legend className="font-heading text-brown text-lg font-semibold">
+                        Pay for more months and save
+                      </legend>
+                      <div className="mt-3 space-y-2">
+                        {[{ months: 1, total: plan.monthlyTotal, percentOff: plan.monthlyPercentOff }, ...packages].map(
+                          (option) => (
+                            <label
+                              key={option.months}
+                              className={`flex cursor-pointer items-center justify-between gap-3 rounded-xl border px-4 py-3 transition-colors ${
+                                (activePackage?.months ?? 1) === option.months
+                                  ? "border-gold bg-gold/15"
+                                  : "border-gold/30 hover:border-gold"
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name="billing_choice"
+                                checked={(activePackage?.months ?? 1) === option.months}
+                                onChange={() => setPlanMonths(option.months)}
+                                className="sr-only"
+                              />
+                              <span>
+                                <span className="block text-sm text-brown font-semibold">
+                                  {option.months === 1
+                                    ? "Pay monthly"
+                                    : `${option.months} months in one payment`}
+                                </span>
+                                {option.percentOff > 0 && (
+                                  <span className="block text-xs text-gold-dark">
+                                    {option.percentOff}% off
+                                  </span>
+                                )}
+                              </span>
+                              <span className="text-right">
+                                <span className="block font-heading text-brown text-xl font-semibold">
+                                  {formatPrice(option.total, isPakistan)}
+                                </span>
+                                <span className="block text-xs text-brown-light">
+                                  {option.months === 1 ? "/ month" : `for ${option.months} months`}
+                                </span>
+                              </span>
+                            </label>
+                          ),
+                        )}
+                      </div>
+                    </fieldset>
+                  )}
                   <p className="text-brown-light text-xs italic mt-3">
                     Class times are agreed with you on WhatsApp after you enroll.
                   </p>
@@ -658,14 +785,15 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                 </p>
                 <p className="text-brown-light text-sm mt-1">
                   {isIndividual
-                    ? `${days.join(", ")} · ${monthlyFee} / month`
+                    ? `${days.join(", ")} · ${feeLine}`
                     : groupDetails
-                      ? `${formatDuration(groupDetails.durationMonths)} ·${groupDetails.daysPerWeek} days a week · ${monthlyFee} / month`
+                      ? `${formatDuration(groupDetails.durationMonths)} · ${groupDetails.daysPerWeek} days a week · ${monthlyFee} / month`
                       : "Fixed group schedule"}
                 </p>
                 {isParent && childCount > 1 && totalFee && (
                   <p className="text-brown text-sm font-medium mt-1">
-                    {childCount} children: {totalFee} / month in total
+                    {childCount} children{plan?.family ? ", family package" : ""}: {feeLine} in
+                    total
                   </p>
                 )}
                 <button
@@ -729,29 +857,12 @@ function EnrollFlow({ initialCourseId, initialFormat, initialDays }) {
                       </Field>
 
                       <SectionTitle>Children</SectionTitle>
-                      <Field
-                        id="children_count_select"
-                        label="How many children do you want to enroll?"
-                      >
-                        <select
-                          id="children_count_select"
-                          value={childCount}
-                          onChange={(event) => setChildCount(Number(event.target.value))}
-                          className={INPUT_CLASS}
-                        >
-                          {Array.from({ length: MAX_CHILDREN }, (_, i) => i + 1).map((n) => (
-                            <option key={n} value={n}>
-                              {n}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
-                      {childCount > 1 && (
-                        <p className="text-brown-light text-xs">
-                          The course, days and fee you chose apply to each child. If your children
-                          need different days, tell us on WhatsApp and we&apos;ll arrange it.
-                        </p>
-                      )}
+                      <p className="text-brown-light text-xs">
+                        Enrolling {childCount} {childCount > 1 ? "children" : "child"}. To change
+                        the number, go back to the days step.
+                        {childCount > 1 &&
+                          " The course and days you chose apply to each child. If your children need different days, tell us on WhatsApp and we'll arrange it."}
+                      </p>
 
                       {Array.from({ length: childCount }, (_, index) => (
                         <div

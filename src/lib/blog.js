@@ -24,7 +24,7 @@ export const BLOG_CATEGORIES = [
   {
     id: "urdu",
     title: "Urdu Blog Post",
-    native: "اردو بلاگ",
+    native: null,
     description: "Articles in Urdu about learning the Quran, Tajweed and Islamic education.",
     language: "ur",
     posts: [

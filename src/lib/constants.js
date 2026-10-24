@@ -207,15 +207,47 @@ export const REACHED_COUNTRIES = [
 // One-to-one fees are charged per class day a week, per month, so a student can
 // pick any days (up to maxDays). `PK` rates are shown only to visitors in
 // Pakistan (see useCountry); everyone else sees `default` (USD). With these
-// rates a full Mon-Fri week is $50 / 5,000 PKR and Sat + Sun is $30 / 3,000 PKR.
+// rates a full Mon-Fri week is $55 / 5,000 PKR and Sat + Sun is $30 / 3,000 PKR.
+//
+// `packages` are prepaid discounts for the full Mon-Fri plan, `weekendPackages`
+// for the Sat + Sun plan: the price is for the whole period (per student), not
+// per month. `families` are for one parent enrolling exactly `children` children
+// on the full Mon-Fri plan: one fixed price for all of them (not per child).
 export const PRICING = {
   classMinutes: CLASS_MINUTES,
   maxDays: 5,
   weekendDays: ["Saturday", "Sunday"],
   perDay: {
-    weekday: { default: 10, PK: 1000 },
+    weekday: { default: 11, PK: 1000 },
     weekend: { default: 15, PK: 1500 },
   },
+  packages: [
+    { months: 3, price: { default: 155, PK: 12000 } },
+    { months: 6, price: { default: 300, PK: 20000 } },
+  ],
+  weekendPackages: [
+    { months: 3, price: { default: 85, PK: 8500 } },
+    { months: 6, price: { default: 165, PK: 16500 } },
+  ],
+  // Family packages: one fixed price for exactly `children` children on Mon-Fri.
+  families: [
+    {
+      children: 3,
+      monthly: { default: 150, PK: 12000 },
+      packages: [
+        { months: 3, price: { default: 420, PK: 32000 } },
+        { months: 6, price: { default: 800, PK: 60000 } },
+      ],
+    },
+    {
+      children: 4,
+      monthly: { default: 200, PK: 16000 },
+      packages: [
+        { months: 3, price: { default: 550, PK: 42500 } },
+        { months: 6, price: { default: 1050, PK: 80000 } },
+      ],
+    },
+  ],
 };
 
 // The "action" URL from MailerLite's embedded-form code (a public endpoint, not

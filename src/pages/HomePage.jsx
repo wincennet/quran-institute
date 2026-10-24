@@ -3,6 +3,7 @@ import WhoWeAre from "../components/WhoWeAre";
 import About from "../components/About";
 import LearningFormats from "../components/LearningFormats";
 import Courses from "../components/Courses";
+import Packages from "../components/Packages";
 import GlobalReach from "../components/GlobalReach";
 import Testimonials from "../components/Testimonials";
 import Blog from "../components/Blog";
@@ -15,8 +16,9 @@ export default function HomePage() {
       <Hero />
       <WhoWeAre />
       <Courses />
-      <LearningFormats />
+      <Packages />
       <About />
+      <LearningFormats />
       <GlobalReach />
       <Blog />
       <Testimonials />
