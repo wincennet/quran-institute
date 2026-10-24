@@ -64,18 +64,11 @@ export default function Packages() {
             {PACKAGES.map((pack) => {
               const plan = planPricing(pack.days, isPakistan, pack.students);
               const rows = [
-                {
-                  months: 1,
-                  label: "Monthly",
-                  total: plan.monthlyTotal,
-                  unit: "/ month",
-                  off: plan.monthlyPercentOff,
-                },
+                { months: 1, label: "Monthly", total: plan.monthlyTotal, off: plan.monthlyPercentOff },
                 ...plan.packages.map((option) => ({
                   months: option.months,
                   label: `${option.months} months`,
                   total: option.total,
-                  unit: `for ${option.months} months`,
                   off: option.percentOff,
                 })),
               ];
@@ -113,24 +106,34 @@ export default function Packages() {
                               ...(row.months > 1 ? { months: String(row.months) } : {}),
                             }).toString(),
                           }}
-                          className="group flex items-center justify-between gap-3 rounded-lg border border-gold/30 bg-cream-light px-3.5 py-2 transition-colors hover:border-gold hover:bg-gold/10"
+                          className="group flex items-center justify-between gap-2 rounded-lg border border-gold/30 bg-cream-light px-3 py-3 transition-colors hover:border-gold hover:bg-gold/10"
                         >
-                          <span className="flex items-baseline gap-2">
-                            <span className="text-sm font-semibold text-brown">{row.label}</span>
+                          <span className="flex items-baseline gap-1.5 whitespace-nowrap">
+                            <span className="text-[13px] sm:text-sm font-semibold text-brown">
+                              {row.label}
+                            </span>
                             {row.off > 0 && (
-                              <span className="text-xs text-gold-dark">{row.off}% off</span>
+                              <span className="text-[10px] sm:text-xs text-gold-dark">
+                                {row.off}% off
+                              </span>
                             )}
                           </span>
-                          <span className="flex items-center gap-2">
-                            <span className="text-right leading-tight">
-                              <span className="block font-heading text-brown text-lg font-semibold">
-                                {formatPrice(row.total, isPakistan)}
-                              </span>
-                              <span className="block text-[11px] text-brown-light">{row.unit}</span>
+                          <span className="flex items-center gap-2 whitespace-nowrap">
+                            <span className="font-heading text-brown text-base sm:text-lg font-semibold">
+                              {isPakistan ? (
+                                <>
+                                  {row.total.toLocaleString("en-US")}
+                                  <span className="ml-1 font-sans text-[10px] sm:text-xs font-medium text-brown-light">
+                                    PKR
+                                  </span>
+                                </>
+                              ) : (
+                                formatPrice(row.total, false)
+                              )}
                             </span>
                             <ArrowRight
                               size={14}
-                              className="text-gold-dark transition-transform group-hover:translate-x-0.5"
+                              className="hidden sm:block text-gold-dark transition-transform group-hover:translate-x-0.5"
                             />
                           </span>
                         </Link>

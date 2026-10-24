@@ -10,7 +10,7 @@ export function priceForDays(days, isPakistan) {
 }
 
 export function formatPrice(amount, isPakistan) {
-  return isPakistan ? `${amount.toLocaleString("en-US")} PKR` : `$${amount}`;
+  return isPakistan ? `${amount.toLocaleString("en-US")} PKR` : `$${amount.toLocaleString("en-US")}`;
 }
 
 export const WEEKDAYS = DAYS_OF_WEEK.filter((day) => !PRICING.weekendDays.includes(day));
