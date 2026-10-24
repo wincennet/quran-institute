@@ -47,6 +47,17 @@ alter table public.posts add column if not exists video_url text;
 alter table public.posts enable row level security;
 alter table public.reviews enable row level security;
 
+-- ---------------------------------------------------------------- API access
+-- From 30 Oct 2026 Supabase no longer gives new tables API access by default, so
+-- a project built from this file needs these grants. They only open the door to
+-- the Data API; the row-level security policies below still decide who can read
+-- or change which rows. Safe to run more than once.
+grant select on public.posts to anon;
+grant select, insert, update, delete on public.posts to authenticated, service_role;
+
+grant select, insert on public.reviews to anon;
+grant select, insert, update, delete on public.reviews to authenticated, service_role;
+
 -- ---------------------------------------------------------------- admin check
 
 create or replace function public.is_site_admin()
