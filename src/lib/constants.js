@@ -52,7 +52,7 @@ export const COURSES = [
     languages: ["Urdu", "English"],
     formats: ["Group", "Individual"],
     groupDetails: {
-      durationMonths: 12,
+      durationMonths: 18,
       daysPerWeek: 2,
       classMinutes: 60,
       price: GROUP_MONTHLY_PRICE,

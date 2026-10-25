@@ -72,9 +72,9 @@ function formatMinutes(minutes) {
   return `${hours} hour${hours > 1 ? "s" : ""}`;
 }
 
-// "6 months", "1 year" — whole years read better than 12 months.
+// "6 months", "1 year", "1.5 years" — years read better than 12 or 18 months.
 export function formatDuration(months) {
-  if (months % 12 !== 0) return `${months} months`;
+  if (months < 12 || months % 6 !== 0) return `${months} months`;
   const years = months / 12;
   return `${years} year${years > 1 ? "s" : ""}`;
 }
